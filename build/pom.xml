@@ -1,0 +1,115 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- Model Version -->
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Artifact Information -->
+  <groupId>org.jboss.ejb3.examples</groupId>
+  <artifactId>jboss-ejb3-examples-build</artifactId>
+  <name>Build System and Parent for JBoss EJB3 Examples</name>
+  <version>0.0.1-SNAPSHOT</version>
+  <description>Build System and Parent for JBoss EJB3 Examples to accompany O'Reilly "Enterprise JavaBeans 6th Edition"</description>
+  <packaging>pom</packaging>
+
+  <!-- Properties -->
+  <properties>
+
+    <!-- Versioning -->
+    <version.org.jboss.ejb3_jboss-ejb3-api>3.1.0-Alpha1</version.org.jboss.ejb3_jboss-ejb3-api>
+    <version.junit_junit>4.5</version.junit_junit>
+
+  </properties>
+
+  <!-- Build Configuration -->
+  <build>
+
+    <plugins>
+
+      <!-- Compiler -->
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <inherited>true</inherited>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <showDeprecation>false</showDeprecation>
+          <showWarnings>true</showWarnings>
+          <optimize>true</optimize>
+          <compilerVersion>1.6</compilerVersion>
+          <fork>true</fork>
+          <executable>${JAVA_HOME}/bin/javac</executable>
+        </configuration>
+      </plugin>
+
+      <!-- Surefire (Tests) Plugin -->
+
+      <!--
+        To pass JVM Arguments (ie. Remote Debugging w/ suspend), pass
+        "maven.surefire.debug" as system property, ie: mvn test
+        -Dmaven.surefire.debug="-Xdebug
+        -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8787"
+      -->
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          <printSummary>true</printSummary>
+          <includes>
+            <include>**/*TestCase.java</include>
+            <include>**/*TestSuite.java</include>
+          </includes>
+          <forkMode>always</forkMode>
+          <argLine>-ea</argLine>
+        </configuration>
+      </plugin>
+
+      <!-- Enforce Maven Environment -->
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-maven-environment</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <rules>
+            <requireMavenVersion>
+              <version>[2.0.9,2.1)</version> <!-- Must be Maven 2.0.9 >= x > 2.1  -->
+            </requireMavenVersion>
+            <requireJavaVersion>
+              <version>1.6.0</version> <!-- Must be JDK6 -->
+            </requireJavaVersion>
+          </rules>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+  <!-- Dependency Versioning -->
+  <dependencyManagement>
+
+    <dependencies>
+
+      <dependency>
+        <groupId>org.jboss.ejb3</groupId>
+        <artifactId>jboss-ejb3-api</artifactId>
+        <version>${version.org.jboss.ejb3_jboss-ejb3-api}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${version.junit_junit}</version>
+      </dependency>
+
+    </dependencies>
+
+  </dependencyManagement>
+
+</project>

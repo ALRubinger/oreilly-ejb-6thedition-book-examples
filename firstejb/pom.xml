@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- Parent Information -->
+  <parent>
+    <groupId>org.jboss.ejb3.examples</groupId>
+    <artifactId>jboss-ejb3-examples-build</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <!-- Model Version -->
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Artifact Information -->
+  <artifactId>jboss-ejb3-examples-firstejb</artifactId>
+  <name>JBoss EJB 3.x Examples - My First EJB</name>
+  <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter 4</description>
+
+  <!-- Dependencies -->
+  <dependencies>
+
+    <dependency>
+      <groupId>org.jboss.ejb3</groupId>
+      <artifactId>jboss-ejb3-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+
+  </dependencies>
+
+</project>
