@@ -87,8 +87,10 @@ public class CalculatorIntegrationTestCase
       // Create the naming context, using jndi.properties on the CP
       namingContext = new InitialContext();
 
-      // Obtain views (vendor-specific)
+      // Obtain EJB 3.x Business Reference
       calcRemoteBusiness = (CalculatorRemoteBusiness) namingContext.lookup(JNDI_NAME_CALC_REMOTE_BUSINESS);
+
+      // Obtain EJB 2.x Component Reference via Home
       final Object calcRemoteHomeReference = namingContext.lookup(JNDI_NAME_CALC_REMOTE_HOME);
       final CalculatorRemoteHome calcRemoteHome = (CalculatorRemoteHome) PortableRemoteObject.narrow(
             calcRemoteHomeReference, CalculatorRemoteHome.class);
