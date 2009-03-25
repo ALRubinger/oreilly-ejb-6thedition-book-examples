@@ -16,8 +16,11 @@
   <properties>
 
     <!-- Versioning -->
-    <version.org.jboss.ejb3_jboss-ejb3-api>3.1.0-Alpha1</version.org.jboss.ejb3_jboss-ejb3-api>
+
     <version.junit_junit>4.5</version.junit_junit>
+    <version.org.jboss.ejb3_jboss-ejb3-api>3.1.0-Alpha1</version.org.jboss.ejb3_jboss-ejb3-api>
+    <version.org.jboss.logging_jboss.logging.log4j>2.0.6.GA</version.org.jboss.logging_jboss.logging.log4j>
+    <version.org.jboss.logging_jboss.logging.spi>2.0.5.GA</version.org.jboss.logging_jboss.logging.spi>
 
   </properties>
 
@@ -56,8 +59,7 @@
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <printSummary>true</printSummary>
           <includes>
-            <include>**/*TestCase.java</include>
-            <include>**/*TestSuite.java</include>
+            <include>**/*UnitTestCase.java</include>
           </includes>
           <forkMode>always</forkMode>
           <argLine>-ea</argLine>
@@ -97,15 +99,29 @@
     <dependencies>
 
       <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${version.junit_junit}</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.jboss.ejb3</groupId>
         <artifactId>jboss-ejb3-api</artifactId>
         <version>${version.org.jboss.ejb3_jboss-ejb3-api}</version>
       </dependency>
 
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${version.junit_junit}</version>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging-log4j</artifactId>
+        <version>${version.org.jboss.logging_jboss.logging.log4j}</version>
+        <optional>true</optional>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging-spi</artifactId>
+        <version>${version.org.jboss.logging_jboss.logging.spi}</version>
+        <optional>true</optional>
       </dependency>
 
     </dependencies>

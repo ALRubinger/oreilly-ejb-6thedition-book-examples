@@ -13,8 +13,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Artifact Information -->
-  <artifactId>jboss-ejb3-examples-firstejb</artifactId>
-  <name>JBoss EJB 3.x Examples - My First EJB</name>
+  <artifactId>jboss-ejb3-examples-ch04-firstejb</artifactId>
+  <name>JBoss EJB 3.x Examples - Chapter 4: Calculator Service EJBs</name>
   <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter 4</description>
 
   <!-- Dependencies -->
@@ -30,6 +30,136 @@
       <artifactId>junit</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging-log4j</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging-spi</artifactId>
+    </dependency>
+
   </dependencies>
+
+  <profiles>
+
+    <profile>
+
+      <!-- Declare the "Integration Test" Profile -->
+      <id>it</id>
+
+      <build>
+
+        <plugins>
+
+          <!--
+
+            Configure Surefire to run in integration-test phase
+          -->
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>surefire-it</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <skip>false</skip>
+                  <!-- Include jbossall-client.jar on the CP -->
+                  <additionalClasspathElements>
+                    <additionalClasspathElement>${env.JBOSS_HOME}/client/jbossall-client.jar</additionalClasspathElement>
+                  </additionalClasspathElements>
+                  <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                  <printSummary>true</printSummary>
+                  <forkMode>always</forkMode>
+                  <includes>
+                    <include>**/*IntegrationTestCase.java</include>
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <!--
+
+            Define the JBossAS Maven Control Plugin
+          -->
+          <plugin>
+
+            <groupId>org.jboss.maven.plugins.jbossas</groupId>
+            <artifactId>maven-jboss-as-control-plugin</artifactId>
+            <version>0.1.0</version>
+
+            <!-- Executions -->
+            <executions>
+
+              <!--
+
+                Start JBossAS with our new configuration
+              -->
+              <execution>
+                <id>start-jbossas</id>
+                <goals>
+                  <goal>start</goal>
+                </goals>
+                <phase>pre-integration-test</phase>
+                <configuration>
+                  <jvmArgs>
+                    <jvmArg>-Xmx512M</jvmArg>
+                  </jvmArgs>
+                  <serverConfigName>default</serverConfigName>
+                  <jboss.test.run>true</jboss.test.run>
+                </configuration>
+              </execution>
+
+              <!--
+
+                Deploy into our custom JBossAS Configuration
+              -->
+              <execution>
+                <id>deploy-test-slsb</id>
+                <goals>
+                  <goal>deploy</goal>
+                </goals>
+                <phase>pre-integration-test</phase>
+                <configuration>
+                  <serverConfigName>default</serverConfigName>
+                  <files>
+                    ${project.build.directory}/${project.build.finalName}.${project.packaging}
+                  </files>
+                  <jboss.test.run>true</jboss.test.run>
+                </configuration>
+              </execution>
+
+              <!--
+
+                Stop JBossAS
+              -->
+              <execution>
+                <id>stop-jbossas</id>
+                <goals>
+                  <goal>stop</goal>
+                </goals>
+                <phase>post-integration-test</phase>
+                <configuration>
+                  <serverConfigName>default</serverConfigName>
+                  <jboss.test.run>true</jboss.test.run>
+                </configuration>
+              </execution>
+
+            </executions>
+
+          </plugin>
+
+        </plugins>
+
+      </build>
+
+    </profile>
+
+  </profiles>
 
 </project>

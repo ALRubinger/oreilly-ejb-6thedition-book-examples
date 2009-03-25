@@ -40,7 +40,7 @@ public interface CalculatorLocalHome extends EJBLocalHome
    // ---------------------------------------------------------------------------||
 
    /**
-    * Returns a reference to a remote component view of the CalculatorEJB
+    * Returns a reference to a local component view of the CalculatorEJB
     */
    CalculatorLocal create() throws CreateException;
 

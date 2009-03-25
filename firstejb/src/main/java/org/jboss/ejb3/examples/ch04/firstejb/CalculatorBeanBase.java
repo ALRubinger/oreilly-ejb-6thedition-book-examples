@@ -22,6 +22,8 @@
 
 package org.jboss.ejb3.examples.ch04.firstejb;
 
+import org.jboss.logging.Logger;
+
 /**
  * CalculatorBeanBase
  * 
@@ -34,27 +36,40 @@ package org.jboss.ejb3.examples.ch04.firstejb;
 public class CalculatorBeanBase implements CalculatorCommonBusiness
 {
    // ---------------------------------------------------------------------------||
+   // Class Members -------------------------------------------------------------||
+   // ---------------------------------------------------------------------------||
+
+   /**
+    * Logger
+    */
+   private static final Logger log = Logger.getLogger(CalculatorBeanBase.class);
+
+   // ---------------------------------------------------------------------------||
    // Required Implementations --------------------------------------------------||
    // ---------------------------------------------------------------------------||
 
    /**
-    * Adds all arguments
-    * 
-    * @return The sum of all arguments
+    * {@link CalculatorCommonBusiness#add(int...)}
     */
    @Override
    public int add(final int... arguments)
    {
       // Initialize
+      StringBuffer sb = new StringBuffer();
+      sb.append("Adding arguments: ");
       int result = 0;
 
       // Add all arguments
       for (final int arg : arguments)
       {
          result += arg;
+         sb.append(arg);
+         sb.append(" ");
       }
 
       // Return
+      log.info(sb.toString());
+      log.info("Result: " + result);
       return result;
    }
 

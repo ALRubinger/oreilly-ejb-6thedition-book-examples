@@ -24,6 +24,7 @@ package org.jboss.ejb3.examples.ch04.firstejb;
 
 import junit.framework.TestCase;
 
+import org.jboss.logging.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -36,13 +37,21 @@ import org.junit.Test;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public class CalculatorTestCase
+public class CalculatorUnitTestCase
 {
    // ---------------------------------------------------------------------------||
-   // Required Implementations --------------------------------------------------||
+   // Class Members -------------------------------------------------------------||
    // ---------------------------------------------------------------------------||
 
-   private static SimpleCalculatorBean calc;
+   /**
+    * Logger
+    */
+   private static final Logger log = Logger.getLogger(CalculatorUnitTestCase.class);
+
+   /**
+    * The POJO instance to test
+    */
+   private static CalculatorCommonBusiness calc;
 
    // ---------------------------------------------------------------------------||
    // Lifecycle Methods ---------------------------------------------------------||
@@ -51,6 +60,8 @@ public class CalculatorTestCase
    @BeforeClass
    public static void beforeClass()
    {
+      // Make a POJO instance adhering to the 
+      // CalculatorCommonBusiness contract
       calc = new SimpleCalculatorBean();
    }
 
@@ -59,18 +70,34 @@ public class CalculatorTestCase
    // ---------------------------------------------------------------------------||
 
    /**
-    * Ensures that the CalculatorEJB adds as expected
+    * Ensures that the business logic behind the
+    * CalculatorEJB adds as expected when used 
+    * as a pure POJO
     */
    @Test
    public void testAddition()
    {
       // Initialize
-      int expectedSum = 10;
+      final int[] arguments = new int[]
+      {3, 7, 2};
+      final int expectedSum = 12;
 
       // Add
-      int actualSum = calc.add(2, 3, 5);
+      final int actualSum = calc.add(arguments);
 
       // Test
       TestCase.assertEquals("Addition did not return the expected result", expectedSum, actualSum);
+
+      // Log
+      final StringBuffer sb = new StringBuffer();
+      sb.append("Obtained expected result, ");
+      sb.append(actualSum);
+      sb.append(", from arguments: ");
+      for (final int arg : arguments)
+      {
+         sb.append(arg);
+         sb.append(" ");
+      }
+      log.info(sb.toString());
    }
 }
