@@ -70,7 +70,7 @@
                   <skip>false</skip>
                   <!-- Include jbossall-client.jar on the CP -->
                   <additionalClasspathElements>
-                    <additionalClasspathElement>${env.JBOSS_HOME}/client/jbossall-client.jar</additionalClasspathElement>
+                    <additionalClasspathElement>${jboss.home}/client/jbossall-client.jar</additionalClasspathElement>
                   </additionalClasspathElements>
                   <redirectTestOutputToFile>true</redirectTestOutputToFile>
                   <printSummary>true</printSummary>
@@ -91,7 +91,7 @@
 
             <groupId>org.jboss.maven.plugins.jbossas</groupId>
             <artifactId>maven-jboss-as-control-plugin</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.2-SNAPSHOT</version>
 
             <!-- Executions -->
             <executions>
