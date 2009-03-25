@@ -24,6 +24,7 @@ package org.jboss.ejb3.examples.ch04.firstejb;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.rmi.PortableRemoteObject;
 
 import junit.framework.TestCase;
 
@@ -88,8 +89,9 @@ public class CalculatorIntegrationTestCase
 
       // Obtain views (vendor-specific)
       calcRemoteBusiness = (CalculatorRemoteBusiness) namingContext.lookup(JNDI_NAME_CALC_REMOTE_BUSINESS);
-      final CalculatorRemoteHome calcRemoteHome = (CalculatorRemoteHome) namingContext
-            .lookup(JNDI_NAME_CALC_REMOTE_HOME);
+      final Object calcRemoteHomeReference = namingContext.lookup(JNDI_NAME_CALC_REMOTE_HOME);
+      final CalculatorRemoteHome calcRemoteHome = (CalculatorRemoteHome) PortableRemoteObject.narrow(
+            calcRemoteHomeReference, CalculatorRemoteHome.class);
       calcRemote = calcRemoteHome.create();
    }
 
