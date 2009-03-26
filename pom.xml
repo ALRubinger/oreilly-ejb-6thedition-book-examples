@@ -15,7 +15,7 @@
   <!-- Modules in Aggregator -->
   <modules>
     <module>build</module>
-    <module>firstejb</module>
+    <module>ch04-firstejb</module>
   </modules>
 
 </project>
