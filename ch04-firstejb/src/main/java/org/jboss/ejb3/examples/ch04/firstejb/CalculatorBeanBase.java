@@ -48,14 +48,14 @@ public class CalculatorBeanBase implements CalculatorCommonBusiness
    // Required Implementations --------------------------------------------------||
    // ---------------------------------------------------------------------------||
 
-   /**
-    * {@link CalculatorCommonBusiness#add(int...)}
+   /* (non-Javadoc)
+    * @see org.jboss.ejb3.examples.ch04.firstejb.CalculatorCommonBusiness#add(int[])
     */
    @Override
    public int add(final int... arguments)
    {
       // Initialize
-      StringBuffer sb = new StringBuffer();
+      final StringBuffer sb = new StringBuffer();
       sb.append("Adding arguments: ");
       int result = 0;
 

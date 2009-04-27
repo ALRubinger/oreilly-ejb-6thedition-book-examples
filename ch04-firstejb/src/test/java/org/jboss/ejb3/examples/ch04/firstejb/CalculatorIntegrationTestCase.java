@@ -133,7 +133,7 @@ public class CalculatorIntegrationTestCase
     * Uses the supplied Calculator instance to test the addition
     * algorithm
     */
-   private void assertAdditionSucceeds(CalculatorCommonBusiness calc)
+   private void assertAdditionSucceeds(final CalculatorCommonBusiness calc)
    {
       // Initialize
       final int[] arguments = new int[]
