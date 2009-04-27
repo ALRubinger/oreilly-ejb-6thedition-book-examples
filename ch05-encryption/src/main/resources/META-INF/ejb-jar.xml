@@ -1,0 +1,52 @@
+<ejb-jar xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                  http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd"
+  version="3.0">
+
+  <enterprise-beans>
+
+    <!--
+      In this section we'll bolster our EncryptionEJB with some
+      additional metadata to complement the info defined via
+      annotations.
+    -->
+    <session>
+
+      <!--
+        This will match the value of @Stateless.name upon our bean
+        implementation class
+      -->
+      <ejb-name>EncryptionEJB</ejb-name>
+
+      <!-- Override the ciphers passphrase -->
+      <env-entry>
+        <env-entry-name>ciphersPassphrase</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>OverriddenPassword</env-entry-value>
+      </env-entry>
+
+      <!-- Override the one-way hash MessageDigest algorithm -->
+      <env-entry>
+        <env-entry-name>messageDigestAlgorithm</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>SHA</env-entry-value>
+        <!--
+          TODO This "injection-target" should not be required, we've got @Resource on the
+          member
+          
+          https://jira.jboss.org/jira/browse/EJBTHREE-1813
+          https://jira.jboss.org/jira/browse/EJBBOOK-5
+        -->
+        <injection-target>
+          <injection-target-class>
+            org.jboss.ejb3.examples.ch05.encryption.EncryptionBean</injection-target-class>
+          <injection-target-name>messageDigestAlgorithm</injection-target-name>
+        </injection-target>
+
+      </env-entry>
+
+    </session>
+
+  </enterprise-beans>
+
+</ejb-jar>
