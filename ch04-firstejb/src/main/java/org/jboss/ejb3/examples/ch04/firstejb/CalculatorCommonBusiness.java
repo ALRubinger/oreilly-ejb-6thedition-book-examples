@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source.
- * Copyright 2008, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2009, Red Hat Middleware LLC, and individual contributors
  * as indicated by the @author tags. See the copyright.txt file in the
  * distribution for a full listing of individual contributors.
  *
@@ -25,7 +25,7 @@ package org.jboss.ejb3.examples.ch04.firstejb;
 /**
  * CalculatorCommonBusiness
  * 
- * Contains the contract for operation common to 
+ * Contains the contract for operations common to 
  * all business interfaces of the CalculatorEJB
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>

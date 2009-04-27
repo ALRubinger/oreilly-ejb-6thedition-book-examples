@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source.
- * Copyright 2008, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2009, Red Hat Middleware LLC, and individual contributors
  * as indicated by the @author tags. See the copyright.txt file in the
  * distribution for a full listing of individual contributors.
  *
@@ -69,12 +69,14 @@ public class CalculatorIntegrationTestCase
    /**
     * JNDI Name of the Remote Business Reference
     */
+   //TODO Use Global JNDI Syntax (not yet supported in JBoss EJB3)
    private static final String JNDI_NAME_CALC_REMOTE_BUSINESS = ManyViewCalculatorBean.class.getSimpleName()
          + "/remote";
 
    /**
     * JNDI Name of the Remote Home Reference
     */
+   //TODO Use Global JNDI Syntax (not yet supported in JBoss EJB3)
    private static final String JNDI_NAME_CALC_REMOTE_HOME = ManyViewCalculatorBean.class.getSimpleName() + "/home";
 
    // ---------------------------------------------------------------------------||

@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source.
- * Copyright 2008, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2009, Red Hat Middleware LLC, and individual contributors
  * as indicated by the @author tags. See the copyright.txt file in the
  * distribution for a full listing of individual contributors.
  *
@@ -29,7 +29,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * CalculatorTestCase
+ * CalculatorUnitTestCase
  * 
  * Tests to ensure that the business methods of the CalculatorEJB
  * are working as expected
