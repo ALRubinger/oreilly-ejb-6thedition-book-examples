@@ -16,6 +16,7 @@
   <modules>
     <module>build</module>
     <module>ch04-firstejb</module>
+    <module>ch05-encryption</module>
   </modules>
 
 </project>
