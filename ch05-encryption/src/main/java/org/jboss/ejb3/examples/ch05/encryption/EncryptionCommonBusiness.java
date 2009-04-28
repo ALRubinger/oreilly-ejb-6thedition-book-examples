@@ -59,7 +59,7 @@ public interface EncryptionCommonBusiness
 
    /**
     * Returns a one-way hash of the specified argument.  Useful
-    * for safely storing passwords for comparison.
+    * for safely storing passwords.
     * 
     * @param input
     * @return

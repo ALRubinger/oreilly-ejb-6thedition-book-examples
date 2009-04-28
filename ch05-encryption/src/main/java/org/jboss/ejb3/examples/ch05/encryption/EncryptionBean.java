@@ -21,13 +21,25 @@
  */
 package org.jboss.ejb3.examples.ch05.encryption;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.KeySpec;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
+import org.apache.commons.codec.binary.Base64;
 import org.jboss.logging.Logger;
 
 /**
@@ -44,7 +56,7 @@ import org.jboss.logging.Logger;
 @Stateless(name = EncryptionBean.EJB_NAME)
 @Local(EncryptionLocalBusiness.class)
 @Remote(EncryptionRemoteBusiness.class)
-public class EncryptionBean extends EncryptionBeanBase implements EncryptionLocalBusiness, EncryptionRemoteBusiness
+public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemoteBusiness
 {
    // ---------------------------------------------------------------------------||
    // Class Members -------------------------------------------------------------||
@@ -67,9 +79,47 @@ public class EncryptionBean extends EncryptionBeanBase implements EncryptionLoca
     */
    private static final String ENV_ENTRY_NAME_CIPHERS_PASSPHRASE = "ciphersPassphrase";
 
+   /**
+    * Default Algorithm used by the Digest for one-way hashing
+    */
+   private static final String DEFAULT_ALGORITHM_MESSAGE_DIGEST = "MD5";
+
+   /**
+    * Charset used for encoding/decoding Strings to/from byte representation
+    */
+   private static final String CHARSET = "UTF-8";
+
+   /**
+    * Default Algorithm used by the Cipher Key for symmetric encryption
+    */
+   private static final String DEFAULT_ALGORITHM_CIPHER = "PBEWithMD5AndDES";
+
+   /**
+    * The default passphrase for symmetric encryption/decryption
+    */
+   private static final String DEFAULT_PASSPHRASE = "LocalTestingPassphrase";
+
+   /**
+    * The salt used in symmetric encryption/decryption
+    */
+   private static final byte[] DEFAULT_SALT_CIPHERS =
+   {(byte) 0xB4, (byte) 0xA2, (byte) 0x43, (byte) 0x89, 0x3E, (byte) 0xC5, (byte) 0x78, (byte) 0x53};
+
+   /**
+    * Iteration count used for symmetric encryption/decryption
+    */
+   private static final int DEFAULT_ITERATION_COUNT_CIPHERS = 20;
+
    // ---------------------------------------------------------------------------||
    // Instance Members ----------------------------------------------------------||
    // ---------------------------------------------------------------------------||
+
+   /*
+    * The following members represent the internal
+    * state of the Service.  Note how these are *not* leaked out
+    * via the end-user API, and are hence part of "internal state"
+    * and not "conversational state".
+    */
 
    /**
     * SessionContext of this EJB; this will be injected by the EJB 
@@ -96,39 +146,219 @@ public class EncryptionBean extends EncryptionBeanBase implements EncryptionLoca
    @Resource
    private String messageDigestAlgorithm;
 
+   /**
+    * Digest used for one-way hashing
+    */
+   private MessageDigest messageDigest;
+
+   /**
+    * Cipher used for symmetric encryption
+    */
+   private Cipher encryptionCipher;
+
+   /**
+    * Cipher used for symmetric decryption
+    */
+   private Cipher decryptionCipher;
+
    // ---------------------------------------------------------------------------||
    // Lifecycle -----------------------------------------------------------------||
    // ---------------------------------------------------------------------------||
-   /**
-    * Here we extend the implementation 
-    * of {@link EncryptionBeanBase#initialize()} to:
-    * 
-    * 1) Apply the @PostConstruct annotation such that the method
-    *       is fired by the EJB Container as part of the SLSB lifecycle
-    * 2) Provide some logging to show when its called
-    */
 
-   /* (non-Javadoc)
-    * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionBeanBase#initialize()
+   /**
+    * Initializes this service before it may handle requests
+    * 
+    * @throws Exception If some unexpected error occurred
+    * @throws IllegalStateException If one of the required ciphers was not available
     */
-   @Override
    @PostConstruct
    public void initialize() throws Exception
    {
       // Log that we're here
       log.info("Initializing, part of " + PostConstruct.class.getName() + " lifecycle");
 
-      // Call super implementation
-      super.initialize();
+      /*
+       * Symmetric Encryption
+       */
+
+      // Obtain parameters used in initializing the ciphers
+      final String cipherAlgorithm = DEFAULT_ALGORITHM_CIPHER;
+      final byte[] ciphersSalt = DEFAULT_SALT_CIPHERS;
+      final int ciphersIterationCount = DEFAULT_ITERATION_COUNT_CIPHERS;
+      final String ciphersPassphrase = this.getCiphersPassphrase();
+
+      // Obtain key and param spec for the ciphers
+      final KeySpec ciphersKeySpec = new PBEKeySpec(ciphersPassphrase.toCharArray(), ciphersSalt, ciphersIterationCount);
+      final SecretKey ciphersKey = SecretKeyFactory.getInstance(cipherAlgorithm).generateSecret(ciphersKeySpec);
+      final AlgorithmParameterSpec paramSpec = new PBEParameterSpec(ciphersSalt, ciphersIterationCount);
+
+      // Create and init the ciphers
+      this.encryptionCipher = Cipher.getInstance(ciphersKey.getAlgorithm());
+      this.decryptionCipher = Cipher.getInstance(ciphersKey.getAlgorithm());
+      encryptionCipher.init(Cipher.ENCRYPT_MODE, ciphersKey, paramSpec);
+      decryptionCipher.init(Cipher.DECRYPT_MODE, ciphersKey, paramSpec);
+
+      // Log
+      log.info("Initialized encryption cipher: " + this.encryptionCipher);
+      log.info("Initialized decryption cipher: " + this.decryptionCipher);
+
+      /*
+       * One-way Hashing
+       */
+
+      // Get the algorithm for the MessageDigest
+      final String messageDigestAlgorithm = this.getMessageDigestAlgorithm();
+
+      // Create the MessageDigest
+      try
+      {
+         this.messageDigest = MessageDigest.getInstance(messageDigestAlgorithm);
+      }
+      catch (NoSuchAlgorithmException e)
+      {
+         throw new RuntimeException("Could not obtain the " + MessageDigest.class.getSimpleName() + " for algorithm: "
+               + messageDigestAlgorithm, e);
+      }
+      log.info("Initialized MessageDigest for one-way hashing: " + this.messageDigest);
    }
 
-   /*
-    * We'll override the methods that return the some configuration
-    * so that we may externalize these values by way of EJB Environment Entries.
-    * Later we may look these up via a SessionContext that the Container will
-    * supply to this SLSB Bean instance (@see the @Resource annotation above
-    * the SessionContext member above)
+   // ---------------------------------------------------------------------------||
+   // Required Implementations --------------------------------------------------||
+   // ---------------------------------------------------------------------------||
+
+   /* (non-Javadoc)
+    * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#compare(java.lang.String, java.lang.String)
     */
+   @Override
+   public boolean compare(final String hash, final String input) throws IllegalArgumentException
+   {
+      // Precondition checks
+      if (hash == null)
+      {
+         throw new IllegalArgumentException("hash is required.");
+      }
+      if (input == null)
+      {
+         throw new IllegalArgumentException("Input is required.");
+      }
+
+      // Get the hash of the supplied input
+      final String hashOfInput = this.hash(input);
+
+      // Determine whether equal
+      final boolean equal = hash.equals(hashOfInput);
+
+      // Return
+      return equal;
+   }
+
+   /* (non-Javadoc)
+    * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#decrypt(java.lang.String)
+    */
+   @Override
+   public String decrypt(final String input) throws IllegalArgumentException, IllegalStateException
+   {
+      // Get the cipher
+      final Cipher cipher = this.decryptionCipher;
+      if (cipher == null)
+      {
+         throw new IllegalStateException("Decyrption cipher not available, has this service been initialized?");
+      }
+
+      // Run the cipher
+      byte[] resultBytes = null;;
+      try
+      {
+         final byte[] inputBytes = this.stringToByteArray(input);
+         resultBytes = cipher.doFinal(Base64.decodeBase64(inputBytes));
+      }
+      catch (final Throwable t)
+      {
+         throw new RuntimeException("Error in decryption", t);
+      }
+      final String result = this.byteArrayToString(resultBytes);
+
+      // Log
+      log.info("Decryption on \"" + input + "\": " + result);
+
+      // Return
+      return result;
+   }
+
+   /* (non-Javadoc)
+    * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#encrypt(java.lang.String)
+    */
+   @Override
+   public String encrypt(final String input) throws IllegalArgumentException
+   {
+      // Get the cipher
+      final Cipher cipher = this.encryptionCipher;
+      if (cipher == null)
+      {
+         throw new IllegalStateException("Encyrption cipher not available, has this service been initialized?");
+      }
+
+      // Get bytes from the String
+      byte[] inputBytes = this.stringToByteArray(input);
+
+      // Run the cipher
+      byte[] resultBytes = null;
+      try
+      {
+         resultBytes = Base64.encodeBase64(cipher.doFinal(inputBytes));
+      }
+      catch (final Throwable t)
+      {
+         throw new RuntimeException("Error in encryption of: " + input, t);
+      }
+
+      // Log
+      log.info("Encryption on \"" + input + "\": " + this.byteArrayToString(resultBytes));
+
+      // Return
+      final String result = this.byteArrayToString(resultBytes);
+      return result;
+   }
+
+   /**
+    * Note:
+    * 
+    * This is a weak implementation, but is enough to satisfy the example.
+    * If considering real-world stresses, we would be, at a minimum:
+    * 
+    * 1) Incorporating a random salt and storing it alongside the hashed result
+    * 2) Additionally implementing an iteration count to re-hash N times  
+    */
+   /* (non-Javadoc)
+    * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#hash(java.lang.String)
+    */
+   @Override
+   public String hash(final String input) throws IllegalArgumentException
+   {
+      // Precondition check
+      if (input == null)
+      {
+         throw new IllegalArgumentException("Input is required.");
+      }
+
+      // Get bytes from the input
+      byte[] inputBytes = this.stringToByteArray(input);
+
+      // Obtain the MessageDigest
+      final MessageDigest digest = this.messageDigest;
+
+      // Update with our input, and obtain the hash, resetting the messageDigest
+      digest.update(inputBytes, 0, inputBytes.length);
+      final byte[] hashBytes = digest.digest();
+      final byte[] encodedBytes = Base64.encodeBase64(hashBytes);
+
+      // Get the input back in some readable format
+      final String hash = this.byteArrayToString(encodedBytes);
+      log.info("One-way hash of \"" + input + "\": " + hash);
+
+      // Return
+      return hash;
+   }
 
    /**
     * Override the way we get the ciphers' passphrase so that we may 
@@ -167,7 +397,7 @@ public class EncryptionBean extends EncryptionBeanBase implements EncryptionLoca
                   + "an env-entry, falling back on the default...");
 
             // Set
-            passphrase = super.getCiphersPassphrase();
+            passphrase = DEFAULT_PASSPHRASE;
          }
 
          // Set the passphrase to be used so we don't have to do this lazy init again
@@ -199,7 +429,7 @@ public class EncryptionBean extends EncryptionBeanBase implements EncryptionLoca
                + "an env-entry, falling back on the default...");
 
          // Set
-         this.messageDigestAlgorithm = super.getMessageDigestAlgorithm();
+         this.messageDigestAlgorithm = DEFAULT_ALGORITHM_MESSAGE_DIGEST;
       }
 
       // Log
@@ -212,6 +442,7 @@ public class EncryptionBean extends EncryptionBeanBase implements EncryptionLoca
    // ---------------------------------------------------------------------------||
    // Internal Helper Methods ---------------------------------------------------||
    // ---------------------------------------------------------------------------||
+
    /**
     * Obtains the environment entry with the specified name, casting to a String,
     * and returning the result.  If the entry is not assignable 
@@ -225,6 +456,14 @@ public class EncryptionBean extends EncryptionBeanBase implements EncryptionLoca
     */
    private String getEnvironmentEntryAsString(final String envEntryName) throws IllegalStateException
    {
+      // See if we have a SessionContext
+      final SessionContext context = this.context;
+      if (context == null)
+      {
+         log.warn("No SessionContext, bypassing request to obtain environment entry: " + envEntryName);
+         return null;
+      }
+
       // Lookup in the Private JNDI ENC via the injected SessionContext
       Object lookupValue = null;
       try
@@ -254,6 +493,87 @@ public class EncryptionBean extends EncryptionBeanBase implements EncryptionLoca
 
       // Return
       return returnValue;
+   }
+
+   /**
+    * Returns a String representation of the specified byte array
+    * using the charset from {@link EncryptionBeanBase#getCharset()}.  Wraps 
+    * any {@link UnsupportedEncodingException} as a result of using an invalid
+    * charset in a {@link RuntimeException}.
+    * 
+    * @param bytes
+    * @return
+    * @throws RuntimeException If the charset was invalid, or some otehr unknown error occurred 
+    * @throws IllegalArgumentException If the byte array was not specified
+    */
+   private String byteArrayToString(final byte[] bytes) throws RuntimeException, IllegalArgumentException
+   {
+      // Precondition check
+      if (bytes == null)
+      {
+         throw new IllegalArgumentException("Byte array is required.");
+      }
+
+      // Represent as a String
+      String result = null;
+      final String charset = this.getCharset();
+      try
+      {
+         result = new String(bytes, charset);
+      }
+      catch (final UnsupportedEncodingException e)
+      {
+         throw new RuntimeException("Specified charset is invalid: " + charset, e);
+      }
+
+      // Return
+      return result;
+   }
+
+   /**
+    * Returns a byte array representation of the specified String
+    * using the charset from {@link EncryptionBeanBase#getCharset()}.  Wraps 
+    * any {@link UnsupportedEncodingException} as a result of using an invalid
+    * charset in a {@link RuntimeException}.
+    * 
+    * @param input
+    * @return
+    * @throws RuntimeException If the charset was invalid, or some otehr unknown error occurred 
+    * @throws IllegalArgumentException If the input was not specified (null)
+    */
+   private byte[] stringToByteArray(final String input) throws RuntimeException, IllegalArgumentException
+   {
+      // Precondition check
+      if (input == null)
+      {
+         throw new IllegalArgumentException("Input is required.");
+      }
+
+      // Represent as a String
+      byte[] result = null;
+      final String charset = this.getCharset();
+      try
+      {
+         result = input.getBytes(charset);
+      }
+      catch (final UnsupportedEncodingException e)
+      {
+         throw new RuntimeException("Specified charset is invalid: " + charset, e);
+      }
+
+      // Return
+      return result;
+   }
+
+   /**
+    * Obtains the charset used in encoding/decoding Strings 
+    * to/from byte representation
+    * 
+    * @return The charset
+    */
+   private String getCharset()
+   {
+      return CHARSET;
    }
 
 }

@@ -48,7 +48,7 @@ public class EncryptionUnitTestCase extends EncryptionTestCaseSupport
    /**
     * POJO Encryption Service
     */
-   private static EncryptionBeanBase encryptionService;
+   private static EncryptionBean encryptionService;
 
    // ---------------------------------------------------------------------------||
    // Lifecycle -----------------------------------------------------------------||
@@ -60,8 +60,8 @@ public class EncryptionUnitTestCase extends EncryptionTestCaseSupport
    @BeforeClass
    public static void initialize() throws Throwable
    {
-      // Create the encryption service
-      encryptionService = new EncryptionBeanBase();
+      // Create the encryption service as a POJO
+      encryptionService = new EncryptionBean();
       encryptionService.initialize(); // We call init manually here
    }
 
