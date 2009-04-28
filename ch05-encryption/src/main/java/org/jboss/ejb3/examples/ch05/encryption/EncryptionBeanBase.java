@@ -300,6 +300,24 @@ public class EncryptionBeanBase implements EncryptionCommonBusiness
       return hash;
    }
 
+   /* (non-Javadoc)
+    * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#getCiphersPassphrase()
+    */
+   @Override
+   public String getCiphersPassphrase()
+   {
+      return DEFAULT_PASSPHRASE;
+   }
+
+   /* (non-Javadoc)
+    * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#getMessageDigestAlgorithm()
+    */
+   @Override
+   public String getMessageDigestAlgorithm()
+   {
+      return DEFAULT_ALGORITHM_MESSAGE_DIGEST;
+   }
+
    // ---------------------------------------------------------------------------||
    // Internal Helper Methods ---------------------------------------------------||
    // ---------------------------------------------------------------------------||
@@ -405,27 +423,4 @@ public class EncryptionBeanBase implements EncryptionCommonBusiness
       // Return
       return digest;
    }
-
-   /**
-    * Obtains the passphrase to be used in the key for
-    * the symmetric encryption/decryption ciphers
-    * 
-    * @return
-    */
-   protected String getCiphersPassphrase()
-   {
-      return DEFAULT_PASSPHRASE;
-   }
-
-   /**
-    * Returns the algorithm to be used in
-    * one-way hashing
-    *  
-    * @return
-    */
-   protected String getMessageDigestAlgorithm()
-   {
-      return DEFAULT_ALGORITHM_MESSAGE_DIGEST;
-   }
-
 }

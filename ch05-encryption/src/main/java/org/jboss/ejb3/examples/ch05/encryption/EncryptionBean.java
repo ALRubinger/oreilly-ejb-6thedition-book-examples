@@ -23,6 +23,7 @@ package org.jboss.ejb3.examples.ch05.encryption;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
@@ -41,8 +42,9 @@ import org.jboss.logging.Logger;
  * @version $Revision: $
  */
 @Stateless(name = EncryptionBean.EJB_NAME)
+@Local(EncryptionLocalBusiness.class)
 @Remote(EncryptionRemoteBusiness.class)
-public class EncryptionBean extends EncryptionBeanBase implements EncryptionRemoteBusiness
+public class EncryptionBean extends EncryptionBeanBase implements EncryptionLocalBusiness, EncryptionRemoteBusiness
 {
    // ---------------------------------------------------------------------------||
    // Class Members -------------------------------------------------------------||

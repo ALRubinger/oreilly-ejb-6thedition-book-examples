@@ -78,5 +78,29 @@ public interface EncryptionCommonBusiness
     * @throws IllegalArgumentException If either the hash or input is not provided (null)
     */
    boolean compare(String hash, String input) throws IllegalArgumentException;
+   
+   /*
+    * This comment applies to all below this marker.
+    * 
+    * In real life it's a security risk to expose these internals, 
+    * but they're in place here for testing and to show 
+    * functionality described by the examples.
+    */
+
+   /**
+    * Obtains the passphrase to be used in the key for
+    * the symmetric encryption/decryption ciphers
+    * 
+    * @return
+    */
+   String getCiphersPassphrase();
+
+   /**
+    * Obtains the algorithm to be used in performing
+    * one-way hashing
+    * 
+    * @return
+    */
+   String getMessageDigestAlgorithm();
 
 }

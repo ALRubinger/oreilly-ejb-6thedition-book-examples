@@ -22,14 +22,14 @@
 package org.jboss.ejb3.examples.ch05.encryption;
 
 /**
- * EncryptionRemoteBusiness
+ * EncryptionLocalBusiness
  * 
- * EJB 3.x Remote Business View of the EncryptionEJB
+ * EJB 3.x Local Business View of the EncryptionEJB
  *
  * @author <a href="mailto:alr@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface EncryptionRemoteBusiness extends EncryptionCommonBusiness
+public interface EncryptionLocalBusiness extends EncryptionCommonBusiness
 {
    // Contracts in hierarchy
 }
