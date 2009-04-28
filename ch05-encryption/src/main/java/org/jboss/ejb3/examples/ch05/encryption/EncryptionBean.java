@@ -123,7 +123,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
 
    /**
     * SessionContext of this EJB; this will be injected by the EJB 
-    * Container as it's marked w/ @Resource
+    * Container because it's marked w/ @Resource
     */
    @Resource
    private SessionContext context;
@@ -169,7 +169,6 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
     * Initializes this service before it may handle requests
     * 
     * @throws Exception If some unexpected error occurred
-    * @throws IllegalStateException If one of the required ciphers was not available
     */
    @PostConstruct
    public void initialize() throws Exception
@@ -230,7 +229,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
     * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#compare(java.lang.String, java.lang.String)
     */
    @Override
-   public boolean compare(final String hash, final String input) throws IllegalArgumentException
+   public boolean compare(final String hash, final String input) throws IllegalArgumentException, EncryptionException
    {
       // Precondition checks
       if (hash == null)
@@ -256,7 +255,8 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
     * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#decrypt(java.lang.String)
     */
    @Override
-   public String decrypt(final String input) throws IllegalArgumentException, IllegalStateException
+   public String decrypt(final String input) throws IllegalArgumentException, IllegalStateException,
+         EncryptionException
    {
       // Get the cipher
       final Cipher cipher = this.decryptionCipher;
@@ -274,7 +274,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
       }
       catch (final Throwable t)
       {
-         throw new RuntimeException("Error in decryption", t);
+         throw new EncryptionException("Error in decryption", t);
       }
       final String result = this.byteArrayToString(resultBytes);
 
@@ -289,7 +289,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
     * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#encrypt(java.lang.String)
     */
    @Override
-   public String encrypt(final String input) throws IllegalArgumentException
+   public String encrypt(final String input) throws IllegalArgumentException, EncryptionException
    {
       // Get the cipher
       final Cipher cipher = this.encryptionCipher;
@@ -309,7 +309,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
       }
       catch (final Throwable t)
       {
-         throw new RuntimeException("Error in encryption of: " + input, t);
+         throw new EncryptionException("Error in encryption of: " + input, t);
       }
 
       // Log
@@ -333,7 +333,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
     * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#hash(java.lang.String)
     */
    @Override
-   public String hash(final String input) throws IllegalArgumentException
+   public String hash(final String input) throws IllegalArgumentException, EncryptionException
    {
       // Precondition check
       if (input == null)
@@ -468,7 +468,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
       Object lookupValue = null;
       try
       {
-         lookupValue = this.context.lookup(envEntryName);
+         lookupValue = context.lookup(envEntryName);
          log.debug("Obtained environment entry \"" + envEntryName + "\": " + lookupValue);
       }
       catch (final IllegalArgumentException iae)

@@ -42,8 +42,9 @@ public interface EncryptionCommonBusiness
     * @param input
     * @return
     * @throws IllegalArgumentException If no input was provided (null)
+    * @throws EncryptionException If some problem occurred with encryption
     */
-   String encrypt(String input) throws IllegalArgumentException;
+   String encrypt(String input) throws IllegalArgumentException, EncryptionException;
 
    /**
     * Decrypts the specified String, returning the result.  The general
@@ -54,8 +55,9 @@ public interface EncryptionCommonBusiness
     * @param input
     * @return
     * @throws IllegalArgumentException If no input was provided (null)
+    * @throws EncryptionException If some problem occurred with decryption
     */
-   String decrypt(String input) throws IllegalArgumentException;
+   String decrypt(String input) throws IllegalArgumentException, EncryptionException;
 
    /**
     * Returns a one-way hash of the specified argument.  Useful
@@ -64,8 +66,9 @@ public interface EncryptionCommonBusiness
     * @param input
     * @return
     * @throws IllegalArgumentException If no input was provided (null)
+    * @throws EncryptionException If some problem occurred making the hash
     */
-   String hash(String input) throws IllegalArgumentException;
+   String hash(String input) throws IllegalArgumentException, EncryptionException;
 
    /**
     * Returns whether or not the specified input matches the specified 
@@ -76,9 +79,10 @@ public interface EncryptionCommonBusiness
     * @param input
     * @return
     * @throws IllegalArgumentException If either the hash or input is not provided (null)
+    * @throws EncryptionException If some problem occurred making the hash
     */
-   boolean compare(String hash, String input) throws IllegalArgumentException;
-   
+   boolean compare(String hash, String input) throws IllegalArgumentException, EncryptionException;
+
    /*
     * This comment applies to all below this marker.
     * 

@@ -22,14 +22,14 @@
       -->
       <ejb-name>EncryptionEJB</ejb-name>
 
-      <!-- Override the ciphers passphrase -->
+      <!-- Override the ciphers' default  passphrase -->
       <env-entry>
         <env-entry-name>ciphersPassphrase</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
         <env-entry-value>OverriddenPassword</env-entry-value>
       </env-entry>
 
-      <!-- Override the one-way hash MessageDigest algorithm -->
+      <!-- Override the default unidirectional hash MessageDigest algorithm -->
       <env-entry>
         <env-entry-name>messageDigestAlgorithm</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
