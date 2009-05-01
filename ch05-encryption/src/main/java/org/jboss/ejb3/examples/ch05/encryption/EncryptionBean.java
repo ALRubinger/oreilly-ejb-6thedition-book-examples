@@ -80,6 +80,12 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
    private static final String ENV_ENTRY_NAME_CIPHERS_PASSPHRASE = "ciphersPassphrase";
 
    /**
+    * Name of the environment entry representing the message digest algorithm supplied
+    * in ejb-jar.xml
+    */
+   private static final String ENV_ENTRY_NAME_MESSAGE_DIGEST_ALGORITHM = "messageDigestAlgorithm";
+
+   /**
     * Default Algorithm used by the Digest for one-way hashing
     */
    private static final String DEFAULT_ALGORITHM_MESSAGE_DIGEST = "MD5";
@@ -134,16 +140,11 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
     */
    private String ciphersPassphrase;
 
-   //TODO https://jira.jboss.org/jira/browse/EJBTHREE-1813
-   //TODO https://jira.jboss.org/jira/browse/EJBBOOK-5
-   /*
-    * injection-target in XML should *NOT* be required here.
-    */
    /**
     * Algorithm to use in message digest (hash) operations, injected
-    * via @Resource annotation
+    * via @Resource annotation with name property equal to env-entry name
     */
-   @Resource
+   @Resource(name = ENV_ENTRY_NAME_MESSAGE_DIGEST_ALGORITHM)
    private String messageDigestAlgorithm;
 
    /**

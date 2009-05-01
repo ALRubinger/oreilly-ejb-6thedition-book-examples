@@ -34,18 +34,6 @@
         <env-entry-name>messageDigestAlgorithm</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
         <env-entry-value>SHA</env-entry-value>
-        <!--
-          TODO This "injection-target" should not be required, we've got @Resource on the
-          member
-          
-          https://jira.jboss.org/jira/browse/EJBTHREE-1813
-          https://jira.jboss.org/jira/browse/EJBBOOK-5
-        -->
-        <injection-target>
-          <injection-target-class>
-            org.jboss.ejb3.examples.ch05.encryption.EncryptionBean</injection-target-class>
-          <injection-target-name>messageDigestAlgorithm</injection-target-name>
-        </injection-target>
 
       </env-entry>
 
