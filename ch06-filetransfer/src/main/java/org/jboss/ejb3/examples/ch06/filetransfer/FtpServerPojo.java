@@ -21,9 +21,6 @@
  */
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -140,7 +137,6 @@ public final class FtpServerPojo
       // Get the current CL
       final ClassLoader tccl = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>()
       {
-
          @Override
          public ClassLoader run()
          {
@@ -151,30 +147,16 @@ public final class FtpServerPojo
       // Load the properties file to get its URI
       final String usersConfigFileName = this.getUsersConfigFileName();
       log.info("Using users configuration file: " + usersConfigFileName);
-      final URL usersFileUrl = tccl.getResource(usersConfigFileName);
-      if (usersFileUrl == null)
+      final URL usersConfigUrl = tccl.getResource(usersConfigFileName);
+      if (usersConfigUrl == null)
       {
          throw new RuntimeException("Could not find specified users configuration file upon the classpath: "
                + usersConfigFileName);
       }
-      URI usersFileUri = null;
-      try
-      {
-         usersFileUri = usersFileUrl.toURI();
-      }
-      catch (final URISyntaxException urise)
-      {
-         throw new RuntimeException(urise);
-      }
-      final File usersFile = new File(usersFileUri);
-      if (!usersFile.exists())
-      {
-         throw new RuntimeException("Specified users configuration file does not exist: " + usersFile.getAbsolutePath());
-      }
 
       // Configure the user auth mechanism
       final PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
-      userManagerFactory.setFile(usersFile);
+      userManagerFactory.setUrl(usersConfigUrl);
       userManagerFactory.setPasswordEncryptor(new ClearTextPasswordEncryptor());
       final UserManager userManager = userManagerFactory.createUserManager();
       serverFactory.setUserManager(userManager);

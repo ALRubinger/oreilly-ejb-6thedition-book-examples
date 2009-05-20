@@ -21,8 +21,6 @@
  */
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
-import java.io.File;
-
 import javax.ejb.PostActivate;
 import javax.ejb.PrePassivate;
 
@@ -48,7 +46,7 @@ import org.junit.Test;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public class FileTransferUnitTestCase
+public class FileTransferUnitTestCase extends FileTransferTestCaseBase
 {
 
    //-------------------------------------------------------------------------------------||
@@ -79,23 +77,6 @@ public class FileTransferUnitTestCase
     * Name of the users configuration file for the server
     */
    private static final String FILE_NAME_USERS_CONFIG = "ftpusers.properties";
-
-   /**
-    * The name of the directory under the writable temp filesystem which
-    * will act as the home for these tests
-    */
-   private static final String RELATIVE_LOCATION_HOME = "ejb31_ch06-example-ftpHome";
-
-   /**
-    * The name of the system property denoting the I/O temp directory
-    */
-   private static final String SYS_PROP_NAME_IO_TMP_DIR = "java.io.tmpdir";
-
-   /**
-    * The File we'll use as the writeable home for FTP operations.  Created and
-    * destroyed alongside test lifecycle.
-    */
-   private static File ftpHome;
 
    //-------------------------------------------------------------------------------------||
    // Instance Members -------------------------------------------------------------------||
@@ -161,14 +142,11 @@ public class FileTransferUnitTestCase
 
    /**
     * Creates and initializes the FTP Client used in testing.
-    * Creates the directory which we'll use as the writeable home 
-    * for FTP operations.  Fired before each test is run.
+    * Fired before each test is run.
     */
    @Before
-   public void initialize() throws Exception
+   public void createFtpClient() throws Exception
    {
-      // Create the writeable home
-      this.createFtpHome();
 
       // Create client
       final FileTransferBean ftpClient = new FileTransferBean();
@@ -186,8 +164,7 @@ public class FileTransferUnitTestCase
    }
 
    /**
-    * Disconnects and resets the FTP Client.  Removes the writeable
-    * home for FTP operations.  Fired after each 
+    * Disconnects and resets the FTP Client.  Fired after each 
     * test has completed.
     * 
     * @throws Exception
@@ -205,49 +182,11 @@ public class FileTransferUnitTestCase
          ftpClient.disconnect();
          this.ftpClient = null;
       }
-
-      // Remove the writeable home
-      this.deleteFtpHome();
    }
 
    //-------------------------------------------------------------------------------------||
    // Tests ------------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
-
-   /**
-    * Tests that the a new directory can be made, we can switch 
-    * into it, and we can obtain the present working directory of our newly-created
-    * directory
-    */
-   @Test
-   public void testMkdirCdAndPwd() throws Exception
-   {
-      // Log
-      log.info("testMkdirAndPwd");
-
-      // Get the client
-      final FileTransferCommonBusiness client = this.ftpClient;
-
-      // Switch to home
-      final String home = getFtpHome().getAbsolutePath();
-      client.cd(home);
-
-      // Ensure we're home
-      final String pwdBefore = client.pwd();
-      TestCase.assertEquals("Present working directory should be our home", home, pwdBefore);
-
-      // Make the directory
-      final String newDir = "newDirectory";
-      client.mkdir(newDir);
-
-      // cd into the new dir
-      client.cd(newDir);
-
-      // Ensure we're in the new directory
-      final String pwdAfter = client.pwd();
-      TestCase.assertEquals("Present working directory should be our new directory", home + File.separator + newDir,
-            pwdAfter);
-   }
 
    /**
     * Mocks the passivation/activation process by manually invoking
@@ -265,7 +204,7 @@ public class FileTransferUnitTestCase
       log.info("testPassivationAndActivation");
 
       // Get the client
-      final FileTransferCommonBusiness client = this.ftpClient;
+      final FileTransferCommonBusiness client = this.getClient();
 
       // Switch to home
       final String home = getFtpHome().getAbsolutePath();
@@ -290,114 +229,16 @@ public class FileTransferUnitTestCase
    }
 
    //-------------------------------------------------------------------------------------||
-   // Internal Helper Methods ------------------------------------------------------------||
+   // Required Implementations -----------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
-   /**
-    * Deletes the writable FTP Home
-    * 
-    * @throws Exception
+   /* (non-Javadoc)
+    * @see org.jboss.ejb3.examples.ch06.filetransfer.FileTransferTestCaseBase#getClient()
     */
-   protected void deleteFtpHome() throws Exception
+   @Override
+   protected FileTransferCommonBusiness getClient()
    {
-      final File ftpHome = getFtpHome();
-      if (!ftpHome.exists())
-      {
-         throw new RuntimeException("Error in test setup; FTP Home should exist: " + ftpHome.getAbsolutePath());
-      }
-      final boolean removed = this.deleteRecursive(ftpHome);
-      if (!removed)
-      {
-         throw new RuntimeException("Request to remove the FTP Home failed: " + ftpHome.getAbsolutePath());
-      }
-      log.info("Removed FTP Home: " + ftpHome.getAbsolutePath());
+      return this.ftpClient;
    }
 
-   /**
-    * Recursively deletes all contents of the specified root, 
-    * including the root itself.  If the specified root does not exist, 
-    * no action is taken.
-    * 
-    * @param root
-    * @return true if deleted, false otherwise
-    */
-   protected boolean deleteRecursive(final File root)
-   {
-      // Ensure exists
-      if (!root.exists())
-      {
-         return false;
-      }
-
-      // Get all children
-      final File[] children = root.listFiles();
-      // If it's a directory
-      if (children != null)
-      {
-         // Remove all children
-         for (final File child : children)
-         {
-            this.deleteRecursive(child);
-         }
-      }
-
-      // Delete me
-      final boolean success = root.delete();
-      log.info("Deleted: " + root);
-      return success;
-   }
-
-   /**
-    * Creates the writable FTP Home
-    * 
-    * @throws Exception
-    */
-   protected void createFtpHome() throws Exception
-   {
-      final File ftpHome = getFtpHome();
-      if (ftpHome.exists())
-      {
-         throw new RuntimeException("Error in test setup; FTP Home should not yet exist: " + ftpHome.getAbsolutePath());
-      }
-      final boolean created = ftpHome.mkdir();
-      if (!created)
-      {
-         throw new RuntimeException("Request to create the FTP Home failed: " + ftpHome.getAbsolutePath());
-      }
-      log.info("Created FTP Home: " + ftpHome.getAbsolutePath());
-   }
-
-   /**
-    * Obtains the writeable home for these tests, set under the namespace of the
-    * IO Temp directory
-    */
-   private static File getFtpHome() throws Exception
-   {
-      // If the home is not defined
-      if (ftpHome == null)
-      {
-
-         // Get the property
-         final String sysPropIoTempDir = SYS_PROP_NAME_IO_TMP_DIR;
-         final String ioTempDir = System.getProperty(sysPropIoTempDir);
-         if (ioTempDir == null)
-         {
-            throw new RuntimeException("I/O temp directory was not specified by system property: " + sysPropIoTempDir);
-         }
-
-         // Make the File
-         final File ioTempDirFile = new File(ioTempDir);
-         if (!ioTempDirFile.exists())
-         {
-            throw new RuntimeException("I/O Temp directory does not exist: " + ioTempDirFile.getAbsolutePath());
-         }
-
-         // Append the suffix for our home
-         final File home = new File(ioTempDirFile, RELATIVE_LOCATION_HOME);
-         ftpHome = home;
-      }
-
-      // Return
-      return ftpHome;
-   }
 }

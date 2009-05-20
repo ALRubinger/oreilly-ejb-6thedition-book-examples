@@ -27,7 +27,8 @@ package org.jboss.ejb3.examples.ch06.filetransfer;
  * Contains the contract for operations common to all
  * business interfaces of the FileTransferEJB.
  * 
- * Includes support for //TODO
+ * Includes support for switching present working directories,
+ * printing the current working directory, and making directories.
  * 
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $

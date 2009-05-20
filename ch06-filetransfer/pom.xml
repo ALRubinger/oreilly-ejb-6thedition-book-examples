@@ -186,6 +186,7 @@
                     ${project.build.directory}/lib/ftpserver-core.jar,
                     ${project.build.directory}/lib/mina-core.jar,
                     ${project.build.directory}/lib/slf4j-api.jar,
+                    ${project.build.directory}/lib/commons-net.jar,
                     ${project.build.directory}/${project.build.finalName}.${project.packaging}</files>
                   <jboss.test.run>true</jboss.test.run>
                 </configuration>

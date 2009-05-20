@@ -29,6 +29,7 @@ import javax.annotation.Resource;
 import javax.ejb.PostActivate;
 import javax.ejb.PrePassivate;
 import javax.ejb.Remote;
+import javax.ejb.Remove;
 import javax.ejb.Stateful;
 
 import org.apache.commons.net.ftp.FTPClient;
@@ -45,7 +46,7 @@ import org.jboss.logging.Logger;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-@Stateful
+@Stateful(name = FileTransferBean.EJB_NAME)
 @Remote(FileTransferRemoteBusiness.class)
 public class FileTransferBean implements FileTransferRemoteBusiness
 {
@@ -68,6 +69,11 @@ public class FileTransferBean implements FileTransferRemoteBusiness
     * Name of the environment entry containing the port to which we'll connect
     */
    private static final String ENV_ENTRY_NAME_CONNECT_PORT = "connectPort";
+
+   /**
+    * Name of the EJB, referenced from ejb-jar.xml and used in Global JNDI addresses
+    */
+   public static final String EJB_NAME = "FileTransferEJB";
 
    //-------------------------------------------------------------------------------------||
    // Instance Members -------------------------------------------------------------------||
@@ -334,6 +340,16 @@ public class FileTransferBean implements FileTransferRemoteBusiness
 
    }
 
+   /* (non-Javadoc)
+    * @see org.jboss.ejb3.examples.ch06.filetransfer.FileTransferRemoteBusiness#endSession()
+    */
+   @Remove
+   @Override
+   public void endSession()
+   {
+      log.info("Session Ending...");
+   }
+
    //-------------------------------------------------------------------------------------||
    // Accessors / Mutators ---------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
@@ -343,6 +359,12 @@ public class FileTransferBean implements FileTransferRemoteBusiness
     */
    public String getConnectHost()
    {
+      final String connectHost = this.connectHost;
+      if (connectHost == null || connectHost.length() == 0)
+      {
+         throw new IllegalStateException("Connect host must have been defined by env-entry name: "
+               + ENV_ENTRY_NAME_CONNECT_HOST);
+      }
       return connectHost;
    }
 
@@ -359,6 +381,12 @@ public class FileTransferBean implements FileTransferRemoteBusiness
     */
    public int getConnectPort()
    {
+      final int connectPort = this.connectPort;
+      if (connectPort <= 0)
+      {
+         throw new IllegalStateException("Connect port must have been defined by env-entry name \""
+               + ENV_ENTRY_NAME_CONNECT_PORT + "\" and must be a positive integer");
+      }
       return connectPort;
    }
 
@@ -401,4 +429,5 @@ public class FileTransferBean implements FileTransferRemoteBusiness
    {
       this.presentWorkingDirectory = presentWorkingDirectory;
    }
+
 }
