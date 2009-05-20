@@ -17,6 +17,7 @@
     <module>build</module>
     <module>ch04-firstejb</module>
     <module>ch05-encryption</module>
+    <module>ch06-filetransfer</module>
   </modules>
 
 </project>
