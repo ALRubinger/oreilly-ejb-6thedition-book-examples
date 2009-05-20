@@ -1,0 +1,7 @@
+Some author notes on this example for the workbook section:
+
+* Shows use of SFSB for conversational processing
+* Introduces @PostConstruct/@PreDestroy/@Remove lifecycle callbacks
+* TODO
+
+Possible Exercise: TODO 

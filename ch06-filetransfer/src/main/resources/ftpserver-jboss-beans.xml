@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+  <!-- 
+  
+  Define the POJO which will Embed the FTP Server 
+  
+  This FTP Server will be used for our SFSB Examples
+  
+  -->
+  
+  <bean name="org.jboss.ejb3.examples.ch06.filetransfer.FtpServer"
+    class="org.jboss.ejb3.examples.ch06.filetransfer.FtpServerPojo">
+    
+    <!-- Define configurable properties -->
+    <property name="bindPort">12345</property>
+    <property name="usersConfigFileName">ftpusers.properties</property>
+    
+    <!-- Define callbacks to be invoked alongside MC Lifecycle -->
+    <install method="initializeServer" state="Configured" />
+    <install method="startServer" state="Started "/>
+    <uninstall method="stopServer" />
+    
+  </bean>
+  
+</deployment>
