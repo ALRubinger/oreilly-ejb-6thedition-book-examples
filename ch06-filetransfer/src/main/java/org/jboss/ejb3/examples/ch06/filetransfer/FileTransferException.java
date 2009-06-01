@@ -21,19 +21,15 @@
  */
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
-import javax.ejb.ApplicationException;
-
 /**
  * FileTransferException
  * 
  * Exception to indicate that a problem has occurred during 
- * a file transfer operation.  Will rollback the current transaction
- * if encountered.
+ * a file transfer operation. 
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-@ApplicationException(rollback = true)
 public class FileTransferException extends RuntimeException
 {
 

@@ -22,6 +22,7 @@
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -48,12 +49,17 @@ import org.jboss.logging.Logger;
  */
 @Stateful(name = FileTransferBean.EJB_NAME)
 @Remote(FileTransferRemoteBusiness.class)
-public class FileTransferBean implements FileTransferRemoteBusiness
+public class FileTransferBean implements FileTransferRemoteBusiness, Serializable
 {
 
    //-------------------------------------------------------------------------------------||
    // Class Members ----------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
+
+   /**
+    * Serial Version UID
+    */
+   private static final long serialVersionUID = 1L;
 
    /**
     * Logger
@@ -80,13 +86,12 @@ public class FileTransferBean implements FileTransferRemoteBusiness
    //-------------------------------------------------------------------------------------||
 
    /**
-    * The underlying FTP Client.  We mark this 
-    * as transient because we don't want its state
+    * The underlying FTP Client.  We don't want its state
     * getting Serialized during passivation.  We'll
     * reinitialize this client and its connections
     * upon activation.
     */
-   private transient FTPClient client;
+   private FTPClient client;
 
    /**
     * The name of the host to which we'll connect.
@@ -157,6 +162,9 @@ public class FileTransferBean implements FileTransferRemoteBusiness
             {
                log.warn("Exception encountered in disconnecting the FTP client", ioe);
             }
+
+            // Null out the client so it's not serialized 
+            this.client = null;
          }
       }
    }

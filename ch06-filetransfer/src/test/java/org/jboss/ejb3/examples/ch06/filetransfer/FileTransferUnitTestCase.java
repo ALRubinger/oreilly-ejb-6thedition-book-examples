@@ -21,6 +21,14 @@
  */
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+
 import javax.ejb.PostActivate;
 import javax.ejb.PrePassivate;
 
@@ -214,16 +222,32 @@ public class FileTransferUnitTestCase extends FileTransferTestCaseBase
       final String pwdBefore = client.pwd();
       TestCase.assertEquals("Present working directory should be set to home", home, pwdBefore);
 
-      // Mock passivation
-      log.info("Mock passivation");
+      // Mock @PrePassivate
+      log.info("Mock @" + PrePassivate.class.getName());
       client.disconnect();
+
+      // Mock passivation 
+      log.info("Mock passivation");
+      final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+      final ObjectOutput objectOut = new ObjectOutputStream(outStream);
+      objectOut.writeObject(client);
+      objectOut.close();
 
       // Mock activation
       log.info("Mock activation");
-      client.connect();
+      final InputStream inStream = new ByteArrayInputStream(outStream.toByteArray());
+      final ObjectInput objectIn = new ObjectInputStream(inStream);
+
+      // Get a new client from passivation/activation roundtrip
+      final FileTransferCommonBusiness serializedClient = (FileTransferCommonBusiness) objectIn.readObject();
+      objectIn.close();
+
+      // Mock @PostActivate
+      log.info("Mock @" + PostActivate.class.getName());
+      serializedClient.connect();
 
       // Test the pwd
-      final String pwdAfter = client.pwd();
+      final String pwdAfter = serializedClient.pwd();
       TestCase.assertEquals("Present working directory should be the same as before passivation/activation", home,
             pwdAfter);
    }
