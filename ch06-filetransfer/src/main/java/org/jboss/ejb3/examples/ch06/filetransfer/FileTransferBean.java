@@ -80,7 +80,9 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
    /**
     * The port to which we'll connect.
     * In production systems would typically be externalized
-    * via configurable environment entry
+    * via configurable environment entry.  IANA standard
+    * for FTP ports is 21, though this requires root access
+    * on *nix for testing, so we'll use the nonstandard 12345.
     */
    private static int CONNECT_PORT = 12345;
 
