@@ -26,7 +26,6 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
 import javax.ejb.PostActivate;
 import javax.ejb.PrePassivate;
 import javax.ejb.Remote;
@@ -67,19 +66,23 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
    private static final Logger log = Logger.getLogger(FileTransferBean.class);
 
    /**
-    * Name of the environment entry containing the host to which we'll connect
-    */
-   private static final String ENV_ENTRY_NAME_CONNECT_HOST = "connectHost";
-
-   /**
-    * Name of the environment entry containing the port to which we'll connect
-    */
-   private static final String ENV_ENTRY_NAME_CONNECT_PORT = "connectPort";
-
-   /**
-    * Name of the EJB, referenced from ejb-jar.xml and used in Global JNDI addresses
+    * Name of the EJB, used in Global JNDI addresses
     */
    public static final String EJB_NAME = "FileTransferEJB";
+
+   /**
+    * The name of the host to which we'll connect.
+    * In production systems would typically be externalized
+    * via configurable environment entry
+    */
+   private static String CONNECT_HOST = "localhost";
+
+   /**
+    * The port to which we'll connect.
+    * In production systems would typically be externalized
+    * via configurable environment entry
+    */
+   private static int CONNECT_PORT = 12345;
 
    //-------------------------------------------------------------------------------------||
    // Instance Members -------------------------------------------------------------------||
@@ -92,22 +95,6 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
     * upon activation.
     */
    private FTPClient client;
-
-   /**
-    * The name of the host to which we'll connect.
-    * Initialized from the environment entry named
-    * {@link FileTransferBean#ENV_ENTRY_NAME_CONNECT_HOST}
-    */
-   @Resource(name = ENV_ENTRY_NAME_CONNECT_HOST)
-   private String connectHost;
-
-   /**
-    * The port to which we'll connect.
-    * Initialized from the environment entry named
-    * {@link FileTransferBean#ENV_ENTRY_NAME_CONNECT_PORT}
-    */
-   @Resource(name = ENV_ENTRY_NAME_CONNECT_PORT)
-   private int connectPort;
 
    /**
     * Name of the present working directory.  In cases where
@@ -367,21 +354,7 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
     */
    public String getConnectHost()
    {
-      final String connectHost = this.connectHost;
-      if (connectHost == null || connectHost.length() == 0)
-      {
-         throw new IllegalStateException("Connect host must have been defined by env-entry name: "
-               + ENV_ENTRY_NAME_CONNECT_HOST);
-      }
-      return connectHost;
-   }
-
-   /**
-    * @param connectHost the connectHost to set
-    */
-   public void setConnectHost(final String connectHost)
-   {
-      this.connectHost = connectHost;
+      return CONNECT_HOST;
    }
 
    /**
@@ -389,21 +362,7 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
     */
    public int getConnectPort()
    {
-      final int connectPort = this.connectPort;
-      if (connectPort <= 0)
-      {
-         throw new IllegalStateException("Connect port must have been defined by env-entry name \""
-               + ENV_ENTRY_NAME_CONNECT_PORT + "\" and must be a positive integer");
-      }
-      return connectPort;
-   }
-
-   /**
-    * @param connectPort the connectPort to set
-    */
-   public void setConnectPort(final int connectPort)
-   {
-      this.connectPort = connectPort;
+      return CONNECT_PORT;
    }
 
    /**

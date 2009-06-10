@@ -77,11 +77,6 @@ public class FileTransferUnitTestCase extends FileTransferTestCaseBase
    private static final int FTP_SERVICE_BIND_PORT = 12345;
 
    /**
-    * Host to which the FTP Client will connect
-    */
-   private static final String FTP_CLIENT_CONNECT_HOST = "127.0.0.1";
-
-   /**
     * Name of the users configuration file for the server
     */
    private static final String FILE_NAME_USERS_CONFIG = "ftpusers.properties";
@@ -155,13 +150,8 @@ public class FileTransferUnitTestCase extends FileTransferTestCaseBase
    @Before
    public void createFtpClient() throws Exception
    {
-
       // Create client
       final FileTransferBean ftpClient = new FileTransferBean();
-
-      // Set properties
-      ftpClient.setConnectHost(FTP_CLIENT_CONNECT_HOST);
-      ftpClient.setConnectPort(FTP_SERVICE_BIND_PORT);
 
       // Connect
       ftpClient.connect();
