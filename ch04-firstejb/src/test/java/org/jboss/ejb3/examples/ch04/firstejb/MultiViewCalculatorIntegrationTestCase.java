@@ -24,21 +24,21 @@ package org.jboss.ejb3.examples.ch04.firstejb;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.rmi.PortableRemoteObject;
 
 import org.jboss.logging.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * CalculatorIntegrationTestCase
+ * MultiViewCalculatorIntegrationTestCase
  * 
- * Integration tests for the CalculatorEJB exposing one 
- * remote business view
+ * Integration tests for the CalculatorEJB, testing many views
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public class CalculatorIntegrationTestCase
+public class MultiViewCalculatorIntegrationTestCase
 {
    // ---------------------------------------------------------------------------||
    // Class Members -------------------------------------------------------------||
@@ -47,7 +47,7 @@ public class CalculatorIntegrationTestCase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(CalculatorIntegrationTestCase.class);
+   private static final Logger log = Logger.getLogger(MultiViewCalculatorIntegrationTestCase.class);
 
    /**
     * The JNDI Naming Context
@@ -60,6 +60,11 @@ public class CalculatorIntegrationTestCase
    private static CalculatorRemoteBusiness calcRemoteBusiness;
 
    /**
+    * The EJB 2.x remote component view of the CalculatorEJB 
+    */
+   private static CalculatorRemote calcRemote;
+
+   /**
     * Delegate for ensuring that the obtained Calculators are working as expected
     */
    private static CalculatorAssertionDelegate assertionDelegate;
@@ -68,7 +73,14 @@ public class CalculatorIntegrationTestCase
     * JNDI Name of the Remote Business Reference
     */
    //TODO Use Global JNDI Syntax (not yet supported in JBoss EJB3)
-   private static final String JNDI_NAME_CALC_REMOTE_BUSINESS = SimpleCalculatorBean.class.getSimpleName() + "/remote";
+   private static final String JNDI_NAME_CALC_REMOTE_BUSINESS = ManyViewCalculatorBean.class.getSimpleName()
+         + "/remote";
+
+   /**
+    * JNDI Name of the Remote Home Reference
+    */
+   //TODO Use Global JNDI Syntax (not yet supported in JBoss EJB3)
+   private static final String JNDI_NAME_CALC_REMOTE_HOME = ManyViewCalculatorBean.class.getSimpleName() + "/home";
 
    // ---------------------------------------------------------------------------||
    // Lifecycle Methods ---------------------------------------------------------||
@@ -88,6 +100,12 @@ public class CalculatorIntegrationTestCase
 
       // Create Assertion Delegate
       assertionDelegate = new CalculatorAssertionDelegate();
+
+      // Obtain EJB 2.x Component Reference via Home
+      final Object calcRemoteHomeReference = namingContext.lookup(JNDI_NAME_CALC_REMOTE_HOME);
+      final CalculatorRemoteHome calcRemoteHome = (CalculatorRemoteHome) PortableRemoteObject.narrow(
+            calcRemoteHomeReference, CalculatorRemoteHome.class);
+      calcRemote = calcRemoteHome.create();
    }
 
    // ---------------------------------------------------------------------------||
@@ -104,6 +122,18 @@ public class CalculatorIntegrationTestCase
       // Test 
       log.info("Testing remote business reference...");
       assertionDelegate.assertAdditionSucceeds(calcRemoteBusiness);
+   }
+
+   /**
+    * Ensures that the CalculatorEJB adds as expected,
+    * using the EJB 2.x component view
+    */
+   @Test
+   public void testAdditionUsingComponentReference() throws Throwable
+   {
+      // Test
+      log.info("Testing remote component reference...");
+      assertionDelegate.assertAdditionSucceeds(calcRemote);
    }
 
 }
