@@ -1,0 +1,179 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- Parent Information -->
+  <parent>
+    <groupId>org.jboss.ejb3.examples</groupId>
+    <artifactId>jboss-ejb3-examples-build</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <!-- Model Version -->
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Artifact Information -->
+  <artifactId>jboss-ejb3-examples-ch07-envinfo</artifactId>
+  <name>JBoss EJB 3.x Examples - Chapter 7: EnvironmentInfo EJBs</name>
+  <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter 7</description>
+
+  <!-- Build -->
+  <build>
+  </build>
+
+
+  <!-- Properties -->
+  <properties>
+
+    <!-- Versioning -->
+
+  </properties>
+
+  <!-- Dependencies -->
+  <dependencies>
+
+    <dependency>
+      <groupId>org.jboss.ejb3</groupId>
+      <artifactId>jboss-ejb3-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging-log4j</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging-spi</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <profiles>
+
+    <profile>
+
+      <!-- Declare the "Integration Test" Profile -->
+      <id>it</id>
+
+      <build>
+
+        <plugins>
+
+          <!--
+
+            Configure Surefire to run in integration-test phase
+          -->
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>surefire-it</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <skip>false</skip>
+                  <!-- Include jbossall-client.jar on the CP -->
+                  <additionalClasspathElements>
+                    <additionalClasspathElement>${jboss.home}/client/jbossall-client.jar</additionalClasspathElement>
+                  </additionalClasspathElements>
+                  <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                  <printSummary>true</printSummary>
+                  <forkMode>always</forkMode>
+                  <includes>
+                    <include>**/*IntegrationTestCase.java</include>
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <!--
+
+            Define the JBossAS Maven Control Plugin
+          -->
+          <plugin>
+
+            <groupId>org.jboss.maven.plugins.jbossas</groupId>
+            <artifactId>maven-jboss-as-control-plugin</artifactId>
+            <version>0.1.2-SNAPSHOT</version>
+
+            <!-- Executions -->
+            <executions>
+
+              <!--
+
+                Start JBossAS with our new configuration
+              -->
+              <execution>
+                <id>start-jbossas</id>
+                <goals>
+                  <goal>start</goal>
+                </goals>
+                <phase>pre-integration-test</phase>
+                <configuration>
+                  <jvmArgs>
+                    <jvmArg>-Xmx512M</jvmArg>
+                  </jvmArgs>
+                  <serverConfigName>default</serverConfigName>
+                  <jboss.test.run>true</jboss.test.run>
+                </configuration>
+              </execution>
+
+              <!--
+                Deploy into our custom JBossAS Configuration
+              -->
+              <execution>
+                <id>deploy-test-slsb</id>
+                <goals>
+                  <goal>deploy</goal>
+                </goals>
+                <phase>pre-integration-test</phase>
+                <configuration>
+                  <serverConfigName>default</serverConfigName>
+                  <files>${project.build.directory}/lib/ftplet-api.jar,
+                    ${project.build.directory}/lib/ftpserver-core.jar,
+                    ${project.build.directory}/lib/mina-core.jar,
+                    ${project.build.directory}/lib/slf4j-api.jar,
+                    ${project.build.directory}/lib/commons-net.jar,
+                    ${project.build.directory}/${project.build.finalName}.${project.packaging}</files>
+                  <jboss.test.run>true</jboss.test.run>
+                </configuration>
+              </execution>
+
+              <!--
+
+                Stop JBossAS
+              -->
+              <execution>
+                <id>stop-jbossas</id>
+                <goals>
+                  <goal>stop</goal>
+                </goals>
+                <phase>post-integration-test</phase>
+                <configuration>
+                  <serverConfigName>default</serverConfigName>
+                  <jboss.test.run>true</jboss.test.run>
+                </configuration>
+              </execution>
+
+            </executions>
+
+          </plugin>
+
+        </plugins>
+
+      </build>
+
+    </profile>
+
+  </profiles>
+
+</project>
