@@ -1,0 +1,318 @@
+<?xml version="1.0"?>
+<!-- name="generator" content="blojsom v2.25.3" -->
+<rss version="2.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
+    <channel>
+        <title>Enter The JBoss Matrix</title>
+        <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/</link>
+        <description>Where JBossians blog</description>
+        <language>en</language>
+        <image>
+            <url>http://blogs.jboss.org/favicon.ico</url>
+            <title>Enter The JBoss Matrix</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/</link>
+        </image>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+		<generator>blojsom v2.25.3</generator>
+		<managingEditor>it-ops@jboss.com</managingEditor>
+		<webMaster>it-ops@jboss.com</webMaster>
+		<pubDate>Wed, 1 Jul 2009 12:02:26 -0400</pubDate>
+
+                <item>
+            <title>Selecting Community or Platforms?</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/mlittle/?permalink=Selecting_Community_or_Platforms.txt</link>
+            <description>&lt;p&gt;Over the past few years we have made a conscious choice to separate community projects from commercial platforms. Why is this the case? What differentiates  between our community and commercial software? Probably the most obvious difference is that we sell support (24x7) on commercial platforms whereas projects are given a best-effort support through public forums. But really there are benefits and trade-offs associated with either option.&lt;/p&gt;
+
+&lt;h3&gt;Project&lt;/h3&gt;
+&lt;p&gt;
+With this option the projects are always at the cutting edge. They release frequently (usually every 8 to 10 weeks) and they drive a lot of our innovation. We have many community contributors, in the form of code donations, use cases, feature requests etc. Technical direction is set by a combination of the project lead and the community. Interfaces and capabilities may change frequently as the developers and users of the project learn and shape their requirements based on experiences gained. As mentioned above, the support given to project code is best effort, with help from the community and Red Hat employees where possible. But you should not rely on it being available all of the time. However, this is definitely the place to be if you want to be on the bleeding edge and influence next generation technology and direction.&lt;/p&gt;
+&lt;h3&gt;
+Platform&lt;/h3&gt;
+&lt;p&gt;
+The projects try hard to ensure that where there are cross-project dependencies they work well together. However, because they release frequently, this is not always possible. Furthermore, the amount of testing across different operating systems, databases (and their drivers) and VMs that the projects can/should do is limited. As well as the 24x7 support they offer, this is where the platforms come in to their own. A platform is a point-cut of specific projects and is typically many months behind those projects when it is released. The reason for this is the amount of testing and qualification that goes into driving a project to become part of a platform. This can often be between 3 and 9 months of effort. As well as giving this significant testing regime, platforms also provide a very strict evolution path: interfaces and capabilities cannot simply change from one release to another, and not everything that is within a project may be within a platform, e.g., something that was beta quality when the project was accepted within the platform effort will typically be removed by the platform process. If long term stability and support are what you are after then this is the place to be.&lt;/p&gt;
+</description>
+            <author>Mark Little</author>
+            <guid>http://blogs.jboss.org/blog/mlittle/?permalink=Selecting_Community_or_Platforms.txt</guid>
+			<pubDate>Wed, 1 Jul 2009 12:02:26 -0400</pubDate>
+            <category>/mlittle/</category>
+                    </item>
+                <item>
+            <title>RESTEasy 1.1 Released</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/bburke/?permalink=RESTEasy_1_1_Released.txt</link>
+            <description>I&#39;m pleased to announce the release of RESTEasy 1.1.GA.  This was a huge functionality and bug fix release for us.  Special thanks goes out to Solomon Duskis, Attila Kiraly, and Michael Brackx.  Included in this release is:
+
+&lt;ul&gt;
+&lt;li&gt;New interceptor model&lt;/li&gt;
+&lt;li&gt;GZIP encoding support&lt;/li&gt;
+&lt;li&gt;Guice 1.0 support.  Thanks Mike!&lt;/li&gt;
+&lt;li&gt;XOP and multipart/related support. Thanks Attila!&lt;/li&gt;
+&lt;li&gt;Internal dispatching and forwarding support.  Thanks Solomon!&lt;/li&gt;
+&lt;li&gt;Jackson JSON provider support.&lt;/li&gt;
+&lt;li&gt;Asynchronous Job Service&lt;/li&gt;
+&lt;li&gt;Client and Server side caching capabilities&lt;/li&gt;
+&lt;li&gt;Decorator framework for JAXB&lt;/li&gt;
+&lt;li&gt;XMl header and stylesheet support for JAXB&lt;/li&gt;
+&lt;li&gt;Greatly improved multipart support thanks to Attila.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+For more information follow the links at &lt;a href=&quot;http://jboss.org/resteasy&quot;&gt;RESTEasy&#39;s Project Page&lt;/a&gt;.&lt;/p&gt;
+</description>
+            <author>Bill Burke</author>
+            <guid>http://blogs.jboss.org/blog/bburke/?permalink=RESTEasy_1_1_Released.txt</guid>
+			<pubDate>Wed, 17 Jun 2009 21:02:43 -0400</pubDate>
+            <category>/bburke/</category>
+                    </item>
+                <item>
+            <title>We Welcome our Friends at Hewlett Packard to our SOA Solutions Community</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/pfricke/?permalink=We_Welcome_our_Friends_at_Hewlett_Packard_to_our_SOA_Solutions_Community.txt</link>
+            <description>Today we announced that &lt;a href=&quot;http://www.redhat.com/about/news/prarchive/2009/hp_on_soa.html&quot;&gt; Red Hat and HP are collaborating on an integrated SOA development, execution and integration, and management environment featuring JBoss Enterprise SOA Platform and HP SOA Systinet&lt;/a&gt;. This week, we are with HP at &lt;a href=&quot;http://www.hpsoftwareuniverse2009.com/hpswu/controller.cfm?view=content.overview&quot;&gt; HP Software Universe&lt;/a&gt; demonstrating and discussing our solution with customers, partners and others. We are excited to have HP join us on the journey to make enterprise SOA more simple, open and affordable, expanding opportunities for business to be more agile at all levels in the value chain.
+</description>
+            <author>Pierre Fricke</author>
+            <guid>http://blogs.jboss.org/blog/pfricke/?permalink=We_Welcome_our_Friends_at_Hewlett_Packard_to_our_SOA_Solutions_Community.txt</guid>
+			<pubDate>Wed, 17 Jun 2009 15:21:33 -0400</pubDate>
+            <category>/pfricke/</category>
+                    </item>
+                <item>
+            <title>Don&#39;t put lipstick on a pig that can&#39;t fly</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/mlittle/?permalink=Dont_put_lipstick_on_a_pig_that_cant_fly.txt</link>
+            <description>&lt;p&gt;For as long as I can recall I&#39;ve always liked good tools and been infuriated with those that get in the way of me being &quot;creative&quot; or working &quot;efficiently&quot;. (Subjective terms, I know.) Whether it was the &lt;a href=&quot;http://en.wikipedia.org/wiki/MetaComCo&quot;&gt;MetaComCo C/Pascal compiler tools for my Atari those many years back&lt;/a&gt; (great customization capabilities) or plain emacs (yes, it&#39;s a tool!) I&#39;ve admired those groups who can make good tools. Over the years I&#39;ve met many tooling groups from HP, Bluestone, BEA, Microsoft and of course JBoss/Red Hat. Some of the more successful groups have been staffed by a combination of good engineers but also people who have good &lt;a href=&quot;http://en.wikipedia.org/wiki/Human-computer_interaction&quot;&gt;HCI skills&lt;/a&gt; (including psychology backgrounds). But they&#39;ve all usually had the same comments to make about how tooling is seen by developers: under appreciated and an afterthought. That&#39;s a shame because as far as I&#39;m concerned a good tooling experience can bring a better ROI than adding some super cool feature here or there.
+&lt;/p&gt;
+&lt;p&gt;I think the key to good tooling is having the involvement of the developers on the product for which tooling is being developed as early as possible. Where I&#39;ve seen this work well is when there&#39;s actually a tooling person sitting in that team full time, learning about the requirements and acting as a conduit to impart that knowledge to the rest of the tooling team. To do it otherwise can often take longer (inefficient?) and may result in something that isn&#39;t quite what is required. Despite the fact that they&#39;re all engineers, there is often an impedance mismatch between tooling engineers and project engineers; almost a language barrier. But for good tooling to work well, the conversations need to be bi-directional. This is another reason why the approach of having a tooling person sitting in the project works well, as it provides immediacy of responses.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://blog.hibernate.org/Bloggers/Max&quot;&gt;Max&lt;/a&gt;, our tooling lead, is keen to say that good tools shouldn&#39;t be used to cover up poor underlying projects. He&#39;s right! I&#39;ve seen that happen a lot across the industry, where the tools look fantastic but there&#39;s very little under the covers, or what is there is horribly baroque and hard to understand. Designing for tooling from the outset should be considered in the same way as designing for robustness or performance or security. It&#39;s not something that is easy to retro-fit.
+&lt;/p&gt;
+&lt;p&gt;Good tools (and yes, I count &lt;a href=&quot;http://www.jboss.com/products/devstudio/&quot;&gt;JBDS&lt;/a&gt; in that list) also grow with you. Too often I&#39;ve seen tools that are either way too complex to use for beginners or are so basic as to encourage you to grow out of them pretty quickly and look for something else. (There&#39;s a reason I&#39;ve been using shell and emacs for 20 years.) And of course in this world of ever changing runtimes, you really want a tool suite (or IDE in this case) that can work with more than one at a time: I hate having to fire up different IDEs for different versions of the same product, especially when there may only be a few months age difference between the runtime versions.
+&lt;/p&gt;
+&lt;p&gt;Fortunately we have some great people here who are passionate about tooling and understand its importance in making the whole product experience work well. That doesn&#39;t mean we&#39;ve got to that nirvana just yet, but we are on the right path. We need to work more closely with the projects and vice versa in order to push this mantra of thinking about tooling through all phases of the project lifecycle and not just after the fact. The improvements we&#39;ve made over the past couple of years are pretty significant and there&#39;s much more to come. I&#39;m excited and maybe this will finally encourage me to move away from emacs ;-)
+&lt;/p&gt;
+&lt;p&gt;BTW, thanks to &lt;a href=&quot;http://blog.hibernate.org/Bloggers/Max&quot;&gt;Max&lt;/a&gt; for the title of this entry!&lt;/p&gt;
+</description>
+            <author>Mark Little</author>
+            <guid>http://blogs.jboss.org/blog/mlittle/?permalink=Dont_put_lipstick_on_a_pig_that_cant_fly.txt</guid>
+			<pubDate>Mon, 15 Jun 2009 09:45:34 -0400</pubDate>
+            <category>/mlittle/</category>
+                    </item>
+                <item>
+            <title>The JBoss Microcontainer: Flexibility and Future Proofing</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/mlittle/?permalink=The_JBoss_Microcontainer_Flexibility_and_Future_Proofing.txt</link>
+            <description>&lt;p&gt;You&#39;ve probably all seen or heard of &lt;a href=&quot;http://en.wikipedia.org/wiki/Transformers_(film)&quot;&gt;Transformers (&quot;Transformers ... robots in disguise.&quot;)&lt;/a&gt; The gist is that these robot are flexible enough to be reconfigured into a variety of different forms depending upon the need at hand. Pretty important if you need to battle enemies from the stars and then make your way silently through the streets disguised as a &lt;a href=&quot;http://en.wikipedia.org/wiki/Bugatti_Veyron&quot;&gt;Bugatti Veyron&lt;/a&gt;. But what, you ask, has this to do with JBoss? Well we&#39;ve been working on our own adaptable infrastructure for a few years; not so we can fight Decepticons, but so that we can offer a way for the same software components to be used in a variety of different environments without requiring major rewrites, different implementations, recompilations or several months of on-site consultants. We also want to support a range of different frameworks or component models, such as &lt;a href=&quot;http://www.mail-archive.com/tuscany-dev@ws.apache.org/msg32307.html&quot;&gt;SCA&lt;/a&gt;, &lt;a href=&quot;http://oddthesis.org/&quot;&gt;Ruby&lt;/a&gt; and OSGi.&lt;/p&gt;
+&lt;p&gt;
+So how have we been able to accomplish this? With the &lt;a href=&quot;http://www.jboss.org/jbossmc/&quot;&gt;JBoss Microcontainer&lt;/a&gt;. It&#39;s been in development for several years as well as being an evolution from the original &lt;a href=&quot;http://www.jboss.org/community/wiki/JBossMicrokernel&quot;&gt;JMX Micro-kernel&lt;/a&gt;. The basic concept is pretty simple: you can define your core services/components and their interdependencies no matter what their flavour (e.g., POJOs, MBeans) dynamically and potentially on-the-fly. What was a full-featured JEE Application Server one minute could be a scaled down embedded ESB the next. What was a basic Web server yesterday could seamlessly acquire transactions and security tomorrow.&lt;/p&gt;
+&lt;p&gt;The aim here is clear though: to allow existing investments in components that have proven their maturity over the years to be used in both lightweight and heavyweight environments. Other approaches to solving this problem typically revolve around completely different technology stacks, requiring different expertise, learning curves, support contracts etc. And that kind of solution does not evolve with your changing requirements (at least not without going back to the vendor to arrange delivery of the new product, learning it, training etc.)&lt;/p&gt;
+&lt;p&gt;
+But what about other deployment models, such as OSGi and Spring? Although JBoss is popular there are people who need to use these alternative frameworks/component models. In the past they meant embracing that entire framework for everything in the assumption that the choice you make today is the right choice for tomorrow. Unfortunately frameworks come and go, as well as requirements changing. So an investment in something today is not necessarily the right approach for the future. But in that case what do you do when you&#39;re left with an OSGi bundle and you don&#39;t want to stay with OSGi, for example? Well fortunately the JBoss Microcontainer offers a possible solution there too. supporting a flexible state machine model of components we can support native component model deployments as well as foreign component models on the same codebase and track dependencies across those component models.&lt;/p&gt;
+&lt;p&gt;
+The architecture of the Microcontainer has evolved over the past few years, so even if you looked at it a while ago it&#39;s worth looking again. For example, we&#39;ve added increased flexibility to the deployment model such that we now support an AOP-like manipulation of a metadata pipeline down to the final component deployer. There&#39;s also a Virtual File System for deployments, which is a major improvement over the past. Finally it&#39;s now possible to declare that any implementors of an interface should be &quot;injected/un-injected&quot; via specified methods, which allows for containers to specify plugin interfaces and easily have plugin implementors associated with the container as the plugins are instantiated. These examples and others just go to prove how much thought and effort has gone into this new architecture in order for us to be able to deliver on the promise of flexibility and adaptability for user requirements now and in the future. We spent a lot of time doing this so that we could do it right once and for all time: the future is bright for JBoss and its users, because we know now that we don&#39;t have to worry about re-architecting again in a years time when another deployment environment comes along, or some subtle differences in needs force a rethink of &quot;fat&quot; versus &quot;thin&quot; deployments or &quot;rich&quot; versus &quot;poor&quot;. You can safely deploy to the new Microcontainer in the knowledge that it&#39;s future-proofing you.&lt;/p&gt;
+&lt;p&gt;As an industry one thing that we often fail to remember is that standards come and go, but core requirements remain. If you look at the evolution of distributed systems over the past 4 decades, for example, you&#39;ll see the transition through DCE, CORBA, JEE, Web Services etc. These all define their own component model(s), APIs, development methodologies etc. Yet at the heart of them all critical services such as transactions, messaging, security etc. remain the same. The only thing that changes is the way in which they are wrapped into the infrastructure. Well that&#39;s something we&#39;ve tried to embrace with the new Microcontainer: leveraging our tried and tested components and providing a way to use them in environments/standards past, present and future.&lt;/p&gt;
+</description>
+            <author>Mark Little</author>
+            <guid>http://blogs.jboss.org/blog/mlittle/?permalink=The_JBoss_Microcontainer_Flexibility_and_Future_Proofing.txt</guid>
+			<pubDate>Mon, 1 Jun 2009 17:50:54 -0400</pubDate>
+            <category>/mlittle/</category>
+                    </item>
+                <item>
+            <title>Red Hat Launches Business Rules Management System to Drive Enterprise Competitive Advantage in Turbulent Business Climate</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/pfricke/?permalink=Red_Hat_Launches_Business_Rules_Management_System_to_Drive_Enterprise_Competitive_Advantage_in_Turbulent_Business_Climate.txt</link>
+            <description>&lt;h2&gt;JBoss Enterprise BRMS Enables Rapid Response to Change&lt;/h2&gt;
+&lt;p&gt;
+Faced with economic, business and regulatory turbulence, enterprises around the world need to respond to change, opportunities and threats more rapidly than ever before. Businesses that can respond to new regulations, customer trends, opportunities and threats by updating the IT deployments with new / modified business rules will have a competitive advantage. To date, business rules management systems (BRMS) have been complex, closed and expensive.  Red Hat believes there is a better way to improve business execution and responsiveness while carving out costs. Today, we introduce the JBoss Enterprise BRMS.
+&lt;p&gt;
+&lt;a href=&quot;http://www.jboss.com/products/platforms/brms/index.html&quot;&gt; JBoss Enterprise BRMS&lt;/a&gt; provides an open source business rules management system that enables easy business policy and rules development, access, and change management. &lt;a href=&quot;http://www.jboss.com/products/platforms/brms/index.html&quot;&gt; JBoss Enterprise BRMS&lt;/a&gt; includes a fast and highly efficient rule engine and easy to use rules development, management system and repository.  &lt;a href=&quot;http://www.jboss.com/products/platforms/brms/index.html&quot;&gt; JBoss Enterprise BRMS&lt;/a&gt; allows businesses to reduce development time to update applications, SOA deployments and business processes with the latest business rules and policies.  &lt;b&gt;The ability to respond to change in hours or days updating a BRMS vs. weeks or months updating business rules scattered in stove-piped enterprise and web applications can mean the difference between prosperity and bankruptcy.&lt;/b&gt; The JBoss Enterprise BRMS subscription along with other JBoss Enterprise Middleware such as our SOA Platform enable this value within solid IT governance methodologies for some situations such as price changes or simpler parameter changes on policy or product configurations. Even with more complex changes such as a new regulatory regime, the enterprise can respond faster with JBoss Enterprise BRMS.
+&lt;p&gt;
+Examples where JBoss Enterprise BRMS may add significant value to an enterprise or government agency include:
+&lt;ul&gt;
+&lt;li&gt;Resource Allocation and Prioritization
+&lt;li&gt;Product Configuration - Handles complex product feature interdependencies
+&lt;li&gt;Pricing and Electronic Trading - Applying algorithms to live pricing information
+&lt;li&gt;Insurance - Assessing the premium level for new and changed customers
+&lt;li&gt;Network Security and Monitoring - Intelligent assessment of traffic for malicious intent; smart alerts and control actions
+&lt;li&gt;Authorization – e.g., Determining user permissions
+&lt;li&gt;Control Systems – e.g., Air conditioning, heating
+&lt;li&gt;Healthcare – Assessing drug interactions; prescription assistance
+Government – Evaluating and approving benefits such as social security, unemployment, and welfare; fraud detection
+&lt;/ul&gt;
+&lt;p&gt;
+For example, suppose an upsell opportunity arose, with demand so high that a price increase is also in order.  Also, let&#39;s assume that $100,000 of increased business per day is likely when the new product offering is available.  With product configuration and pricing rules in &lt;a href=&quot;http://www.jboss.com/products/platforms/brms/index.html&quot;&gt; JBoss Enterprise BRMS&lt;/a&gt;, this business may be able to reconfigure IT to offer the new upsell product and product pricing in 5 days, making the change available to all channels simultaneously. Without JBoss Enterprise BRMS, this new offering could require changing and redeploying 3 web applications and a product configuration application written in Java which may take 25 days. With &lt;a href=&quot;http://www.jboss.com/products/platforms/brms/index.html&quot;&gt; JBoss Enterprise BRMS&lt;/a&gt;, the web applications are still part of the deployment, but now call upon the BRMS to execute business rules. The enterprise with JBoss Enterprise BRMS has gained $2,000,000 in increased revenue. Even if the old style application deployment enterprise made the change manually by faxing new price sheets to various channels, it still could take several days and then present several consistency, customer satisfaction, delivery and other issues. 
+&lt;p&gt;
+We invite you to explore &lt;a href=&quot;http://www.jboss.com/products/platforms/brms/index.html&quot;&gt; JBoss Enterprise BRMS&lt;/a&gt; and see how it may help improve your business.  
+&lt;p&gt;
+We also invite you to take the &lt;a href=&quot;http://www.jboss.com/resources/soa/&quot;&gt; JBoss SOA Assessment&lt;/a&gt; which will help you understand where you are in adopting SOA and what next steps may further your journey to a more flexible and agile IT infrastructure that is responsive to change. &lt;a href=&quot;http://www.jboss.com/products/&quot;&gt; JBoss Enterprise Middleware&lt;/a&gt; and &lt;a href=&quot;http://www.jboss.com/services/consulting/&quot;&gt; Red Hat Consulting&lt;/a&gt; can smooth the path and accelerate the journey...learn more in the &lt;a href=&quot;http://www.jboss.com/resources/soa/&quot;&gt; JBoss SOA Resource Center&lt;/a&gt;.
+&lt;p&gt;
+
+
+</description>
+            <author>Pierre Fricke</author>
+            <guid>http://blogs.jboss.org/blog/pfricke/?permalink=Red_Hat_Launches_Business_Rules_Management_System_to_Drive_Enterprise_Competitive_Advantage_in_Turbulent_Business_Climate.txt</guid>
+			<pubDate>Tue, 19 May 2009 08:41:03 -0400</pubDate>
+            <category>/pfricke/</category>
+                    </item>
+                <item>
+            <title>CloudCamp 2009</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/mlittle/?permalink=CloudCamp_2009.txt</link>
+            <description>&lt;p&gt;We are co-sponsoring &lt;a href=&quot;http://www.cloudcamp.com/&quot;&gt;CloudCamp&lt;/a&gt; this year. Come along to the &lt;a href=&quot;http://www.cloudcamp.com/?page_id=394&quot;&gt;Newcastle&lt;/a&gt; or &lt;a href=&quot;http://www.cloudcamp.com/?page_id=396&quot;&gt;Edinburgh events&lt;/a&gt; if you get a chance.&lt;/p&gt;
+</description>
+            <author>Mark Little</author>
+            <guid>http://blogs.jboss.org/blog/mlittle/?permalink=CloudCamp_2009.txt</guid>
+			<pubDate>Thu, 12 Mar 2009 10:34:07 -0400</pubDate>
+            <category>/mlittle/</category>
+                    </item>
+                <item>
+            <title>WS-Eventing standardization</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/mlittle/?permalink=WS_Eventing_standardization.txt</link>
+            <description>&lt;p&gt;Sometimes standards evolution can read a bit like a religious work! For example: in the beginning there was the word and the word was &quot;events&quot;. Some of the Web Services architects looked at the word and came up with &lt;a href=&quot;http://xml.coverpages.org/WS-Events20030721.pdf&quot;&gt;WS-Events&lt;/a&gt;. The rest of the Web Services world looked on that specification and found it wanting so &lt;a href=&quot;http://www.thefreedictionary.com/begat&quot;&gt;begat&lt;/a&gt; &lt;a href=&quot;http://www.ibm.com/developerworks/library/ws-resource/ws-notification.pdf&quot;&gt;WS-Notification&lt;/a&gt;. But this wasn&#39;t enough for some and they begat &lt;a href=&quot;http://ftpna2.bea.com/pub/downloads/WS-Eventing.pdf&quot;&gt;WS-Eventing&lt;/a&gt;. As with so many of the standardization efforts in those prehistoric days (&lt;a href=&quot;http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=ws-caf&quot;&gt;WS-CAF&lt;/a&gt; vs &lt;a href=&quot;http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=ws-tx&quot;&gt;WS-TX&lt;/a&gt;, &lt;a href=&quot;http://developers.sun.com/sw/platform/technologies/ws-reliability.html&quot;&gt;WS-Reliability&lt;/a&gt; vs &lt;a href=&quot;http://www.ibm.com/developerworks/library/specification/ws-rm/&quot;&gt;WS-Reliable Messaging&lt;/a&gt; etc.), this lead to confusion for the people, especially as none of these approaches were standards initially.&lt;/p&gt;
+&lt;p&gt;Fortunately &lt;a href=&quot;http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=wsn&quot;&gt;WS-Notification eventually went to OASIS and became a standard&lt;/a&gt;, but it lacked the support of all major vendors. A modified version of &lt;a href=&quot;http://www.w3.org/Submission/WS-Eventing/&quot;&gt;WS-Eventing became a W3C Note&lt;/a&gt; around the same time but this is significantly less than a standards stamp of approval, though it did have some of the author companies from the other specifications involved. Yet more confusion abounded! Event notification ranks up there with security, transactions and messaging as core to most distributed system technologies over the past 4 decades. So it was no surprise that it would eventually come to pass that events would find their way into Web Services. Unfortunately because there is no single standards body for all Web Services work, that tends to lead to competing specifications (and standards). It&#39;s getting a lot better these days than it was back in the early 2000&#39;s, but it&#39;s still not perfect.&lt;/p&gt;
+&lt;p&gt;In an effort to solve the confusion around events &lt;a href=&quot;http://xml.coverpages.org/ni2008-11-14-a.html&quot;&gt;all of the main protagonists (ourselves included) got together last year&lt;/a&gt; to form the &lt;a href=&quot;http://www.w3.org/2008/08/ws/charter.html&quot;&gt;Web Services Resource Access (WS-RA) technical committee within W3C&lt;/a&gt;. Part of that effort will standardize &lt;a href=&quot;http://www.w3.org/Submission/2006/SUBM-WS-Eventing-20060315/&quot;&gt;WS-Eventing&lt;/a&gt;. The timescale is fairly aggressive, with final standards due in June 2010 (which will include &lt;a href=&quot;http://www.w3.org/2002/ws/addr/testsuite/report/&quot;&gt;interoperability efforts&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;But what do you do in the meantime? Events are important. Some vendors have implementations of one or more of these specifications/standards. What does that mean now that WS-RA is changing things? Well it definitely means that if you&#39;re already using a product based on one of the existing documents you will have to change something: backward compatibility is not a key aspect of the WS-RA effort. Of course change for change&#39;s sake won&#39;t happen, but some changes are inevitable (e.g., because the specs were broken or experience has shown a better approach). I&#39;m sure some vendors will try to provide means to allow their existing products to continue to work with the next generation, but it is likely that changes will be driven right up to the developer. So be warned.&lt;/p&gt;
+&lt;p&gt;In terms of &lt;a href=&quot;http://www.jboss.org/jbossws/&quot;&gt;our own WS-Eventing offering&lt;/a&gt;, it&#39;s based on the older documents and is a community-only release. We&#39;re going to be working on providing a version based on the evolving standard and may have early access releases before the standard comes out (being on the committee helps!) So feel free to use what we&#39;ve got for now in the community and watch the forums as we begin to work on the next generation.&lt;/p&gt;
+</description>
+            <author>Mark Little</author>
+            <guid>http://blogs.jboss.org/blog/mlittle/?permalink=WS_Eventing_standardization.txt</guid>
+			<pubDate>Wed, 11 Mar 2009 07:46:24 -0400</pubDate>
+            <category>/mlittle/</category>
+                    </item>
+                <item>
+            <title>RESTEasy 1.0 GA Released!</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/bburke/?permalink=RESTEasy_1_0_GA_Released.txt</link>
+            <description>&lt;p&gt;I am pleased to announce the first GA release of JBoss RESTEasy.  All documentation and download links are available at &lt;a href=&quot;http://jboss.org/resteasy&quot;&gt;RESTEasy&#39;s JBoss.org project page&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;JBoss RESTEasy is a framework that allows you to write RESTFul Web Services in Java. It is a fully certified and portable implementation of &lt;a href=&quot;http://jcp.org/en/jsr/detail?id=311&quot;&gt;JAX-RS&lt;/a&gt; specification. JAX-RS is a new JCP specification that provides a Java API for RESTful Web Services over the HTTP protocol.&lt;/p&gt;
+&lt;p&gt;RESTEasy can run in any Servlet container, but tighter integration with the JBoss Application Server is also available to make the user experience nicer in that environment. While JAX-RS is only a server-side specification, RESTEasy has innovated to bring JAX-RS to the client through the RESTEasy JAX-RS Client Framework. This client-side framework allows you to map outgoing HTTP requests to remote servers using JAX-RS annotations and interface proxies.
+&lt;/p&gt;
+&lt;p/&gt;
+&lt;p&gt;Features&lt;/p&gt;
+&lt;ul&gt;
+    &lt;li&gt; Fully certified JAX-RS implementation&lt;/li&gt;
+    &lt;li&gt; Portable to any app-server/Tomcat that runs on JDK 5 or higher&lt;/li&gt;
+    &lt;li&gt; Embeddedable server implementation for junit testing&lt;/li&gt;
+    &lt;li&gt; Rich set of providers for: XML, JSON, YAML, Fastinfoset, Atom, etc.&lt;/li&gt;
+    &lt;li&gt; JAXB marshalling into XML, JSON, Fastinfoset, and Atom as well as wrappers for arrays, lists, and sets of JAXB Objects.&lt;/li&gt;
+    &lt;li&gt;Asynchronous HTTP (Comet) abstractions for JBoss Web, Tomcat 6, and Servlet 3.0&lt;/li&gt;
+    &lt;li&gt;EJB, Spring, and Spring MVC integration&lt;/li&gt;
+    &lt;li&gt; Client framework that leverages JAX-RS annotations so that you can write HTTP clients easily (JAX-RS only defines server bindings)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p/&gt;
+&lt;p&gt;
+Special thanks goes to all our independent contributors, specifically:  Solomon Duskis, Ryan McDonough, Olivier Brand, Martin Algesten, Michael Brackx, and Justin Edelson.
+&lt;/p&gt;
+</description>
+            <author>Bill Burke</author>
+            <guid>http://blogs.jboss.org/blog/bburke/?permalink=RESTEasy_1_0_GA_Released.txt</guid>
+			<pubDate>Tue, 20 Jan 2009 17:37:06 -0500</pubDate>
+            <category>/bburke/</category>
+                    </item>
+                <item>
+            <title>RESTEasy 1.0-RC1 Released: Need help finalizing GA!</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/bburke/?permalink=RESTEasy_1_0_RC1_Released_Need_help_finalizing_GA.txt</link>
+            <description>RESTEasy 1.0-RC1 has just been released.  For more details &lt;a href=&quot;http://bill.burkecentral.com/2009/01/07/resteasy-10-rc1-released-need-help-finalizing-ga/&quot;&gt;click here!&lt;/a&gt;
+</description>
+            <author>Bill Burke</author>
+            <guid>http://blogs.jboss.org/blog/bburke/?permalink=RESTEasy_1_0_RC1_Released_Need_help_finalizing_GA.txt</guid>
+			<pubDate>Tue, 6 Jan 2009 19:25:29 -0500</pubDate>
+            <category>/bburke/</category>
+                    </item>
+                <item>
+            <title>Economic Depression and the Rise of Open Source SOA and Business Rules</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/pfricke/?permalink=Economic_Depression_and_the_Rise_of_Open_Source_SOA_and_Business_Rules.txt</link>
+            <description>&lt;p&gt;
+&quot;Those who cannot remember the past are condemned to repeat it.&quot; 
+Life of Reason, Reason in Common Sense, Scribner&#39;s, 1905, page 284&quot;.
+&lt;p&gt;
+We know how the mania-bust cycle works.  We have many examples in history.  Seems like our &quot;FIRE&quot;-driven economy forgot it.  FIRE=Financial, Insurance and Real Estate industries.  In 1920s, it was stocks and too much debt.  In the 2000s it&#39;s real estate and too much debt. It absolutely makes no sense to buy a house for a mortgage payment that is two times the rent cost!  It&#39;s even more foolish to take a HELOC up to the manic value of a house to pay for consumer goods like cars, vacations and a lifestyle that otherwise one cannot afford. The industries that supported all of this activity expanded to a oversupply condition that must contract. So now we unwind...we may be halfway there; there being appropriately valued real estate that people can purchase with confidence...if the government let&#39;s the cycle play out without interference. If not, then we (the USA and EU) may follow in Japan&#39;s footsteps and it will take a while.
+&lt;p&gt;
+Nevertheless, it&#39;s not the end of the world, just the end of an era. In economic depressions and deflations, business activity continues.  It just doesn&#39;t continue at the previous pace. However, there are still growth opportunities.  We can look at the 1930s for instruction. We know auction houses, bars, home entertainment, repo businesses, bankruptcy and divorce lawyers will have a lot of business.  But also the government will expand.  Regulation and the implementation of regulation will expand.  Industries will be transformed (finance, insurance, government, energy, real estate, manufacturing, health care, education, etc...).
+&lt;p&gt;
+In the 1930s, emerging high technology in the form of tabulator machines and improved telephonic services continued to grow. IBM led the charge and had growth every year in the 1930s with expanded opportunities for tabulators to support the new regulatory environment and to help industries become more productive and reduce costs. New Deal government programs drove a lot of demand and the companies that were looking ahead also took advantage of the new technology to improve their businesses.  Remember, 75% of the people were still employed and even with pay cuts, many were coming out ahead due to deflation (as long as they had little debt!). They saved a lot more and spent less, but business was still transacted and those businesses positioned to serve the government and remaining consumer demand with new products, services that solved problems did OK to well.
+&lt;p&gt;
+Today, we will see the same thing.  Not everyone will go out of business and whether we see 8%, 12% or 18% unemployment, business activity will continue. Certainly the government will expand...trillions of $ are being lined up.  The FIRE industries will need to be re-invented to operate in a much different regulatory environment. Existing IT assets, configured as they are, will become obsolete.  They can be reused, but need to be augmented and reintegrated to operate in the &quot;New New Deal&quot;.
+&lt;p&gt;
+Today&#39;s business productivity and transformation tools will include further transition to an SOA-enabled environment. Since there likely will be several waves of regulation and increased change in the business environment, enterprises that set themselves and their value chain to respond to change rapidly will win. Beyond re-integrating IT assets to operate in the &quot;New New Deal&quot;, businesses will also need to pull their business rules out of scattered applications, consolidate them in business rules management systems and present them to the applications, people and business processes as SOA services. This will be required to be responsive to a rapidly changing environment.
+&lt;p&gt;
+But these enterprises and value chains will need to do this with reduced budgets, even with bailout money available! Local and state governments cannot print money and will have reduced tax revenues. They will not be able to afford the $50K / CPU closed source SOA platforms or $100K+ / CPU BRMSes that require a lot of capital expenditure up front.  Fortunately, open source SOA and BRMS (Business Rules Management Systems) are maturing and offer a more simple, open and affordable way to weather these challenging economic and turbulent times.  Indeed, business and government will need to serve picky customers with better service on reduced budgets and open source can help lead the way! 
+&lt;p&gt;
+Maybe we will get lucky and this will only be a &quot;serious recession&quot; like 1980-82. Or this could look more like a modern version of the 1870s, 1890s or 1930s. Or 1990s-2000s Japan. Either way, Red Hat, with its high value, cost-effective open source subscriptions and services, stands ready to serve and help enterprises, value chains, and governments not only survive, but to prepare for prosperity again!
+
+ 
+</description>
+            <author>Pierre Fricke</author>
+            <guid>http://blogs.jboss.org/blog/pfricke/?permalink=Economic_Depression_and_the_Rise_of_Open_Source_SOA_and_Business_Rules.txt</guid>
+			<pubDate>Tue, 6 Jan 2009 17:13:58 -0500</pubDate>
+            <category>/pfricke/</category>
+                    </item>
+                <item>
+            <title>JBoss Virtual Experience - Online Show - Feb 11 2009</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/pfricke/?permalink=JBoss_Virtual_Experience_Online_Show_Feb_11_2009.txt</link>
+            <description>Red Hat will be hosting an online show called the JBoss Virtual Experience on Feb 11, 2009. The JBoss Virtual Experience is open for &lt;a href=&quot;http://www.jboss.com/virtualexperience&quot;&gt; registration.&lt;/a&gt; 
+We are also on &lt;a href=&quot;http://twitter.com/jbossvirtexp&quot;&gt;Twitter.&lt;/a&gt; I encourage all to register for the conference and select their preferred topics as this will a great way to get up to date on JBoss without travel expense!
+&lt;p&gt;
+I will be presenting &quot;Open source SOA: Strategies for affordable business integration and automation&quot; at 10am on the business track.
+&lt;p&gt;
+Abstract: Open source software continues to advance in the enterprise, moving up the stack to solve higher value business problems. With the JBoss Enterprise SOA Platform, open source has advanced to solve value chain integration and business automation challenges. This new generation of platform finds, integrates, and orchestrates SOA business services and applications.
+&lt;p&gt;
+In this session, Pierre will explore how enterprises are using open source to build multi-platform SOA solutions. He&#39;ll present a tool that can help you assess your current SOA optimization and determine the best path for SOA success. You&#39;ll also hear about future directions of open source SOA and how things might evolve over the next few years.	
+&lt;p&gt;
+Thanks and look forward to &quot;seeing&quot; you there!
+&lt;p&gt;
+
+	
+</description>
+            <author>Pierre Fricke</author>
+            <guid>http://blogs.jboss.org/blog/pfricke/?permalink=JBoss_Virtual_Experience_Online_Show_Feb_11_2009.txt</guid>
+			<pubDate>Fri, 2 Jan 2009 16:25:21 -0500</pubDate>
+            <category>/pfricke/</category>
+                    </item>
+                <item>
+            <title>Doing Two Models at the Same Time</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/arubinger/?permalink=Doing_Two_Models_at_the_Same_Time.txt</link>
+            <description>We&#39;ve got many component models from which to choose for our business logic, but the real power comes when we can mix &#39;n match.
+
+&lt;br /&gt;&lt;br /&gt;
+
+As an exercise I put JBossMC through its paces to showcase how its agnostic framework is ideally suited as a base for building a runtime.
+
+&lt;br /&gt;&lt;br /&gt;
+
+Enjoy; I had fun with &lt;a href=&quot;http://exitcondition.alrubinger.com/2008/12/20/doing-two-models-at-the-same-time/&quot;&gt;this one&lt;/a&gt;.
+
+&lt;br /&gt;&lt;br /&gt;
+S,&lt;br /&gt;
+ALR
+</description>
+            <author>Andrew Rubinger</author>
+            <guid>http://blogs.jboss.org/blog/arubinger/?permalink=Doing_Two_Models_at_the_Same_Time.txt</guid>
+			<pubDate>Sun, 21 Dec 2008 21:10:45 -0500</pubDate>
+            <category>/arubinger/</category>
+                    </item>
+                <item>
+            <title>It&#39;s Not 2002</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/arubinger/?permalink=Its_Not_2002.txt</link>
+            <description>Since 2002:
+
+&lt;br /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The Red Sox have won the World Series.  Twice.&lt;/li&gt;
+&lt;li&gt;The Vatican got a new Pope.&lt;/li&gt;
+&lt;li&gt;We&#39;ve had 2 February 29ths&lt;/li&gt;
+&lt;li&gt;Paris went through 6 or 7 BFFs&lt;/li&gt;
+&lt;/ul&gt;
+...yet our friends at SpringSource continue to push the notion that Enterprise Java is complex and unpopular.
+
+&lt;br /&gt;&lt;br /&gt;
+&lt;a href=&quot;http://exitcondition.alrubinger.com/2008/12/04/its-not-2002/&quot;&gt;I disagree&lt;/a&gt;.
+
+&lt;br /&gt;&lt;br /&gt;S,&lt;br /&gt;ALR
+</description>
+            <author>Andrew Rubinger</author>
+            <guid>http://blogs.jboss.org/blog/arubinger/?permalink=Its_Not_2002.txt</guid>
+			<pubDate>Thu, 4 Dec 2008 07:15:23 -0500</pubDate>
+            <category>/arubinger/</category>
+                    </item>
+                <item>
+            <title>The Benefits of an Open Source SOA</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/pfricke/?permalink=The_Benefits_of_an_Open_Source_SOA.txt</link>
+            <description>&lt;a href=&quot;http://www.networkworld.com/news/tech/2008/091008-tech-update.html?page=1&quot;&gt; The Benefits of an Open Source SOA.&lt;/a&gt;
+</description>
+            <author>Pierre Fricke</author>
+            <guid>http://blogs.jboss.org/blog/pfricke/?permalink=The_Benefits_of_an_Open_Source_SOA.txt</guid>
+			<pubDate>Wed, 22 Oct 2008 15:46:25 -0400</pubDate>
+            <category>/pfricke/</category>
+                    </item>
+            </channel>
+</rss>

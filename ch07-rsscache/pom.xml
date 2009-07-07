@@ -13,8 +13,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Artifact Information -->
-  <artifactId>jboss-ejb3-examples-ch07-envinfo</artifactId>
-  <name>JBoss EJB 3.x Examples - Chapter 7: EnvironmentInfo EJBs</name>
+  <artifactId>jboss-ejb3-examples-ch07-rsscache</artifactId>
+  <name>JBoss EJB 3.x Examples - Chapter 7: RssCache EJBs</name>
   <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter 7</description>
 
   <!-- Build -->
@@ -26,6 +26,7 @@
   <properties>
 
     <!-- Versioning -->
+    <version.rome_rome.fetcher>1.0RC2</version.rome_rome.fetcher>
 
   </properties>
 
@@ -52,7 +53,34 @@
       <artifactId>jboss-logging-spi</artifactId>
     </dependency>
 
+    <!-- Rome library for RSS parsing -->
+    <dependency>
+      <groupId>rome</groupId>
+      <artifactId>rome-fetcher</artifactId>
+      <version>${version.rome_rome.fetcher}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty</artifactId>
+      <version>6.1.16</version>
+    </dependency>
+
   </dependencies>
+
+  <!-- Extra Repository Definitions (eg. for Rome) -->
+  <repositories>
+    <repository>
+      <id>java.net</id>
+      <url>http://download.java.net/maven/2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  </repositories>
 
   <profiles>
 

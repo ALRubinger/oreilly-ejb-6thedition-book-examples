@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!-- name="generator" content="blojsom v2.25.3" -->
+<rss version="2.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
+    <channel>
+        <title>Enter The JBoss Matrix</title>
+        <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/</link>
+        <description>Where JBossians blog</description>
+        <language>en</language>
+        <image>
+            <url>http://blogs.jboss.org/favicon.ico</url>
+            <title>Enter The JBoss Matrix</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/</link>
+        </image>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+		<generator>blojsom v2.25.3</generator>
+		<managingEditor>it-ops@jboss.com</managingEditor>
+		<webMaster>it-ops@jboss.com</webMaster>
+		<pubDate>Wed, 1 Jul 2009 12:02:26 -0400</pubDate>
+
+                <item>
+            <title>Selecting Community or Platforms?</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/mlittle/?permalink=Selecting_Community_or_Platforms.txt</link>
+            <description>&lt;p&gt;Over the past few years we have made a conscious choice to separate community projects from commercial platforms. Why is this the case? What differentiates  between our community and commercial software? Probably the most obvious difference is that we sell support (24x7) on commercial platforms whereas projects are given a best-effort support through public forums. But really there are benefits and trade-offs associated with either option.&lt;/p&gt;
+
+&lt;h3&gt;Project&lt;/h3&gt;
+&lt;p&gt;
+With this option the projects are always at the cutting edge. They release frequently (usually every 8 to 10 weeks) and they drive a lot of our innovation. We have many community contributors, in the form of code donations, use cases, feature requests etc. Technical direction is set by a combination of the project lead and the community. Interfaces and capabilities may change frequently as the developers and users of the project learn and shape their requirements based on experiences gained. As mentioned above, the support given to project code is best effort, with help from the community and Red Hat employees where possible. But you should not rely on it being available all of the time. However, this is definitely the place to be if you want to be on the bleeding edge and influence next generation technology and direction.&lt;/p&gt;
+&lt;h3&gt;
+Platform&lt;/h3&gt;
+&lt;p&gt;
+The projects try hard to ensure that where there are cross-project dependencies they work well together. However, because they release frequently, this is not always possible. Furthermore, the amount of testing across different operating systems, databases (and their drivers) and VMs that the projects can/should do is limited. As well as the 24x7 support they offer, this is where the platforms come in to their own. A platform is a point-cut of specific projects and is typically many months behind those projects when it is released. The reason for this is the amount of testing and qualification that goes into driving a project to become part of a platform. This can often be between 3 and 9 months of effort. As well as giving this significant testing regime, platforms also provide a very strict evolution path: interfaces and capabilities cannot simply change from one release to another, and not everything that is within a project may be within a platform, e.g., something that was beta quality when the project was accepted within the platform effort will typically be removed by the platform process. If long term stability and support are what you are after then this is the place to be.&lt;/p&gt;
+</description>
+            <author>Mark Little</author>
+            <guid>http://blogs.jboss.org/blog/mlittle/?permalink=Selecting_Community_or_Platforms.txt</guid>
+			<pubDate>Wed, 1 Jul 2009 12:02:26 -0400</pubDate>
+            <category>/mlittle/</category>
+                    </item>
+                <item>
+            <title>RESTEasy 1.1 Released</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/bburke/?permalink=RESTEasy_1_1_Released.txt</link>
+            <description>I&#39;m pleased to announce the release of RESTEasy 1.1.GA.  This was a huge functionality and bug fix release for us.  Special thanks goes out to Solomon Duskis, Attila Kiraly, and Michael Brackx.  Included in this release is:
+
+&lt;ul&gt;
+&lt;li&gt;New interceptor model&lt;/li&gt;
+&lt;li&gt;GZIP encoding support&lt;/li&gt;
+&lt;li&gt;Guice 1.0 support.  Thanks Mike!&lt;/li&gt;
+&lt;li&gt;XOP and multipart/related support. Thanks Attila!&lt;/li&gt;
+&lt;li&gt;Internal dispatching and forwarding support.  Thanks Solomon!&lt;/li&gt;
+&lt;li&gt;Jackson JSON provider support.&lt;/li&gt;
+&lt;li&gt;Asynchronous Job Service&lt;/li&gt;
+&lt;li&gt;Client and Server side caching capabilities&lt;/li&gt;
+&lt;li&gt;Decorator framework for JAXB&lt;/li&gt;
+&lt;li&gt;XMl header and stylesheet support for JAXB&lt;/li&gt;
+&lt;li&gt;Greatly improved multipart support thanks to Attila.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+For more information follow the links at &lt;a href=&quot;http://jboss.org/resteasy&quot;&gt;RESTEasy&#39;s Project Page&lt;/a&gt;.&lt;/p&gt;
+</description>
+            <author>Bill Burke</author>
+            <guid>http://blogs.jboss.org/blog/bburke/?permalink=RESTEasy_1_1_Released.txt</guid>
+			<pubDate>Wed, 17 Jun 2009 21:02:43 -0400</pubDate>
+            <category>/bburke/</category>
+                    </item>
+                <item>
+            <title>We Welcome our Friends at Hewlett Packard to our SOA Solutions Community</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/pfricke/?permalink=We_Welcome_our_Friends_at_Hewlett_Packard_to_our_SOA_Solutions_Community.txt</link>
+            <description>Today we announced that &lt;a href=&quot;http://www.redhat.com/about/news/prarchive/2009/hp_on_soa.html&quot;&gt; Red Hat and HP are collaborating on an integrated SOA development, execution and integration, and management environment featuring JBoss Enterprise SOA Platform and HP SOA Systinet&lt;/a&gt;. This week, we are with HP at &lt;a href=&quot;http://www.hpsoftwareuniverse2009.com/hpswu/controller.cfm?view=content.overview&quot;&gt; HP Software Universe&lt;/a&gt; demonstrating and discussing our solution with customers, partners and others. We are excited to have HP join us on the journey to make enterprise SOA more simple, open and affordable, expanding opportunities for business to be more agile at all levels in the value chain.
+</description>
+            <author>Pierre Fricke</author>
+            <guid>http://blogs.jboss.org/blog/pfricke/?permalink=We_Welcome_our_Friends_at_Hewlett_Packard_to_our_SOA_Solutions_Community.txt</guid>
+			<pubDate>Wed, 17 Jun 2009 15:21:33 -0400</pubDate>
+            <category>/pfricke/</category>
+                    </item>
+                <item>
+            <title>Don&#39;t put lipstick on a pig that can&#39;t fly</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/mlittle/?permalink=Dont_put_lipstick_on_a_pig_that_cant_fly.txt</link>
+            <description>&lt;p&gt;For as long as I can recall I&#39;ve always liked good tools and been infuriated with those that get in the way of me being &quot;creative&quot; or working &quot;efficiently&quot;. (Subjective terms, I know.) Whether it was the &lt;a href=&quot;http://en.wikipedia.org/wiki/MetaComCo&quot;&gt;MetaComCo C/Pascal compiler tools for my Atari those many years back&lt;/a&gt; (great customization capabilities) or plain emacs (yes, it&#39;s a tool!) I&#39;ve admired those groups who can make good tools. Over the years I&#39;ve met many tooling groups from HP, Bluestone, BEA, Microsoft and of course JBoss/Red Hat. Some of the more successful groups have been staffed by a combination of good engineers but also people who have good &lt;a href=&quot;http://en.wikipedia.org/wiki/Human-computer_interaction&quot;&gt;HCI skills&lt;/a&gt; (including psychology backgrounds). But they&#39;ve all usually had the same comments to make about how tooling is seen by developers: under appreciated and an afterthought. That&#39;s a shame because as far as I&#39;m concerned a good tooling experience can bring a better ROI than adding some super cool feature here or there.
+&lt;/p&gt;
+&lt;p&gt;I think the key to good tooling is having the involvement of the developers on the product for which tooling is being developed as early as possible. Where I&#39;ve seen this work well is when there&#39;s actually a tooling person sitting in that team full time, learning about the requirements and acting as a conduit to impart that knowledge to the rest of the tooling team. To do it otherwise can often take longer (inefficient?) and may result in something that isn&#39;t quite what is required. Despite the fact that they&#39;re all engineers, there is often an impedance mismatch between tooling engineers and project engineers; almost a language barrier. But for good tooling to work well, the conversations need to be bi-directional. This is another reason why the approach of having a tooling person sitting in the project works well, as it provides immediacy of responses.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://blog.hibernate.org/Bloggers/Max&quot;&gt;Max&lt;/a&gt;, our tooling lead, is keen to say that good tools shouldn&#39;t be used to cover up poor underlying projects. He&#39;s right! I&#39;ve seen that happen a lot across the industry, where the tools look fantastic but there&#39;s very little under the covers, or what is there is horribly baroque and hard to understand. Designing for tooling from the outset should be considered in the same way as designing for robustness or performance or security. It&#39;s not something that is easy to retro-fit.
+&lt;/p&gt;
+&lt;p&gt;Good tools (and yes, I count &lt;a href=&quot;http://www.jboss.com/products/devstudio/&quot;&gt;JBDS&lt;/a&gt; in that list) also grow with you. Too often I&#39;ve seen tools that are either way too complex to use for beginners or are so basic as to encourage you to grow out of them pretty quickly and look for something else. (There&#39;s a reason I&#39;ve been using shell and emacs for 20 years.) And of course in this world of ever changing runtimes, you really want a tool suite (or IDE in this case) that can work with more than one at a time: I hate having to fire up different IDEs for different versions of the same product, especially when there may only be a few months age difference between the runtime versions.
+&lt;/p&gt;
+&lt;p&gt;Fortunately we have some great people here who are passionate about tooling and understand its importance in making the whole product experience work well. That doesn&#39;t mean we&#39;ve got to that nirvana just yet, but we are on the right path. We need to work more closely with the projects and vice versa in order to push this mantra of thinking about tooling through all phases of the project lifecycle and not just after the fact. The improvements we&#39;ve made over the past couple of years are pretty significant and there&#39;s much more to come. I&#39;m excited and maybe this will finally encourage me to move away from emacs ;-)
+&lt;/p&gt;
+&lt;p&gt;BTW, thanks to &lt;a href=&quot;http://blog.hibernate.org/Bloggers/Max&quot;&gt;Max&lt;/a&gt; for the title of this entry!&lt;/p&gt;
+</description>
+            <author>Mark Little</author>
+            <guid>http://blogs.jboss.org/blog/mlittle/?permalink=Dont_put_lipstick_on_a_pig_that_cant_fly.txt</guid>
+			<pubDate>Mon, 15 Jun 2009 09:45:34 -0400</pubDate>
+            <category>/mlittle/</category>
+                    </item>
+                <item>
+            <title>The JBoss Microcontainer: Flexibility and Future Proofing</title>
+            <link>http://www.jboss.com/elqNow/elqRedir.htm?ref=http://blogs.jboss.org/blog/mlittle/?permalink=The_JBoss_Microcontainer_Flexibility_and_Future_Proofing.txt</link>
+            <description>&lt;p&gt;You&#39;ve probably all seen or heard of &lt;a href=&quot;http://en.wikipedia.org/wiki/Transformers_(film)&quot;&gt;Transformers (&quot;Transformers ... robots in disguise.&quot;)&lt;/a&gt; The gist is that these robot are flexible enough to be reconfigured into a variety of different forms depending upon the need at hand. Pretty important if you need to battle enemies from the stars and then make your way silently through the streets disguised as a &lt;a href=&quot;http://en.wikipedia.org/wiki/Bugatti_Veyron&quot;&gt;Bugatti Veyron&lt;/a&gt;. But what, you ask, has this to do with JBoss? Well we&#39;ve been working on our own adaptable infrastructure for a few years; not so we can fight Decepticons, but so that we can offer a way for the same software components to be used in a variety of different environments without requiring major rewrites, different implementations, recompilations or several months of on-site consultants. We also want to support a range of different frameworks or component models, such as &lt;a href=&quot;http://www.mail-archive.com/tuscany-dev@ws.apache.org/msg32307.html&quot;&gt;SCA&lt;/a&gt;, &lt;a href=&quot;http://oddthesis.org/&quot;&gt;Ruby&lt;/a&gt; and OSGi.&lt;/p&gt;
+&lt;p&gt;
+So how have we been able to accomplish this? With the &lt;a href=&quot;http://www.jboss.org/jbossmc/&quot;&gt;JBoss Microcontainer&lt;/a&gt;. It&#39;s been in development for several years as well as being an evolution from the original &lt;a href=&quot;http://www.jboss.org/community/wiki/JBossMicrokernel&quot;&gt;JMX Micro-kernel&lt;/a&gt;. The basic concept is pretty simple: you can define your core services/components and their interdependencies no matter what their flavour (e.g., POJOs, MBeans) dynamically and potentially on-the-fly. What was a full-featured JEE Application Server one minute could be a scaled down embedded ESB the next. What was a basic Web server yesterday could seamlessly acquire transactions and security tomorrow.&lt;/p&gt;
+&lt;p&gt;The aim here is clear though: to allow existing investments in components that have proven their maturity over the years to be used in both lightweight and heavyweight environments. Other approaches to solving this problem typically revolve around completely different technology stacks, requiring different expertise, learning curves, support contracts etc. And that kind of solution does not evolve with your changing requirements (at least not without going back to the vendor to arrange delivery of the new product, learning it, training etc.)&lt;/p&gt;
+&lt;p&gt;
+But what about other deployment models, such as OSGi and Spring? Although JBoss is popular there are people who need to use these alternative frameworks/component models. In the past they meant embracing that entire framework for everything in the assumption that the choice you make today is the right choice for tomorrow. Unfortunately frameworks come and go, as well as requirements changing. So an investment in something today is not necessarily the right approach for the future. But in that case what do you do when you&#39;re left with an OSGi bundle and you don&#39;t want to stay with OSGi, for example? Well fortunately the JBoss Microcontainer offers a possible solution there too. supporting a flexible state machine model of components we can support native component model deployments as well as foreign component models on the same codebase and track dependencies across those component models.&lt;/p&gt;
+&lt;p&gt;
+The architecture of the Microcontainer has evolved over the past few years, so even if you looked at it a while ago it&#39;s worth looking again. For example, we&#39;ve added increased flexibility to the deployment model such that we now support an AOP-like manipulation of a metadata pipeline down to the final component deployer. There&#39;s also a Virtual File System for deployments, which is a major improvement over the past. Finally it&#39;s now possible to declare that any implementors of an interface should be &quot;injected/un-injected&quot; via specified methods, which allows for containers to specify plugin interfaces and easily have plugin implementors associated with the container as the plugins are instantiated. These examples and others just go to prove how much thought and effort has gone into this new architecture in order for us to be able to deliver on the promise of flexibility and adaptability for user requirements now and in the future. We spent a lot of time doing this so that we could do it right once and for all time: the future is bright for JBoss and its users, because we know now that we don&#39;t have to worry about re-architecting again in a years time when another deployment environment comes along, or some subtle differences in needs force a rethink of &quot;fat&quot; versus &quot;thin&quot; deployments or &quot;rich&quot; versus &quot;poor&quot;. You can safely deploy to the new Microcontainer in the knowledge that it&#39;s future-proofing you.&lt;/p&gt;
+&lt;p&gt;As an industry one thing that we often fail to remember is that standards come and go, but core requirements remain. If you look at the evolution of distributed systems over the past 4 decades, for example, you&#39;ll see the transition through DCE, CORBA, JEE, Web Services etc. These all define their own component model(s), APIs, development methodologies etc. Yet at the heart of them all critical services such as transactions, messaging, security etc. remain the same. The only thing that changes is the way in which they are wrapped into the infrastructure. Well that&#39;s something we&#39;ve tried to embrace with the new Microcontainer: leveraging our tried and tested components and providing a way to use them in environments/standards past, present and future.&lt;/p&gt;
+</description>
+            <author>Mark Little</author>
+            <guid>http://blogs.jboss.org/blog/mlittle/?permalink=The_JBoss_Microcontainer_Flexibility_and_Future_Proofing.txt</guid>
+			<pubDate>Mon, 1 Jun 2009 17:50:54 -0400</pubDate>
+            <category>/mlittle/</category>
+                    </item>
+               </channel>
+</rss>
