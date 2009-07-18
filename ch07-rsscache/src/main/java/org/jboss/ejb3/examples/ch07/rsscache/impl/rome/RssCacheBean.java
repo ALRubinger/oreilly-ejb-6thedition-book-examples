@@ -3,6 +3,7 @@ package org.jboss.ejb3.examples.ch07.rsscache.impl.rome;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -146,8 +147,11 @@ public class RssCacheBean implements RssCacheCommonBusiness
          log.debug("Found new RSS Entry: " + rssEntry);
       }
 
-      // Set the entries
-      this.entries = rssEntries;
+      // Protect the entries from mutation from exporting the client view
+      final List<RssEntry> protectedEntries = Collections.unmodifiableList(rssEntries);
+
+      // Set the entries in the cache
+      this.entries = protectedEntries;
    }
 
    //-------------------------------------------------------------------------------------||

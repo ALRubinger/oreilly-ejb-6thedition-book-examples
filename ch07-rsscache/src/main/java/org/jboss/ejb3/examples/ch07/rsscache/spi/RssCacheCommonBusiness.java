@@ -40,7 +40,8 @@ public interface RssCacheCommonBusiness
    // ---------------------------------------------------------------------------||
 
    /**
-    * Returns all entries in the RSS Feed represented by {@link RssCacheCommonBusiness#getUrl()}
+    * Returns all entries in the RSS Feed represented by {@link RssCacheCommonBusiness#getUrl()}.
+    * This list will not support mutation and is read-only.
     */
    List<RssEntry> getEntries();
 
