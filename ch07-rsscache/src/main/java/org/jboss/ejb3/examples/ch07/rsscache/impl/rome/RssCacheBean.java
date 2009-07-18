@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Remote;
-import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -28,7 +28,7 @@ import com.sun.syndication.io.FeedException;
 /**
  * RssCacheBean
  * 
- * Singleton EJB, to be eagerly instanciated upon application deployment,
+ * Singleton EJB, to be eagerly instantiated upon application deployment,
  * exposing a cached view of an RSS Feed
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
@@ -37,6 +37,8 @@ import com.sun.syndication.io.FeedException;
 @Singleton
 @Startup
 @Remote(RssCacheCommonBusiness.class)
+// Explicitly declare Container Managed Concurrency, which is unnecessary; it's the default
+@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class RssCacheBean implements RssCacheCommonBusiness
 {
 
@@ -63,20 +65,15 @@ public class RssCacheBean implements RssCacheCommonBusiness
     */
    private List<RssEntry> entries;
 
-   /**
-    * The EJB SessionContext
-    */
-   @Resource
-   private SessionContext context;
-
    //-------------------------------------------------------------------------------------||
    // Required Implementations -----------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
+
    /* (non-Javadoc)
     * @see org.jboss.ejb3.examples.ch07.rsscache.spi.RssCacheCommonBusiness#getEntries()
     */
    @Override
-   // @Lock(LockType.READ) // Optional metadata, READ is the default
+   @Lock(LockType.READ)
    public List<RssEntry> getEntries()
    {
       return entries;
@@ -85,7 +82,7 @@ public class RssCacheBean implements RssCacheCommonBusiness
    /* (non-Javadoc)
     * @see org.jboss.ejb3.examples.ch07.rsscache.spi.RssCacheCommonBusiness#getUrl()
     */
-   // @Lock(LockType.READ) // Optional metadata, READ is the default
+   @Lock(LockType.READ)
    @Override
    public URL getUrl()
    {
@@ -99,7 +96,7 @@ public class RssCacheBean implements RssCacheCommonBusiness
     */
    @PostConstruct
    @Override
-   // Lock all readers and writers until we're done here
+   // Lock all readers and writers until we're done here; Optional metadata, WRITE is the default
    @Lock(LockType.WRITE)
    public void refresh() throws IllegalStateException
    {
