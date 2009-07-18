@@ -97,7 +97,7 @@ public class RssCacheBean implements RssCacheCommonBusiness
     */
    @PostConstruct
    @Override
-   // Lock all readers and writers until we're done here; Optional metadata, WRITE is the default
+   // Block all readers and writers until we're done here; Optional metadata, WRITE is the default
    @Lock(LockType.WRITE)
    public void refresh() throws IllegalStateException
    {

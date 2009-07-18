@@ -40,7 +40,7 @@ class ProtectExportUtil
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Internal constructor; protects against instanciation
+    * Internal constructor; protects against instantiation
     */
    private ProtectExportUtil()
    {
