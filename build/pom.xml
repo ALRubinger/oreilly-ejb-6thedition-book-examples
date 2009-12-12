@@ -18,7 +18,12 @@
     <!-- Versioning -->
 
     <version.junit_junit>4.5</version.junit_junit>
-    <version.org.jboss.ejb3_jboss-ejb3-api>3.1.0-Alpha1</version.org.jboss.ejb3_jboss-ejb3-api>
+    <version.org.jboss.embedded>1.0.0-alpha-1</version.org.jboss.embedded>
+    <version.org.jboss.jbossas>6.0.0.M1</version.org.jboss.jbossas>
+    <version.org.jboss.shrinkwrap>1.0.0-alpha-2</version.org.jboss.shrinkwrap>
+    <version.org.jboss.ejb3_jboss.ejb3.api>3.1.0-Alpha1</version.org.jboss.ejb3_jboss.ejb3.api>
+    <version.org.jboss.ejb3_jboss.ejb3.ext.api>1.0.0</version.org.jboss.ejb3_jboss.ejb3.ext.api>
+    <version.org.jboss.javaee_jboss-jms-api>1.1.0.GA</version.org.jboss.javaee_jboss-jms-api>
     <version.org.jboss.logging_jboss.logging.log4j>2.0.6.GA</version.org.jboss.logging_jboss.logging.log4j>
     <version.org.jboss.logging_jboss.logging.spi>2.0.5.GA</version.org.jboss.logging_jboss.logging.spi>
 
@@ -107,7 +112,19 @@
       <dependency>
         <groupId>org.jboss.ejb3</groupId>
         <artifactId>jboss-ejb3-api</artifactId>
-        <version>${version.org.jboss.ejb3_jboss-ejb3-api}</version>
+        <version>${version.org.jboss.ejb3_jboss.ejb3.api}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.ejb3</groupId>
+        <artifactId>jboss-ejb3-ext-api</artifactId>
+        <version>${version.org.jboss.ejb3_jboss.ejb3.ext.api}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.javaee</groupId>
+        <artifactId>jboss-jms-api</artifactId>
+        <version>${version.org.jboss.javaee_jboss-jms-api}</version>
       </dependency>
 
       <dependency>
@@ -123,7 +140,21 @@
         <version>${version.org.jboss.logging_jboss.logging.spi}</version>
         <optional>true</optional>
       </dependency>
-
+    
+      <dependency>
+        <groupId>org.jboss.embedded</groupId>
+        <artifactId>jboss-embedded-api</artifactId>
+        <version>${version.org.jboss.embedded}</version>
+        <scope>test</scope>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.shrinkwrap</groupId>
+        <artifactId>shrinkwrap-impl-base</artifactId>
+        <version>${version.org.jboss.shrinkwrap}</version>
+        <scope>test</scope>
+      </dependency>
+     
     </dependencies>
 
   </dependencyManagement>
