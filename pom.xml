@@ -20,6 +20,7 @@
     <module>ch06-filetransfer</module>
     <module>ch07-rsscache</module>
     <module>ch08-statusupdate</module>
+    <module>ch08-messagedestinationlink</module>
   </modules>
 
 </project>

@@ -1,0 +1,59 @@
+<ejb-jar xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                  http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd"
+  version="3.0">
+  <!--
+    TODO https://jira.jboss.org/jira/browse/EJBBOOK-6 Update the Schema
+    to 3.1
+  -->
+
+  <enterprise-beans>
+
+    <!--
+      In this section we'll configure our MessageSendingEJB to use a
+      message-destination-link
+    -->
+    <session>
+
+      <!--
+        This will match the value of @Stateless.name upon our bean
+        implementation class
+      -->
+      <ejb-name>MessageSendingEJB</ejb-name>
+
+      <!--
+        Declare the Message Destination Reference which will be used in
+        the bean implementation class as a logical reference to which
+        we'll send messages
+      -->
+      <message-destination-ref>
+        <message-destination-ref-name>jms/MessageDestinationLinkQueue</message-destination-ref-name>
+        <message-destination-type>javax.jms.Queue</message-destination-type>
+        <message-destination-usage>Produces</message-destination-usage>
+        <message-destination-link>OurLinkName</message-destination-link>
+      </message-destination-ref>
+
+    </session>
+
+    <!--
+      Now we'll configure our MDB to receive messages from the logical
+      name defined by the message-destination-link
+    -->
+    <message-driven>
+      <ejb-name>MessageDestinationLinkMdb</ejb-name>
+      <message-destination-link>OurLinkName</message-destination-link>
+    </message-driven>
+
+  </enterprise-beans>
+
+  <!--
+    Declare the Message Destination which is used as a logical name for
+    linking
+  -->
+  <assembly-descriptor>
+    <message-destination>
+      <message-destination-name>OurLinkName</message-destination-name>
+    </message-destination>
+  </assembly-descriptor>
+
+</ejb-jar>
