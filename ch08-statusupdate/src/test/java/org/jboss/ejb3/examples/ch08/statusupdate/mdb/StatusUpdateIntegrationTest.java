@@ -97,7 +97,9 @@ public class StatusUpdateIntegrationTest extends StatusUpdateTestBase
 
    /**
     * Name of the system property for JBOSS_HOME
+    * @deprecated EJBBOOK-14
     */
+   @Deprecated
    private static final String NAME_SYSPROP_JBOSS_HOME = "jboss.home";
 
    /**
@@ -117,6 +119,7 @@ public class StatusUpdateIntegrationTest extends StatusUpdateTestBase
    /**
     * Creates and starts a new JBossAS Server Embedded within this JVM
     */
+   //TODO EJBBOOK-15
    @BeforeClass
    public static void createAndStartJBossASAndSetNamingContext() throws Exception
    {
@@ -153,7 +156,7 @@ public class StatusUpdateIntegrationTest extends StatusUpdateTestBase
       log.info("Starting Server: " + server);
 
       // Set TCCL
-      Thread.currentThread().setContextClassLoader(jbossHomeClassLoader);
+      SecurityActions.setThreadContextClassLoader(jbossHomeClassLoader);
 
       // Start the Server
       server.start();
@@ -298,8 +301,10 @@ public class StatusUpdateIntegrationTest extends StatusUpdateTestBase
    /**
     * Obtains $JBOSS_HOME from the system property
     * 
+    * @deprecated EJBBOOK-14
     * @return
     */
+   @Deprecated
    private static URL getJBossHome()
    {
       final String sysProp = NAME_SYSPROP_JBOSS_HOME;
