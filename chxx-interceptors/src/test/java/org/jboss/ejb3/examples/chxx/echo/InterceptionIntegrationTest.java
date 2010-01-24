@@ -138,7 +138,7 @@ public class InterceptionIntegrationTest
       log.info("Starting Server: " + server);
 
       // Set TCCL
-      Thread.currentThread().setContextClassLoader(jbossHomeClassLoader);
+      SecurityActions.setThreadContextClassLoader(jbossHomeClassLoader);
 
       // Start the Server
       server.start();

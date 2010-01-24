@@ -81,25 +81,6 @@ class SecurityActions
    }
 
    /**
-    * Obtains the environment variable with the specified name, or null
-    * if not present
-    * @param envVarName
-    * @return
-    * @throws IllegalArgumentException If the environment variable name was not specified
-    */
-   static String getEnvironmentVariable(final String envVarName) throws IllegalArgumentException
-   {
-      // Precondition checks
-      if (envVarName == null || envVarName.length() == 0)
-      {
-         throw new IllegalArgumentException("Environment variable name was not specified");
-      }
-
-      // Return
-      return AccessController.doPrivileged(new GetEnvironmentVariableAction(envVarName));
-   }
-
-   /**
     * Obtains the system property with the specified key
     * 
     * @param key
@@ -132,41 +113,6 @@ class SecurityActions
       public ClassLoader run()
       {
          return Thread.currentThread().getContextClassLoader();
-      }
-   }
-
-   /**
-    * {@link PrivilegedAction} to access an environment variable
-    * 
-    *
-    * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
-    * @version $Revision: $
-    */
-   private static class GetEnvironmentVariableAction implements PrivilegedAction<String>
-   {
-
-      /**
-       * Name of the environment variable to get
-       */
-      private String envVarName;
-
-      /**
-       * Creates a new instance capable of obtaining the specified environment variable name
-       * @param envVarName
-       */
-      public GetEnvironmentVariableAction(final String envVarName)
-      {
-         this.envVarName = envVarName;
-      }
-
-      /**
-       * {@inheritDoc}
-       * @see java.security.PrivilegedAction#run()
-       */
-      @Override
-      public String run()
-      {
-         return System.getenv(envVarName);
       }
    }
 
