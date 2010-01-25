@@ -21,6 +21,7 @@
     <module>ch07-rsscache</module>
     <module>ch08-statusupdate</module>
     <module>ch08-messagedestinationlink</module>
+    <module>chxx-interceptors</module>
   </modules>
 
 </project>
