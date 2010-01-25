@@ -21,11 +21,14 @@
  */
 package org.jboss.ejb3.examples.chxx.tuner;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
@@ -61,38 +64,72 @@ public class CachingAuditor
     * each bean instance is guaranteed to be used by only one thread at once, many bean instances
     * may be executed concurrently.
     */
-   private static final List<InvocationContext> invocations = new CopyOnWriteArrayList<InvocationContext>();
+   private static final List<AuditedInvocation> invocations = new CopyOnWriteArrayList<AuditedInvocation>();
+
+   //-------------------------------------------------------------------------------------||
+   // Instance Members -------------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * The current EJB Context; will either be injected by the EJB Container or
+    * manually populated by unit tests
+    */
+   @Resource
+   EJBContext beanContext;
 
    //-------------------------------------------------------------------------------------||
    // Required Implementations -----------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Caches the intercepted {@link InvocationContext} such that
-    * a test may obtain it later
+    * Caches the intercepted invocation in an auditable view such that
+    * it may later be obtained
     */
    @AroundInvoke
-   public Object audit(final InvocationContext context) throws Exception
+   public Object audit(final InvocationContext invocationContext) throws Exception
    {
       // Precondition checks
-      assert context != null : "Context was not specified";
+      assert invocationContext != null : "Context was not specified";
+
+      // Obtain the caller
+      Principal caller;
+      try
+      {
+         caller = beanContext.getCallerPrincipal();
+      }
+      //TODO EJBTHREE-1996 Should not throw NPE
+      catch (final NullPointerException npe)
+      {
+         caller = new Principal()
+         {
+
+            @Override
+            public String getName()
+            {
+               return "Unauthenticated Caller";
+            }
+         };
+      }
+
+      // Create a new view
+      final AuditedInvocation audit = new AuditedInvocation(invocationContext, caller);
 
       // Add the invocation to the cache
-      invocations.add(context);
+      invocations.add(audit);
 
       // Carry out the invocation, noting where we've intercepted before and after the call (around it)
       try
       {
          // Log
-         log.info("Intercepted: " + context);
+         log.info("Intercepted: " + invocationContext);
 
          // Return
-         return context.proceed();
+         return invocationContext.proceed();
       }
       finally
       {
          // Log
-         log.info("Done with: " + context);
+         log.info("Done with: " + invocationContext);
       }
 
    }
@@ -105,7 +142,7 @@ public class CachingAuditor
     * Returns a read-only view of the {@link InvocationContext}
     * cached by this interceptor
     */
-   public static List<InvocationContext> getInvocations()
+   public static List<AuditedInvocation> getInvocations()
    {
       // Copy on export
       return Collections.unmodifiableList(invocations);

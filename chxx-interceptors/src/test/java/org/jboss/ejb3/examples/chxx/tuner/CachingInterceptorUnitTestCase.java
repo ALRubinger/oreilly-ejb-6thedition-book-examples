@@ -19,16 +19,22 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.tuner.test;
+package org.jboss.ejb3.examples.chxx.tuner;
 
+import java.security.Identity;
+import java.security.Principal;
+import java.util.Properties;
 import java.util.logging.Logger;
 
+import javax.ejb.EJBContext;
+import javax.ejb.EJBHome;
+import javax.ejb.EJBLocalHome;
+import javax.ejb.TimerService;
 import javax.interceptor.InvocationContext;
+import javax.transaction.UserTransaction;
 
 import junit.framework.TestCase;
 
-import org.jboss.ejb3.examples.chxx.tuner.CachingAuditor;
-import org.jboss.ejb3.examples.chxx.tuner.TunerLocalBusiness;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,6 +58,24 @@ public class CachingInterceptorUnitTestCase
     */
    private static final Logger log = Logger.getLogger(CachingInterceptorUnitTestCase.class.getName());
 
+   /**
+    * Name of the mock user
+    */
+   private static String NAME_PRINCIPAL = "Mock User";
+
+   /**
+    * Principal to return
+    */
+   private Principal PRINCIPAL = new Principal()
+   {
+
+      @Override
+      public String getName()
+      {
+         return NAME_PRINCIPAL;
+      }
+   };
+
    //-------------------------------------------------------------------------------------||
    // Instance Members -------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
@@ -72,6 +96,91 @@ public class CachingInterceptorUnitTestCase
    public void createInterceptor()
    {
       interceptor = new CachingAuditor();
+      // Manually set the EJBContext to a mock view which only supports returning a principal
+      interceptor.beanContext = new EJBContext()
+      {
+
+         /**
+          * Exception to throw if we invoke any method aside from getCallerPrincipal
+          */
+         private UnsupportedOperationException UNSUPPORTED = new UnsupportedOperationException(
+               "Not supported in mock implementation");
+
+         @Override
+         public void setRollbackOnly() throws IllegalStateException
+         {
+            throw UNSUPPORTED;
+
+         }
+
+         @Override
+         public Object lookup(String arg0) throws IllegalArgumentException
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public boolean isCallerInRole(String arg0)
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         @SuppressWarnings("deprecation")
+         public boolean isCallerInRole(Identity arg0)
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public UserTransaction getUserTransaction() throws IllegalStateException
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public TimerService getTimerService() throws IllegalStateException
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public boolean getRollbackOnly() throws IllegalStateException
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public Properties getEnvironment()
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public EJBLocalHome getEJBLocalHome()
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public EJBHome getEJBHome()
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public Principal getCallerPrincipal()
+         {
+            return PRINCIPAL;
+         }
+
+         @Override
+         @SuppressWarnings("deprecation")
+         public Identity getCallerIdentity()
+         {
+            throw UNSUPPORTED;
+         }
+      };
    }
 
    //-------------------------------------------------------------------------------------||
@@ -95,8 +204,9 @@ public class CachingInterceptorUnitTestCase
 
       // Test our invocation was cached properly
       TestCase.assertEquals("Cache should have the first invocation", 1, CachingAuditor.getInvocations().size());
-      TestCase.assertEquals("Invocation cached was not the one that was invoked", invocation, CachingAuditor
-            .getInvocations().get(0));
+      final AuditedInvocation audit = CachingAuditor.getInvocations().get(0);
+      TestCase.assertEquals("Invocation cached was not the one that was invoked", invocation, audit.getContext());
+      TestCase.assertEquals("Invocation did not store the caller as expected", PRINCIPAL, audit.getCaller());
    }
 
 }

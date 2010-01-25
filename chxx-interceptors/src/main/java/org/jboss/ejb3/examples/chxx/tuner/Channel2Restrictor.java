@@ -61,8 +61,8 @@ public class Channel2Restrictor
 
    /**
     * Examines the specified request to determine if the caller is attempting 
-    * to obtain content for Channel 2.  If so, will block the request with 
-    * {@link Channel2ClosedException}
+    * to obtain content for Channel 2.  If so, and Channel 2 is currently closed, 
+    * will block the request, instead throwing {@link Channel2ClosedException}
     */
    @AroundInvoke
    public Object checkAccessibility(final InvocationContext context) throws Exception
