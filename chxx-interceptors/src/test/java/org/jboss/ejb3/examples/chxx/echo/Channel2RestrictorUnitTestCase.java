@@ -22,7 +22,6 @@
 package org.jboss.ejb3.examples.chxx.echo;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.interceptor.InvocationContext;
@@ -33,14 +32,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests to ensure that the {@link CachingAuditor}
+ * Tests to ensure that the {@link Channel2Restrictor}
  * interceptor is working as expected outside the context
  * of a full container.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public class CachingInterceptorUnitTest
+public class Channel2RestrictorUnitTestCase
 {
 
    //-------------------------------------------------------------------------------------||
@@ -50,7 +49,12 @@ public class CachingInterceptorUnitTest
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(CachingInterceptorUnitTest.class.getName());
+   private static final Logger log = Logger.getLogger(Channel2RestrictorUnitTestCase.class.getName());
+
+   /**
+    * Method to get channel content
+    */
+   private static final Method METHOD_GET_CHANNEL = TunerLocalBusiness.class.getMethods()[0];
 
    //-------------------------------------------------------------------------------------||
    // Instance Members -------------------------------------------------------------------||
@@ -59,7 +63,7 @@ public class CachingInterceptorUnitTest
    /**
     * The interceptor instance to test
     */
-   private CachingAuditor interceptor;
+   private Channel2Restrictor interceptor;
 
    //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
@@ -71,7 +75,7 @@ public class CachingInterceptorUnitTest
    @Before
    public void createInterceptor()
    {
-      interceptor = new CachingAuditor();
+      interceptor = new Channel2Restrictor();
    }
 
    //-------------------------------------------------------------------------------------||
@@ -79,75 +83,55 @@ public class CachingInterceptorUnitTest
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Ensures that contexts passed through the interceptor are cached
+    * Ensures requests for channel 2 are blocked when the channel's access is closed
     */
-   @Test
-   public void testCache() throws Exception
+   @Test(expected = Channel2ClosedException.class)
+   public void requestsToChannel2Blocked() throws Exception
    {
-      // Ensure the cache is empty to start
-      TestCase.assertEquals("Cache should start empty", 0, CachingAuditor.getInvocations().size());
+      // Set the access policy to block
+      Channel2AccessPolicy.setChannel2Permitted(false);
 
       // Invoke
-      final InvocationContext invocation = new MockInvocationContext();
-      interceptor.audit(invocation);
-
-      // Test our invocation was cached properly
-      TestCase.assertEquals("Cache should have the first invocation", 1, CachingAuditor.getInvocations().size());
-      TestCase.assertEquals("Invocation cached was not the one that was invoked", invocation, CachingAuditor
-            .getInvocations().get(0));
+      final InvocationContext invocation = new MockInvocationContext(METHOD_GET_CHANNEL, new Object[]
+      {2});
+      interceptor.checkAccessibility(invocation);
    }
-
-   //-------------------------------------------------------------------------------------||
-   // Inner Classes ----------------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
 
    /**
-    * {@link InvocationContext} implementation which throws {@link UnsupportedOperationException}
-    * for all required methods except {@link InvocationContext#proceed()}, which will always return null.
+    * Ensures requests for channel 2 are not blocked when the channel's access is open
     */
-   private static class MockInvocationContext implements InvocationContext
+   @Test
+   public void requestsToChannel2NotBlocked() throws Exception
    {
+      // Set the access policy to block
+      Channel2AccessPolicy.setChannel2Permitted(true);
 
-      /**
-       * Message used to denote that the operation is not supported 
-       */
-      private static final String MSG_UNSUPPORTED = "Not supported in mock implementation";
-
-      @Override
-      public Map<String, Object> getContextData()
+      // Invoke
+      final InvocationContext invocation = new MockInvocationContext(METHOD_GET_CHANNEL, new Object[]
+      {2});
+      try
       {
-         throw new UnsupportedOperationException(MSG_UNSUPPORTED);
+         interceptor.checkAccessibility(invocation);
       }
-
-      @Override
-      public Method getMethod()
+      catch (final Channel2ClosedException e)
       {
-         throw new UnsupportedOperationException(MSG_UNSUPPORTED);
+         TestCase.fail("Should not have been blocked with: " + e);
       }
-
-      @Override
-      public Object[] getParameters()
-      {
-         throw new UnsupportedOperationException(MSG_UNSUPPORTED);
-      }
-
-      @Override
-      public Object getTarget()
-      {
-         throw new UnsupportedOperationException(MSG_UNSUPPORTED);
-      }
-
-      @Override
-      public Object proceed() throws Exception
-      {
-         return null;
-      }
-
-      @Override
-      public void setParameters(Object[] arg0)
-      {
-         throw new UnsupportedOperationException(MSG_UNSUPPORTED);
-      }
-
    }
+
+   /**
+    * Ensures requests for channel 1 are not blocked channel 2's access is closed
+    */
+   @Test
+   public void requestsToChannel1NeverBlocked() throws Exception
+   {
+      // Set the access policy to block
+      Channel2AccessPolicy.setChannel2Permitted(false);
+
+      // Invoke
+      final InvocationContext invocation = new MockInvocationContext(METHOD_GET_CHANNEL, new Object[]
+      {1});
+      interceptor.checkAccessibility(invocation);
+   }
+
 }

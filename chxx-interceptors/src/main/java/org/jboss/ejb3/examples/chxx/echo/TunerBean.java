@@ -21,6 +21,10 @@
  */
 package org.jboss.ejb3.examples.chxx.echo;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Logger;
+
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
@@ -36,21 +40,68 @@ import javax.interceptor.InvocationContext;
  * @version $Revision: $
  */
 @Stateless
+// Class-level interceptors will be run upon requests to every method of this EJB
 @Interceptors(CachingAuditor.class)
-@Local(EchoLocalBusiness.class)
-public class EchoBean implements EchoLocalBusiness
+@Local(TunerLocalBusiness.class)
+public class TunerBean implements TunerLocalBusiness
 {
+   //-------------------------------------------------------------------------------------||
+   // Class Members ----------------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * Logger
+    */
+   private static final Logger log = Logger.getLogger(TunerBean.class.getName());
+
    //-------------------------------------------------------------------------------------||
    // Required Implementations -----------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.chxx.echo.EchoLocalBusiness#echo(java.lang.String)
+    * @see org.jboss.ejb3.examples.chxx.echo.TunerLocalBusiness#getChannel(int)
     */
+   // Here we declare method-level interceptors, which will only take place on this method
+   @Interceptors(Channel2Restrictor.class)
    @Override
-   public String echo(final String value) throws IllegalArgumentException
+   public InputStream getChannel(final int channel) throws IllegalArgumentException
    {
-      return value;
+      // Declare the stream we'll use
+      final InputStream stream;
+      switch (channel)
+      {
+         // We want channel 1
+         case 1 :
+            stream = new InputStream()
+            {
+
+               @Override
+               public int read() throws IOException
+               {
+                  return 1;
+               }
+            };
+            break;
+         // We want channel 2
+         case 2 :
+            stream = new InputStream()
+            {
+
+               @Override
+               public int read() throws IOException
+               {
+                  return 2;
+               }
+            };
+            break;
+         // We've requested an improper channel
+         default :
+            throw new IllegalArgumentException("Not a valid channel: " + channel);
+      }
+
+      // Return
+      log.info("Returning stream for Channel " + channel + ": " + stream);
+      return stream;
    }
 }

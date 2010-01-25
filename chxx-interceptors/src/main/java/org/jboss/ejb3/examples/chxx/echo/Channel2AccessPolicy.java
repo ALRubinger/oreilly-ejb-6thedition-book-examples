@@ -22,33 +22,53 @@
 package org.jboss.ejb3.examples.chxx.echo;
 
 /**
- * Local business interface of an EJB which simply returns a reference
+ * Defines the authoritative policy governing whether or not
+ * Channel 2 should be currently accessible
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface EchoLocalBusiness
+public class Channel2AccessPolicy
 {
+
    //-------------------------------------------------------------------------------------||
-   // Contracts --------------------------------------------------------------------------||
+   // Class Members ----------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * @deprecated Use Global JNDI Bindings EJBBOOK-2 
+    * Flag dictating whether or not Channel 2 should be shown
     */
-   //TODO
-   @Deprecated
-   String JNDI_NAME = "EchoBean/local";
+   private static boolean channel2Permitted = false;
 
    //-------------------------------------------------------------------------------------||
-   // Constants --------------------------------------------------------------------------||
+   // Constructor ------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Returns the specified reference
-    * @param value
-    * @return
-    * @throws IllegalArgumentException If the value was not specified
+    * No instantiation
     */
-   String echo(String value) throws IllegalArgumentException;
+   private Channel2AccessPolicy()
+   {
+      throw new UnsupportedOperationException("No instances permitted");
+   }
+
+   //-------------------------------------------------------------------------------------||
+   // Functional Methods -----------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * Returns whether or not requests to view Channel 2 will be honored
+    */
+   public static boolean isChannel2Permitted()
+   {
+      return channel2Permitted;
+   }
+
+   /**
+    * Returns whether or not requests to view Channel 2 will be honored
+    */
+   public static void setChannel2Permitted(final boolean channel2Permitted)
+   {
+      Channel2AccessPolicy.channel2Permitted = channel2Permitted;
+   }
 }

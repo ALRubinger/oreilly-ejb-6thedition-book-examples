@@ -22,6 +22,9 @@
 package org.jboss.ejb3.examples.chxx.echo;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
@@ -92,7 +95,15 @@ public class InterceptionIntegrationTest
    // Instance Members -------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
+   /**
+    * Archive representing the deployment 
+    */
    private JavaArchive deployment;
+
+   /**
+    * The bean to invoke upon
+    */
+   private TunerLocalBusiness bean;
 
    //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
@@ -168,19 +179,22 @@ public class InterceptionIntegrationTest
    }
 
    /**
-    * Deploys the EJB into the server
+    * Deploys the EJB into the server and looks up an invokable reference
     * @throws Exception
     */
    @Before
-   public void deploy() throws Exception
+   public void deployAndGetBean() throws Exception
    {
 
       // Create the archive
-      deployment = Archives.create("echo.jar", JavaArchive.class).addClasses(EchoLocalBusiness.class, EchoBean.class,
-            CachingAuditor.class);
+      deployment = Archives.create("echo.jar", JavaArchive.class).addClasses(TunerLocalBusiness.class, TunerBean.class,
+            CachingAuditor.class, Channel2Restrictor.class);
 
       // Deploy
       server.deploy(deployment);
+
+      // Lookup 
+      bean = (TunerLocalBusiness) NAMING_CONTEXT.lookup(TunerLocalBusiness.JNDI_NAME);
    }
 
    /**
@@ -204,31 +218,66 @@ public class InterceptionIntegrationTest
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Ensures that invocation upon an EJB with {@link Interceptors} declared
+    * Ensures that invocation upon an EJB with {@link CachingAuditor} declared
     * results in the interception of targeted methods
     */
    @Test
-   public void testInterception() throws NamingException
+   public void testCachingInterception() throws NamingException, IOException
    {
-      // Lookup
-      final EchoLocalBusiness bean = (EchoLocalBusiness) NAMING_CONTEXT.lookup(EchoLocalBusiness.JNDI_NAME);
-
       // Ensure no invocations intercepted yet
       TestCase.assertEquals("No invocations should have yet been intercepted", 0, CachingAuditor.getInvocations()
             .size());
 
       // Invoke
-      final String request = "Hey-o!";
-      final String response = bean.echo(request);
+      final int channel = 1;
+      final InputStream content = bean.getChannel(channel);
 
       // Test the response is as expected
-      TestCase.assertEquals("Did not obtain expected response", request, response);
-      TestCase.assertTrue(
-            "Invocation returned an object equal by value, but local invocations must be pass-by-reference",
-            request == response);
+      TestCase.assertEquals("Did not obtain expected response", channel, content.read());
 
       // Test the invocation was intercepted 
       TestCase.assertEquals("The invocation should have been intercepted", 1, CachingAuditor.getInvocations().size());
+   }
+
+   /**
+    * Ensures that requests to obtain Channel 2 while restricted are blocked with {@link Channel2ClosedException}
+    */
+   @Test(expected = Channel2ClosedException.class)
+   public void testChannel2Restricted() throws Throwable
+   {
+      // Set the policy to block channel 2
+      Channel2AccessPolicy.setChannel2Permitted(false);
+
+      // Invoke
+      try
+      {
+         bean.getChannel(2);
+      }
+      // Expected
+      catch (final UndeclaredThrowableException ute)
+      {
+         throw ute.getCause();
+      }
+
+      // Fail if we reach here
+      TestCase.fail("Request should have been blocked");
+   }
+
+   /**
+    * Ensures that requests to obtain Channel 2 while open succeed
+    */
+   @Test
+   public void testChannel2Allowed() throws NamingException, IOException
+   {
+      // Set the policy to block channel 2
+      Channel2AccessPolicy.setChannel2Permitted(true);
+
+      // Invoke
+      final int channel = 2;
+      final InputStream stream = bean.getChannel(channel);
+
+      // Test
+      TestCase.assertEquals("Unexpected content obtained from channel " + channel, channel, stream.read());
    }
 
    //-------------------------------------------------------------------------------------||
