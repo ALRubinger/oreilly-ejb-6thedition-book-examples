@@ -19,31 +19,22 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.echo;
+package org.jboss.ejb3.examples.chxx.tuner;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
 /**
- * Aspect which keeps a cache of all intercepted
- * invocations in a globally-accessible cache.
- * 
- * Though demonstrative for testing and learning purposes, this is a very
- * poor example of a real-world auditing mechanism.  In a production environment, 
- * the copy-on-write nature of the cache will degrade geometrically 
- * over time, and additionally we export mutable views 
- * (ie. {@link InvocationContext#setParameters(Object[])}) to callers
- * of {@link CachingAuditor#getInvocations()}.
+ * Aspect which restricts access to Channel 2 unless
+ * the network has allowed broadcasting.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public class CachingAuditor
+public class Channel2Restrictor
 {
 
    //-------------------------------------------------------------------------------------||
@@ -53,48 +44,45 @@ public class CachingAuditor
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(CachingAuditor.class.getName());
+   private static final Logger log = Logger.getLogger(Channel2Restrictor.class.getName());
 
    /**
-    * Cached invocations; must be in a thread-safe implementation because this member
-    * is shared by all interceptor instances, which are linked to bean instances.  Though
-    * each bean instance is guaranteed to be used by only one thread at once, many bean instances
-    * may be executed concurrently.
+    * Name of the method to request channel content
     */
-   private static final List<InvocationContext> invocations = new CopyOnWriteArrayList<InvocationContext>();
+   private static final String METHOD_NAME_GET_CHANNEL;
+   static
+   {
+      METHOD_NAME_GET_CHANNEL = TunerLocalBusiness.class.getMethods()[0].getName();
+   }
 
    //-------------------------------------------------------------------------------------||
    // Required Implementations -----------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Caches the intercepted {@link InvocationContext} such that
-    * a test may obtain it later
+    * Examines the specified request to determine if the caller is attempting 
+    * to obtain content for Channel 2.  If so, will block the request with 
+    * {@link Channel2ClosedException}
     */
    @AroundInvoke
-   public Object audit(final InvocationContext context) throws Exception
+   public Object checkAccessibility(final InvocationContext context) throws Exception
    {
       // Precondition checks
       assert context != null : "Context was not specified";
 
-      // Add the invocation to the cache
-      invocations.add(context);
-
-      // Carry out the invocation, noting where we've intercepted before and after the call (around it)
-      try
+      // See if we're requesting Channel 2
+      if (isRequestForChannel2(context))
       {
-         // Log
-         log.info("Intercepted: " + context);
-
-         // Return
-         return context.proceed();
-      }
-      finally
-      {
-         // Log
-         log.info("Done with: " + context);
+         // See if Channel 2 is open
+         if (!Channel2AccessPolicy.isChannel2Permitted())
+         {
+            // Block access
+            throw Channel2ClosedException.INSTANCE;
+         }
       }
 
+      // Otherwise carry on
+      return context.proceed();
    }
 
    //-------------------------------------------------------------------------------------||
@@ -102,12 +90,31 @@ public class CachingAuditor
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Returns a read-only view of the {@link InvocationContext}
-    * cached by this interceptor
+    * Determines whether or not the specified context represents a request for Channel 2
     */
-   public static List<InvocationContext> getInvocations()
+   private static boolean isRequestForChannel2(final InvocationContext context)
    {
-      // Copy on export
-      return Collections.unmodifiableList(invocations);
+      // Precondition check
+      assert context != null : "Context was not specified";
+
+      // Get the target method
+      final Method targetMethod = context.getMethod();
+
+      // If we're requesting a new channel
+      final String targetMethodName = targetMethod.getName();
+      if (targetMethodName.equals(METHOD_NAME_GET_CHANNEL))
+      {
+         log.info("This is a request for channel content: " + context);
+         // Get the requested channel
+         final int channel = ((Integer) context.getParameters()[0]).intValue();
+         if (channel == 2)
+         {
+            // Yep, they want channel 2
+            return true;
+         }
+      }
+
+      // Return
+      return false;
    }
 }

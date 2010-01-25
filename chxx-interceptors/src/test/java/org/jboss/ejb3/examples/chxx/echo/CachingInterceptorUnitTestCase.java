@@ -27,6 +27,8 @@ import javax.interceptor.InvocationContext;
 
 import junit.framework.TestCase;
 
+import org.jboss.ejb3.examples.chxx.tuner.CachingAuditor;
+import org.jboss.ejb3.examples.chxx.tuner.TunerLocalBusiness;
 import org.junit.Before;
 import org.junit.Test;
 

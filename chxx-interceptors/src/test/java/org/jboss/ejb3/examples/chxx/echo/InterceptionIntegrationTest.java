@@ -39,6 +39,12 @@ import javax.naming.NamingException;
 import junit.framework.TestCase;
 
 import org.jboss.bootstrap.api.lifecycle.LifecycleState;
+import org.jboss.ejb3.examples.chxx.tuner.CachingAuditor;
+import org.jboss.ejb3.examples.chxx.tuner.Channel2AccessPolicy;
+import org.jboss.ejb3.examples.chxx.tuner.Channel2ClosedException;
+import org.jboss.ejb3.examples.chxx.tuner.Channel2Restrictor;
+import org.jboss.ejb3.examples.chxx.tuner.TunerBean;
+import org.jboss.ejb3.examples.chxx.tuner.TunerLocalBusiness;
 import org.jboss.embedded.api.server.JBossASEmbeddedServer;
 import org.jboss.embedded.api.server.JBossASEmbeddedServerFactory;
 import org.jboss.embedded.api.server.JBossHomeClassLoader;
