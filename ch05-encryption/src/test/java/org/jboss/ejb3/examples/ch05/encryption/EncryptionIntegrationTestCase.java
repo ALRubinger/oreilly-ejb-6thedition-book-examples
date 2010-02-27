@@ -22,14 +22,22 @@
 
 package org.jboss.ejb3.examples.ch05.encryption;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import junit.framework.TestCase;
 
+import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
+import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * EncryptionIntegrationTestCase
@@ -39,6 +47,7 @@ import org.junit.Test;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
+@RunWith(Arquillian.class)
 public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
 {
    // ---------------------------------------------------------------------------||
@@ -56,15 +65,15 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
    private static Context namingContext;
 
    /**
-    * The EJB 3.x remote business view of the EncryptionEJB
+    * The EJB 3.x local business view of the EncryptionEJB
     */
-   private static EncryptionRemoteBusiness encryptionRemoteBusiness;
+   private static EncryptionLocalBusiness encryptionLocalBusiness;
 
    /**
-    * JNDI Name of the Remote Business Reference
+    * JNDI Name of the Business Reference
     */
-   //TODO Use Global JNDI Syntax (not yet supported in JBoss EJB3)
-   private static final String JNDI_NAME_ENCRYPTION_REMOTE_BUSINESS = EncryptionBean.EJB_NAME + "/remote";
+   //TODO Use Global JNDI Syntax or injection
+   private static final String JNDI_NAME_ENCRYPTION_LOCAL_BUSINESS = EncryptionBean.EJB_NAME + "Local";
 
    /**
     * Correlates to the env-entry within ejb-jar.xml, to be used as an override from the default 
@@ -75,6 +84,22 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
     * Correlates to the env-entry within ejb-jar.xml, to be used as an override from the default 
     */
    private static final String EXPECTED_ALGORITHM_MESSAGE_DIGEST = "SHA";
+
+   /**
+    * Define the deployment
+    */
+   @Deployment
+   public static JavaArchive createDeployment() throws MalformedURLException
+   {
+      final JavaArchive archive = Archives.create("slsb.jar", JavaArchive.class).addClasses(EncryptionBean.class,
+            EncryptionCommonBusiness.class, EncryptionLocalBusiness.class, EncryptionRemoteBusiness.class,
+            EncryptionException.class).addManifestResource(
+            new URL(EncryptionIntegrationTestCase.class.getProtectionDomain().getCodeSource().getLocation(),
+                  "../classes/META-INF/ejb-jar.xml"), "ejb-jar.xml");
+      //TODO SHRINKWRAP-141 Make addition of the ejb-jar less verbose
+      log.info(archive.toString(true));
+      return archive;
+   }
 
    // ---------------------------------------------------------------------------||
    // Lifecycle Methods ---------------------------------------------------------||
@@ -87,7 +112,7 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
       namingContext = new InitialContext();
 
       // Obtain EJB 3.x Business Reference
-      encryptionRemoteBusiness = (EncryptionRemoteBusiness) namingContext.lookup(JNDI_NAME_ENCRYPTION_REMOTE_BUSINESS);
+      encryptionLocalBusiness = (EncryptionLocalBusiness) namingContext.lookup(JNDI_NAME_ENCRYPTION_LOCAL_BUSINESS);
    }
 
    // ---------------------------------------------------------------------------||
@@ -108,7 +133,7 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
       log.info("testHashing");
 
       // Test via superclass
-      this.assertHashing(encryptionRemoteBusiness);
+      this.assertHashing(encryptionLocalBusiness);
    }
 
    /**
@@ -121,7 +146,7 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
       log.info("testEncryption");
 
       // Test via superclass
-      this.assertEncryption(encryptionRemoteBusiness);
+      this.assertEncryption(encryptionLocalBusiness);
    }
 
    /**
@@ -137,7 +162,7 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
       log.info("testMessageDigestAlgorithmOverride");
 
       // Get the algorithm used
-      final String algorithm = encryptionRemoteBusiness.getMessageDigestAlgorithm();
+      final String algorithm = encryptionLocalBusiness.getMessageDigestAlgorithm();
       log.info("Using MessageDigest algorithm: " + algorithm);
 
       // Ensure expected
@@ -158,7 +183,7 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
       log.info("testCiphersPassphraseOverride");
 
       // Get the algorithm used
-      final String passphrase = encryptionRemoteBusiness.getCiphersPassphrase();
+      final String passphrase = encryptionLocalBusiness.getCiphersPassphrase();
       log.info("Using Encryption passphrase: " + passphrase);
 
       // Ensure expected
