@@ -76,7 +76,7 @@ public class CalculatorIntegrationTestCase
     * JNDI Name of the Remote Business Reference
     */
    //TODO Use Global JNDI Syntax 
-   private static final String JNDI_NAME_CALC_LOCAL_BUSINESS = ManyViewCalculatorBean.class.getSimpleName() + "Local";
+   private static final String JNDI_NAME_CALC_LOCAL_BUSINESS = SimpleCalculatorBean.class.getSimpleName() + "Local";
 
    /**
     * Define the deployment

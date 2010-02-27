@@ -22,13 +22,19 @@
 
 package org.jboss.ejb3.examples.ch04.firstejb;
 
+import java.net.MalformedURLException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
 
+import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
+import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * MultiViewCalculatorIntegrationTestCase
@@ -38,6 +44,7 @@ import org.junit.Test;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
+@RunWith(Arquillian.class)
 public class MultiViewCalculatorIntegrationTestCase
 {
    // ---------------------------------------------------------------------------||
@@ -55,14 +62,14 @@ public class MultiViewCalculatorIntegrationTestCase
    private static Context namingContext;
 
    /**
-    * The EJB 3.x remote business view of the CalculatorEJB
+    * The EJB 3.x local business view of the CalculatorEJB
     */
-   private static CalculatorRemoteBusiness calcRemoteBusiness;
+   private static CalculatorLocalBusiness calcLocalBusiness;
 
    /**
-    * The EJB 2.x remote component view of the CalculatorEJB 
+    * The EJB 2.x local component view of the CalculatorEJB 
     */
-   private static CalculatorRemote calcRemote;
+   private static CalculatorLocal calcLocal;
 
    /**
     * Delegate for ensuring that the obtained Calculators are working as expected
@@ -70,17 +77,28 @@ public class MultiViewCalculatorIntegrationTestCase
    private static CalculatorAssertionDelegate assertionDelegate;
 
    /**
-    * JNDI Name of the Remote Business Reference
+    * JNDI Name of the Local Business Reference
     */
-   //TODO Use Global JNDI Syntax (not yet supported in JBoss EJB3)
-   private static final String JNDI_NAME_CALC_REMOTE_BUSINESS = ManyViewCalculatorBean.class.getSimpleName()
-         + "/remote";
+   //TODO Use Global JNDI Syntax
+   private static final String JNDI_NAME_CALC_LOCAL_BUSINESS = ManyViewCalculatorBean.class.getSimpleName() + "Local";
 
    /**
-    * JNDI Name of the Remote Home Reference
+    * JNDI Name of the Local Home Reference
     */
    //TODO Use Global JNDI Syntax (not yet supported in JBoss EJB3)
-   private static final String JNDI_NAME_CALC_REMOTE_HOME = ManyViewCalculatorBean.class.getSimpleName() + "/home";
+   private static final String JNDI_NAME_CALC_REMOTE_HOME = ManyViewCalculatorBean.class.getSimpleName() + "LocalHome";
+
+   /**
+    * Define the deployment
+    */
+   @Deployment
+   public static JavaArchive createDeployment() throws MalformedURLException
+   {
+      final JavaArchive archive = Archives.create("firstejb.jar", JavaArchive.class).addPackage(
+            CalculatorBeanBase.class.getPackage());
+      log.info(archive.toString(true));
+      return archive;
+   }
 
    // ---------------------------------------------------------------------------||
    // Lifecycle Methods ---------------------------------------------------------||
@@ -96,16 +114,15 @@ public class MultiViewCalculatorIntegrationTestCase
       namingContext = new InitialContext();
 
       // Obtain EJB 3.x Business Reference
-      calcRemoteBusiness = (CalculatorRemoteBusiness) namingContext.lookup(JNDI_NAME_CALC_REMOTE_BUSINESS);
+      calcLocalBusiness = (CalculatorLocalBusiness) namingContext.lookup(JNDI_NAME_CALC_LOCAL_BUSINESS);
 
       // Create Assertion Delegate
       assertionDelegate = new CalculatorAssertionDelegate();
 
       // Obtain EJB 2.x Component Reference via Home
-      final Object calcRemoteHomeReference = namingContext.lookup(JNDI_NAME_CALC_REMOTE_HOME);
-      final CalculatorRemoteHome calcRemoteHome = (CalculatorRemoteHome) PortableRemoteObject.narrow(
-            calcRemoteHomeReference, CalculatorRemoteHome.class);
-      calcRemote = calcRemoteHome.create();
+      final Object calcLocalHomeReference = namingContext.lookup(JNDI_NAME_CALC_REMOTE_HOME);
+      final CalculatorLocalHome calcRemoteHome = (CalculatorLocalHome) calcLocalHomeReference;
+      calcLocal = calcRemoteHome.create();
    }
 
    // ---------------------------------------------------------------------------||
@@ -121,7 +138,7 @@ public class MultiViewCalculatorIntegrationTestCase
    {
       // Test 
       log.info("Testing remote business reference...");
-      assertionDelegate.assertAdditionSucceeds(calcRemoteBusiness);
+      assertionDelegate.assertAdditionSucceeds(calcLocalBusiness);
    }
 
    /**
@@ -133,7 +150,7 @@ public class MultiViewCalculatorIntegrationTestCase
    {
       // Test
       log.info("Testing remote component reference...");
-      assertionDelegate.assertAdditionSucceeds(calcRemote);
+      assertionDelegate.assertAdditionSucceeds(calcLocal);
    }
 
 }

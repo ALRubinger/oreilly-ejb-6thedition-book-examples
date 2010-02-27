@@ -22,20 +22,20 @@
 
 package org.jboss.ejb3.examples.ch04.firstejb;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 
 /**
  * SimpleCalculatorBean
  * 
  * Bean implementation class of the CalculatorEJB which
- * exposes one remote business view
+ * exposes one local business view
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
 @Stateless
-@Remote(CalculatorRemoteBusiness.class)
+@Local(CalculatorLocalBusiness.class)
 public class SimpleCalculatorBean extends CalculatorBeanBase implements CalculatorCommonBusiness
 {
    /*
