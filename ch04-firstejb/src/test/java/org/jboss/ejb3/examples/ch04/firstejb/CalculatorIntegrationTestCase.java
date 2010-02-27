@@ -22,12 +22,19 @@
 
 package org.jboss.ejb3.examples.ch04.firstejb;
 
+import java.net.MalformedURLException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
+import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * CalculatorIntegrationTestCase
@@ -38,6 +45,7 @@ import org.junit.Test;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
+@RunWith(Arquillian.class)
 public class CalculatorIntegrationTestCase
 {
    // ---------------------------------------------------------------------------||
@@ -55,9 +63,9 @@ public class CalculatorIntegrationTestCase
    private static Context namingContext;
 
    /**
-    * The EJB 3.x remote business view of the CalculatorEJB
+    * The EJB 3.x local business view of the CalculatorEJB
     */
-   private static CalculatorRemoteBusiness calcRemoteBusiness;
+   private static CalculatorLocalBusiness calcLocalBusiness;
 
    /**
     * Delegate for ensuring that the obtained Calculators are working as expected
@@ -67,8 +75,20 @@ public class CalculatorIntegrationTestCase
    /**
     * JNDI Name of the Remote Business Reference
     */
-   //TODO Use Global JNDI Syntax (not yet supported in JBoss EJB3)
-   private static final String JNDI_NAME_CALC_REMOTE_BUSINESS = SimpleCalculatorBean.class.getSimpleName() + "/remote";
+   //TODO Use Global JNDI Syntax 
+   private static final String JNDI_NAME_CALC_LOCAL_BUSINESS = ManyViewCalculatorBean.class.getSimpleName() + "Local";
+
+   /**
+    * Define the deployment
+    */
+   @Deployment
+   public static JavaArchive createDeployment() throws MalformedURLException
+   {
+      final JavaArchive archive = Archives.create("firstejb.jar", JavaArchive.class).addPackage(
+            CalculatorBeanBase.class.getPackage());
+      log.info(archive.toString(true));
+      return archive;
+   }
 
    // ---------------------------------------------------------------------------||
    // Lifecycle Methods ---------------------------------------------------------||
@@ -84,7 +104,7 @@ public class CalculatorIntegrationTestCase
       namingContext = new InitialContext();
 
       // Obtain EJB 3.x Business Reference
-      calcRemoteBusiness = (CalculatorRemoteBusiness) namingContext.lookup(JNDI_NAME_CALC_REMOTE_BUSINESS);
+      calcLocalBusiness = (CalculatorLocalBusiness) namingContext.lookup(JNDI_NAME_CALC_LOCAL_BUSINESS);
 
       // Create Assertion Delegate
       assertionDelegate = new CalculatorAssertionDelegate();
@@ -103,7 +123,7 @@ public class CalculatorIntegrationTestCase
    {
       // Test 
       log.info("Testing remote business reference...");
-      assertionDelegate.assertAdditionSucceeds(calcRemoteBusiness);
+      assertionDelegate.assertAdditionSucceeds(calcLocalBusiness);
    }
 
 }
