@@ -25,8 +25,7 @@ package org.jboss.ejb3.examples.ch05.encryption;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 
 import junit.framework.TestCase;
 
@@ -35,7 +34,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.Archives;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -60,20 +58,10 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
    private static final Logger log = Logger.getLogger(EncryptionIntegrationTestCase.class);
 
    /**
-    * The JNDI Naming Context
-    */
-   private static Context namingContext;
-
-   /**
     * The EJB 3.x local business view of the EncryptionEJB
     */
+   @EJB
    private static EncryptionLocalBusiness encryptionLocalBusiness;
-
-   /**
-    * JNDI Name of the Business Reference
-    */
-   //TODO Use Global JNDI Syntax or injection
-   private static final String JNDI_NAME_ENCRYPTION_LOCAL_BUSINESS = EncryptionBean.EJB_NAME + "Local";
 
    /**
     * Correlates to the env-entry within ejb-jar.xml, to be used as an override from the default 
@@ -99,20 +87,6 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
       //TODO SHRINKWRAP-141 Make addition of the ejb-jar less verbose
       log.info(archive.toString(true));
       return archive;
-   }
-
-   // ---------------------------------------------------------------------------||
-   // Lifecycle Methods ---------------------------------------------------------||
-   // ---------------------------------------------------------------------------||
-
-   @BeforeClass
-   public static void beforeClass() throws Throwable
-   {
-      // Create the naming context, using jndi.properties on the CP
-      namingContext = new InitialContext();
-
-      // Obtain EJB 3.x Business Reference
-      encryptionLocalBusiness = (EncryptionLocalBusiness) namingContext.lookup(JNDI_NAME_ENCRYPTION_LOCAL_BUSINESS);
    }
 
    // ---------------------------------------------------------------------------||
