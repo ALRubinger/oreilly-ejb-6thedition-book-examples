@@ -28,7 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.ejb.EJBContext;
+import javax.ejb.SessionContext;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
@@ -75,7 +75,7 @@ public class CachingAuditor
     * manually populated by unit tests
     */
    @Resource
-   EJBContext beanContext;
+   SessionContext beanContext;
 
    //-------------------------------------------------------------------------------------||
    // Required Implementations -----------------------------------------------------------||
@@ -97,7 +97,6 @@ public class CachingAuditor
       {
          caller = beanContext.getCallerPrincipal();
       }
-      //TODO EJBTHREE-1996 Should not throw NPE
       catch (final NullPointerException npe)
       {
          caller = new Principal()

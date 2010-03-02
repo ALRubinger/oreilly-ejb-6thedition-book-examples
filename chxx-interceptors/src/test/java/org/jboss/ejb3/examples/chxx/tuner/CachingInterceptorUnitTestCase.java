@@ -26,12 +26,15 @@ import java.security.Principal;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import javax.ejb.EJBContext;
 import javax.ejb.EJBHome;
 import javax.ejb.EJBLocalHome;
+import javax.ejb.EJBLocalObject;
+import javax.ejb.EJBObject;
+import javax.ejb.SessionContext;
 import javax.ejb.TimerService;
 import javax.interceptor.InvocationContext;
 import javax.transaction.UserTransaction;
+import javax.xml.rpc.handler.MessageContext;
 
 import junit.framework.TestCase;
 
@@ -97,7 +100,7 @@ public class CachingInterceptorUnitTestCase
    {
       interceptor = new CachingAuditor();
       // Manually set the EJBContext to a mock view which only supports returning a principal
-      interceptor.beanContext = new EJBContext()
+      interceptor.beanContext = new SessionContext()
       {
 
          /**
@@ -177,6 +180,42 @@ public class CachingInterceptorUnitTestCase
          @Override
          @SuppressWarnings("deprecation")
          public Identity getCallerIdentity()
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public <T> T getBusinessObject(Class<T> businessInterface) throws IllegalStateException
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public EJBLocalObject getEJBLocalObject() throws IllegalStateException
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public EJBObject getEJBObject() throws IllegalStateException
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public Class getInvokedBusinessInterface() throws IllegalStateException
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public MessageContext getMessageContext() throws IllegalStateException
+         {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public boolean isCancelled() throws IllegalStateException
          {
             throw UNSUPPORTED;
          }

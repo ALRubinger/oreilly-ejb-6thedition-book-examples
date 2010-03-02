@@ -25,9 +25,6 @@
   <!-- Properties -->
   <properties>
 
-    <!-- JBOSS_HOME (We'll unpack into here -->
-    <JBOSS_HOME>${project.build.directory}/jboss-${version.org.jboss.jbossas}</JBOSS_HOME>
-
     <!-- Versioning -->
 
   </properties>
@@ -38,63 +35,12 @@
     <dependency>
       <groupId>org.jboss.ejb3</groupId>
       <artifactId>jboss-ejb3-api</artifactId>
-      <!--
-        Must exclude jboss-metadata to prevent class leaking onto the
-        appCL which breaks booting AS? In an isolated CL context this is
-        not a problem EJBBOOK-12
-      -->
-      <exclusions>
-        <exclusion>
-          <groupId>jboss.jbossws</groupId>
-          <artifactId>jboss-jaxrpc</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
-
-    <dependency>
-      <groupId>org.jboss.ejb3</groupId>
-      <artifactId>jboss-ejb3-ext-api</artifactId>
-      <!-- TODO: Resolve this need for extra configuration -->
-      <!--
-        Must exclude jboss-metadata to prevent class leaking onto the
-        appCL which breaks booting AS? In an isolated CL context this is
-        not a problem EJBBOOK-12
-      -->
-      <exclusions>
-        <exclusion>
-          <groupId>org.jboss.metadata</groupId>
-          <artifactId>jboss-metadata</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.jboss.javaee</groupId>
-          <artifactId>jboss-ejb-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <!-- EJBBOOK-12 Need the whole JNP Server for just client stuff? 
-    <dependency>
-      <groupId>org.jboss.naming</groupId>
-      <artifactId>jnpserver</artifactId>
-      <version>5.0.4.GA</version>
-      <scope>test</scope> 
-      <exclusions>
-        <exclusion>
-          <groupId>org.jboss</groupId>
-          <artifactId>jboss-common-core</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency> -->
 
     <dependency>
       <groupId>org.jboss.javaee</groupId>
       <artifactId>jboss-jms-api</artifactId>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
     </dependency>
 
     <dependency>
@@ -113,25 +59,22 @@
     Test Dependencies
      -->
 
+    <!-- Arquillian Test Harness -->
     <dependency>
-      <groupId>org.jboss.embedded</groupId>
-      <artifactId>jboss-embedded-api</artifactId>
+      <groupId>org.jboss.arquillian</groupId>
+      <artifactId>arquillian-container-openejb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian</groupId>
+      <artifactId>arquillian-junit</artifactId>
+    </dependency>
+    
+    <!-- JUnit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.jboss.shrinkwrap</groupId>
-      <artifactId>shrinkwrap-impl-base</artifactId>
-    </dependency>
-    
-    <!-- TODO: Remove the dependency on the full AS depchain; it pollutes the CP. EJBBOOK-12 -->
-    <dependency>
-      <groupId>org.jboss.embedded</groupId>
-      <artifactId>jboss-embedded-depchain</artifactId>
-      <scope>test</scope>
-      <version>${version.org.jboss.embedded}</version>
-      <type>pom</type>
-    </dependency>
-    
   </dependencies>
 
   <profiles>
@@ -140,6 +83,9 @@
 
       <!-- Declare the "Integration Test" Profile -->
       <id>it</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
 
       <build>
 
@@ -156,9 +102,6 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <additionalClasspathElements>
-                    <additionalClasspathElement>${JBOSS_HOME}/bin/run.jar</additionalClasspathElement>
-                  </additionalClasspathElements>
                   <redirectTestOutputToFile>true</redirectTestOutputToFile>
                   <trimStackTrace>false</trimStackTrace>
                   <printSummary>true</printSummary>
@@ -166,53 +109,6 @@
                     <include>**/*IntegrationTest.java</include>
                   </includes>
                   <forkMode>always</forkMode>
-                  <argLine>-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djava.endorsed.dirs=${JBOSS_HOME}/lib/endorsed -Djboss.home=${JBOSS_HOME}</argLine>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <!-- Get AS and put into "target" -->
-              <execution>
-                <id>unpack</id>
-                <phase>pre-integration-test</phase> <!-- So run before testing -->
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.jboss.jbossas</groupId>
-                      <artifactId>jboss-as-distribution</artifactId>
-                      <version>${version.org.jboss.jbossas}</version>
-                      <type>zip</type>
-                      <overWrite>false</overWrite>
-                      <outputDirectory>${project.build.directory}</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-              <!-- Other deps, not part of AS, into "target/deps" -->
-              <execution>
-                <id>copy</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>copy</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.jboss.embedded</groupId>
-                      <artifactId>jboss-embedded-core</artifactId>
-                      <version>${version.org.jboss.embedded}</version>
-                      <overWrite>false</overWrite>
-                      <outputDirectory>${project.build.directory}/deps</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
                 </configuration>
               </execution>
             </executions>
