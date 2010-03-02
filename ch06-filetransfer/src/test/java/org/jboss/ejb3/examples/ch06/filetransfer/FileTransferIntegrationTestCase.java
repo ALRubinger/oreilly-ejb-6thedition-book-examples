@@ -23,17 +23,21 @@ package org.jboss.ejb3.examples.ch06.filetransfer;
 
 import java.io.File;
 
+import javax.ejb.EJB;
 import javax.ejb.NoSuchEJBException;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import junit.framework.TestCase;
 
+import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
+import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * FileTransferIntegrationTestCase
@@ -49,6 +53,7 @@ import org.junit.Test;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
+@RunWith(Arquillian.class)
 public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
 {
 
@@ -62,15 +67,32 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
    private static final Logger log = Logger.getLogger(FileTransferIntegrationTestCase.class);
 
    /**
-    * JNDI Name to which the FileTransferEJB is bound
+    * Name of the configuration file for the FTP server users
     */
-   //TODO Use Global JNDI Name (not yet available in JBoss EJB3)
-   private static final String JNDI_NAME_FILETRANSFER_EJB = FileTransferBean.EJB_NAME + "/remote";
+   private static final String FTP_SERVER_USERS_CONFIG_FILENAME = "ftpusers.properties";
 
    /**
-    * Naming context used for lookups
+    * Port to which the FTP server should bind
     */
-   private static Context namingContext;
+   private static final int FTP_SERVER_BIND_PORT = 12345;
+
+   /**
+    * The FTP Server
+    */
+   private static FtpServerPojo ftpServer;
+
+   /**
+    * The Deployment
+    * @return
+    */
+   @Deployment
+   public static JavaArchive createDeployment()
+   {
+      final JavaArchive archive = Archives.create("ftpclient.jar", JavaArchive.class).addPackage(
+            FileTransferBean.class.getPackage());
+      log.info(archive.toString(true));
+      return archive;
+   }
 
    //-------------------------------------------------------------------------------------||
    // Instance Members -------------------------------------------------------------------||
@@ -79,34 +101,46 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
    /**
     * Our view of the EJB, remote business interface type of the Proxy
     */
-   private FileTransferRemoteBusiness client;
+   @EJB
+   private FileTransferRemoteBusiness client1;
+
+   /**
+    * Another FTP Client Session
+    */
+   @EJB
+   private FileTransferRemoteBusiness client2;
 
    //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Creates and sets the JNDI Naming Context used to look up SFSB Proxies
+    * Creates and starts the FTP Server
     */
    @BeforeClass
-   public static void createNamingContext() throws Exception
+   public static void startFtpServer() throws Exception
    {
       // Create
-      final Context context = new InitialContext(); // Properties from ClassPath jndi.properties
+      final FtpServerPojo server = new FtpServerPojo();
 
-      // Log and set
-      log.info("Created JNDI Context: " + context);
-      namingContext = context;
+      // Configure
+      server.setUsersConfigFileName(FTP_SERVER_USERS_CONFIG_FILENAME);
+      server.setBindPort(FTP_SERVER_BIND_PORT);
+
+      // Start and set
+      server.initializeServer();
+      server.startServer();
+      ftpServer = server;
    }
 
    /**
-    * Obtains and sets the FTP Client SFSB Proxy
+    * Stops the FTP Server
+    * @throws Exception
     */
-   @Before
-   public void obtainClient() throws Exception
+   @AfterClass
+   public static void stopFtpServer() throws Exception
    {
-      // Set
-      client = this.createNewSession();
+      ftpServer.stopServer();
    }
 
    /**
@@ -114,12 +148,12 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
     * and resets
     */
    @After
-   public void endClientSession() throws Exception
+   public void endClientSessions() throws Exception
    {
-      // End the session
+      // End the session for client 1
       try
       {
-         client.endSession();
+         client1.endSession();
       }
       // If we've already been ended
       catch (final NoSuchEJBException nsee)
@@ -127,8 +161,16 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
          // Ignore
       }
 
-      // Clear
-      client = null;
+      // End the session for client 2
+      try
+      {
+         client2.endSession();
+      }
+      // If we've already been ended
+      catch (final NoSuchEJBException nsee)
+      {
+         // Ignore
+      }
    }
 
    //-------------------------------------------------------------------------------------||
@@ -149,8 +191,8 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
       // Get the existing client as made from the test lifecycle
       final FileTransferRemoteBusiness session1 = this.getClient();
 
-      // Make a new session and use that as another client
-      final FileTransferRemoteBusiness session2 = this.createNewSession();
+      // Use another client
+      final FileTransferRemoteBusiness session2 = this.client2;
 
       // cd into a home directory for each
       final String ftpHome = getFtpHome().getAbsolutePath();
@@ -231,25 +273,7 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
    @Override
    protected FileTransferRemoteBusiness getClient()
    {
-      return this.client;
-   }
-
-   //-------------------------------------------------------------------------------------||
-   // Internal Helper Methods ------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
-    * Obtains the SFSB Proxy from JNDI, creating a new user session
-    */
-   private FileTransferRemoteBusiness createNewSession() throws Exception
-   {
-      // Look up in JNDI
-      final String jndiName = JNDI_NAME_FILETRANSFER_EJB;
-      final Object proxy = namingContext.lookup(jndiName);
-      log.info("Obtained FTP EJB Proxy from JNDI at \"" + jndiName + "\" : " + proxy);
-
-      // Return
-      return (FileTransferRemoteBusiness) proxy;
+      return this.client1;
    }
 
 }

@@ -37,19 +37,16 @@ import org.jboss.logging.Logger;
 /**
  * FtpServerPojo
  * 
- * MC Bean (POJO) Responsible for starting/stopping 
+ * POJO Responsible for starting/stopping 
  * the Embedded FTP Server.
  * 
- * It's the file "ftpserver-jboss-beans.xml" which will
- * install this into JBoss MicroContainer and invoke 
- * the appropriate lifecycle callbacks.  This should
- * be considered part of the test execution environment
+ * This should be considered part of the test execution environment
  * and is not really part of the SFSB examples themselves.
  * The SFSBs for the examples are a client of the FTP server
  * started by this simple bean.
  * 
- * Thread-safe.  Lifecycle operations are synchronized on 
- * "this".
+ * Not thread-safe.  Intended to be used in single-Threaded environments
+ * (or perform your own external synchronization).
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
@@ -77,11 +74,8 @@ public final class FtpServerPojo
 
    /**
     * Port to which the FTP Server will bind.
-    * 
-    * Synchronized on "this", volatile so
-    * we don't block for read-only access
     */
-   private volatile int bindPort;
+   private int bindPort;
 
    /**
     * The underlying server.  Must not be exported.
@@ -90,11 +84,8 @@ public final class FtpServerPojo
 
    /**
     * The name of the users/password configuration filename.
-    * 
-    * Synchronized on "this", volatile so
-    * we don't block for read-only access
     */
-   private volatile String usersConfigFileName;
+   private String usersConfigFileName;
 
    //-------------------------------------------------------------------------------------||
    // Lifecycle Methods ------------------------------------------------------------------||
@@ -104,12 +95,10 @@ public final class FtpServerPojo
     * Creates and initializes the underlying server.  Should be 
     * called along lifecycle when this POJO is created.
     * 
-    * Synchronized on "this" so we block on all lifecycle events
-    * 
     * @throws IllegalStateException If the properties for the server have not
     *       been properly initialized
     */
-   public synchronized void initializeServer() throws IllegalStateException
+   public void initializeServer() throws IllegalStateException
    {
       // Extract properties
       final int bindPort = this.getBindPort();
@@ -168,16 +157,13 @@ public final class FtpServerPojo
    }
 
    /**
-    * Starts the server.  Should be called along lifecycle when this
-    * POJO is installed (ie. @Start)
-    * 
-    * Synchronized on "this" so we block on all lifecycle events
+    * Starts the server.
     * 
     * @throws IllegalStateException If the server has not been initialized or
     *       if the server has already been started
     * @throws FtpException If there was an error in starting the server
     */
-   public synchronized void startServer() throws IllegalStateException, FtpException
+   public void startServer() throws IllegalStateException, FtpException
    {
       // Get the server
       final FtpServer server = this.getServer();
@@ -205,14 +191,13 @@ public final class FtpServerPojo
    }
 
    /**
-    * Stops the server.  Should be called along lifecycle when this
-    * POJO is uninstalled.
+    * Stops the server. 
     * 
     * @throws IllegalStateException If the server is already stopped or the server is
     *       not initialized 
     * @throws FtpException
     */
-   public synchronized void stopServer() throws IllegalStateException
+   public void stopServer() throws IllegalStateException
    {
       // Get the server
       final FtpServer server = this.getServer();
@@ -252,12 +237,11 @@ public final class FtpServerPojo
    }
 
    /**
-    * Sets the port to which we'll bind.  Synchronized on "this"
-    * so we block until lifecycle operations are complete.
+    * Sets the port to which we'll bind.
     * 
     * @param bindPort
     */
-   public synchronized void setBindPort(final int bindPort)
+   public void setBindPort(final int bindPort)
    {
       this.bindPort = bindPort;
    }
@@ -273,12 +257,11 @@ public final class FtpServerPojo
    }
 
    /**
-    * Sets the underlying FTP Server.  Synchronized on 
-    * "this" so we block until lifecycle operations are complete.
+    * Sets the underlying FTP Server. 
     * 
     * @param server
     */
-   private synchronized void setServer(final FtpServer server)
+   private void setServer(final FtpServer server)
    {
       this.server = server;
    }
@@ -294,12 +277,11 @@ public final class FtpServerPojo
    }
 
    /**
-    * Sets the name of the users configuration file.  Synchronized on "this"
-    * so we block until lifecycle operations are complete.
+    * Sets the name of the users configuration file.
     * 
     * @param usersConfigFileName the usersConfigFileName to set
     */
-   public synchronized void setUsersConfigFileName(final String usersConfigFileName)
+   public void setUsersConfigFileName(final String usersConfigFileName)
    {
       this.usersConfigFileName = usersConfigFileName;
    }
