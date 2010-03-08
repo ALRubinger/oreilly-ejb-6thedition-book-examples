@@ -26,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -208,10 +209,11 @@ public class StatusUpdateIntegrationTest extends StatusUpdateTestBase
          return;
       }
 
-      // Package up the MDB, all required classes, and a Topic descriptor
+      // Package up the test MDB, all required classes, and a Topic descriptor
       final JavaArchive archive = Archives.create(NAME_MDB_ARCHIVE, JavaArchive.class).addClasses(StatusUpdate.class,
             StatusUpdateConstants.class, LoggingStatusUpdateMdb.class, StatusUpdateBeanBase.class,
-            TwitterUpdateMdb.class, SecurityActions.class).addResource(NAME_RESOURCE_TOPIC_DEPLOYMENT);
+            TwitterUpdateBlockingTestMdb.class, SecurityActions.class, TwitterUpdateMdb.class).addResource(
+            NAME_RESOURCE_TOPIC_DEPLOYMENT);
 
       // Deploy the archive
       log.info("Deploying archive: " + archive.toString(true));
@@ -225,11 +227,10 @@ public class StatusUpdateIntegrationTest extends StatusUpdateTestBase
 
       // Wait for the MDB to process, as it's doing so in another Thread.
       // This is *only* possible when we test MDBs in the same JVM as the test.
-      final boolean processed;
       try
       {
          log.info("Waiting on the MDB...");
-         processed = TwitterUpdateMdb.LATCH.await(10, TimeUnit.SECONDS);
+         TwitterUpdateBlockingTestMdb.BARRIER.await(10, TimeUnit.SECONDS);
       }
       catch (final InterruptedException e)
       {
@@ -238,12 +239,11 @@ public class StatusUpdateIntegrationTest extends StatusUpdateTestBase
          throw new RuntimeException(
                "Thread was interrupted while waiting for MDB processing; should not happen in this test");
       }
-
-      // Ensure the MDB processed the message
-      if (!processed)
+      catch (final BrokenBarrierException bbe)
       {
          TestCase.fail("The MDB did not process the status update in the allotted time.");
       }
+
       log.info("MDB signaled it's done processing, so we can resume");
 
       // Test

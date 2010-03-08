@@ -21,17 +21,12 @@
  */
 package org.jboss.ejb3.examples.ch08.statusupdate.mdb;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.MessageDriven;
 import javax.jms.MessageListener;
 
-import org.jboss.ejb3.annotation.Depends;
 import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdate;
-import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdateConstants;
 
 import twitter4j.Twitter;
 
@@ -48,12 +43,6 @@ import twitter4j.Twitter;
  * @see http://yusuke.homeip.net/twitter4j/en/index.html
  * @version $Revision: $
  */
-@MessageDriven(activationConfig =
-{
-      @ActivationConfigProperty(propertyName = "destinationType", propertyValue = StatusUpdateConstants.TYPE_DESTINATION_STATUSUPDATE),
-      @ActivationConfigProperty(propertyName = "destination", propertyValue = StatusUpdateConstants.JNDI_NAME_TOPIC_STATUSUPDATE)})
-@Depends(StatusUpdateConstants.OBJECT_NAME_TOPIC_STATUSUPDATE)
-// Dependency matches the name in the topic descriptor XML
 public class TwitterUpdateMdb extends StatusUpdateBeanBase implements MessageListener
 {
 
@@ -67,14 +56,9 @@ public class TwitterUpdateMdb extends StatusUpdateBeanBase implements MessageLis
    private static final Logger log = Logger.getLogger(TwitterUpdateMdb.class.getName());
 
    /**
-    * Shared latch, so tests can wait until the MDB is processed.  In POJO
-    * testing this is wholly unnecessary as we've got a single-threaded environment, but 
-    * when testing in an EJB Container running in the *same* JVM as the test, the test 
-    * can use this to wait until the MDB has been invoked, strengthening the integrity
-    * of the test.  It's not recommended to put this piece into a production EJB; instead
-    * test an extension of your EJB which adds this (and only this) support.
+    * EJB Name
     */
-   public static CountDownLatch LATCH = new CountDownLatch(1);
+   static final String NAME = "TwitterUpdateMdb";
 
    //-------------------------------------------------------------------------------------||
    // Constructors -----------------------------------------------------------------------||
@@ -148,10 +132,5 @@ public class TwitterUpdateMdb extends StatusUpdateBeanBase implements MessageLis
 
       // Update status
       client.updateStatus(status);
-
-      // Count down the latch so that the test knows we're here
-      log.info("Counting down the latch...");
-      LATCH.countDown();
-
    }
 }

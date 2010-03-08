@@ -141,6 +141,32 @@
     </dependency>
 
   </dependencies>
+  
+  <dependencyManagement>
+  
+  <dependencies>
+  <!--
+    Manually use an older version of ShrinkWrap to support EmbeddedAS
+    for now
+  -->
+  <dependency>
+    <groupId>org.jboss.shrinkwrap</groupId>
+    <artifactId>shrinkwrap-impl-base</artifactId>
+    <version>1.0.0-alpha-2</version>
+  </dependency>
+  <dependency>
+    <groupId>org.jboss.shrinkwrap</groupId>
+    <artifactId>shrinkwrap-api</artifactId>
+    <version>1.0.0-alpha-2</version>
+  </dependency>
+  <dependency>
+    <groupId>org.jboss.shrinkwrap</groupId>
+    <artifactId>shrinkwrap-spi</artifactId>
+    <version>1.0.0-alpha-2</version>
+  </dependency>
+</dependencies>
+  
+  </dependencyManagement>
 
   <profiles>
 
