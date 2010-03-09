@@ -85,7 +85,7 @@ public class MultiViewCalculatorIntegrationTestCase
    /**
     * JNDI Name of the Local Home Reference
     */
-   //TODO Use Global JNDI Syntax (not yet supported in JBoss EJB3)
+   //TODO Use Global JNDI Syntax 
    private static final String JNDI_NAME_CALC_REMOTE_HOME = ManyViewCalculatorBean.class.getSimpleName() + "LocalHome";
 
    /**

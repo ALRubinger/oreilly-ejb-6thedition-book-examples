@@ -24,8 +24,7 @@ package org.jboss.ejb3.examples.ch04.firstejb;
 
 import java.net.MalformedURLException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -37,10 +36,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * CalculatorIntegrationTestCase
- * 
  * Integration tests for the CalculatorEJB exposing one 
- * remote business view
+ * business view
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
@@ -58,25 +55,15 @@ public class CalculatorIntegrationTestCase
    private static final Logger log = Logger.getLogger(CalculatorIntegrationTestCase.class);
 
    /**
-    * The JNDI Naming Context
-    */
-   private static Context namingContext;
-
-   /**
     * The EJB 3.x local business view of the CalculatorEJB
     */
+   @EJB
    private static CalculatorLocalBusiness calcLocalBusiness;
 
    /**
     * Delegate for ensuring that the obtained Calculators are working as expected
     */
    private static CalculatorAssertionDelegate assertionDelegate;
-
-   /**
-    * JNDI Name of the Remote Business Reference
-    */
-   //TODO Use Global JNDI Syntax 
-   private static final String JNDI_NAME_CALC_LOCAL_BUSINESS = SimpleCalculatorBean.class.getSimpleName() + "Local";
 
    /**
     * Define the deployment
@@ -100,12 +87,6 @@ public class CalculatorIntegrationTestCase
    @BeforeClass
    public static void beforeClass() throws Throwable
    {
-      // Create the naming context, using jndi.properties on the CP
-      namingContext = new InitialContext();
-
-      // Obtain EJB 3.x Business Reference
-      calcLocalBusiness = (CalculatorLocalBusiness) namingContext.lookup(JNDI_NAME_CALC_LOCAL_BUSINESS);
-
       // Create Assertion Delegate
       assertionDelegate = new CalculatorAssertionDelegate();
    }
@@ -122,7 +103,7 @@ public class CalculatorIntegrationTestCase
    public void testAdditionUsingBusinessReference() throws Throwable
    {
       // Test 
-      log.info("Testing remote business reference...");
+      log.info("Testing EJB via business reference...");
       assertionDelegate.assertAdditionSucceeds(calcLocalBusiness);
    }
 
