@@ -43,7 +43,7 @@ import org.jboss.embedded.api.DeploymentException;
 import org.jboss.embedded.api.server.JBossASEmbeddedServer;
 import org.jboss.embedded.api.server.JBossASEmbeddedServerFactory;
 import org.jboss.embedded.api.server.JBossHomeClassLoader;
-import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -190,7 +190,7 @@ public class MessageDestinationLinkIntegrationTest
    public void createAndDeployArchive() throws DeploymentException
    {
       // Package up the EJBs and a Deployment Descriptor
-      final JavaArchive archive = Archives.create(NAME_MDB_ARCHIVE, JavaArchive.class).addClasses(
+      final JavaArchive archive = ShrinkWrap.create(NAME_MDB_ARCHIVE, JavaArchive.class).addClasses(
             MessageDestinationLinkConstants.class, MessageDestinationLinkMdb.class, MessageSendingBusiness.class,
             MessageSendingBean.class).addResource(NAME_EJB_JAR);
 

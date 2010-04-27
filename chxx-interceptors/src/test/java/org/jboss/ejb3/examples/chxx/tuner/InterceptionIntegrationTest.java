@@ -34,7 +34,7 @@ import junit.framework.TestCase;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,7 +69,7 @@ public class InterceptionIntegrationTest
    @Deployment
    public static JavaArchive createDeployment()
    {
-      final JavaArchive deployment = Archives.create("echo.jar", JavaArchive.class).addClasses(
+      final JavaArchive deployment = ShrinkWrap.create("echo.jar", JavaArchive.class).addClasses(
             TunerLocalBusiness.class, TunerBean.class, CachingAuditor.class, Channel2Restrictor.class);
       log.info(deployment.toString(true));
       return deployment;

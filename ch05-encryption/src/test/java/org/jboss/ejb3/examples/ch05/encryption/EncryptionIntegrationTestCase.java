@@ -32,7 +32,7 @@ import junit.framework.TestCase;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
-import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,7 +79,7 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
    @Deployment
    public static JavaArchive createDeployment() throws MalformedURLException
    {
-      final JavaArchive archive = Archives.create("slsb.jar", JavaArchive.class).addClasses(EncryptionBean.class,
+      final JavaArchive archive = ShrinkWrap.create("slsb.jar", JavaArchive.class).addClasses(EncryptionBean.class,
             EncryptionCommonBusiness.class, EncryptionLocalBusiness.class, EncryptionRemoteBusiness.class,
             EncryptionException.class).addManifestResource(
             new URL(EncryptionIntegrationTestCase.class.getProtectionDomain().getCodeSource().getLocation(),

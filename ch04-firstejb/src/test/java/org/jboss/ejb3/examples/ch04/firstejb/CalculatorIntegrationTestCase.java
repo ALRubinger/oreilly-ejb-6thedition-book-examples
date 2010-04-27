@@ -29,7 +29,7 @@ import javax.ejb.EJB;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
-import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -71,7 +71,7 @@ public class CalculatorIntegrationTestCase
    @Deployment
    public static JavaArchive createDeployment() throws MalformedURLException
    {
-      final JavaArchive archive = Archives.create("firstejb.jar", JavaArchive.class).addPackage(
+      final JavaArchive archive = ShrinkWrap.create("firstejb.jar", JavaArchive.class).addPackage(
             CalculatorBeanBase.class.getPackage());
       log.info(archive.toString(true));
       return archive;

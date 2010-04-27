@@ -31,7 +31,7 @@ import junit.framework.TestCase;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
-import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -88,7 +88,7 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
    @Deployment
    public static JavaArchive createDeployment()
    {
-      final JavaArchive archive = Archives.create("ftpclient.jar", JavaArchive.class).addPackage(
+      final JavaArchive archive = ShrinkWrap.create("ftpclient.jar", JavaArchive.class).addPackage(
             FileTransferBean.class.getPackage());
       log.info(archive.toString(true));
       return archive;

@@ -79,8 +79,8 @@
     </dependency>
     
     <dependency>
-      <groupId>org.jboss.arquillian</groupId>
-      <artifactId>arquillian-container-openejb</artifactId>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-openejb</artifactId>
     </dependency>
     
     <dependency>

@@ -20,7 +20,7 @@
     <version.junit_junit>4.5</version.junit_junit>
     <version.org.jboss.embedded>1.0.0-alpha-1</version.org.jboss.embedded>
     <version.org.jboss.jbossas>6.0.0.M1</version.org.jboss.jbossas>
-    <version.org.jboss.shrinkwrap>1.0.0-alpha-5</version.org.jboss.shrinkwrap>
+    <version.org.jboss.shrinkwrap>1.0.0-alpha-9</version.org.jboss.shrinkwrap>
     <version.org.jboss.ejb3_jboss.ejb3.api>3.1.0-Alpha1</version.org.jboss.ejb3_jboss.ejb3.api>
     <version.org.jboss.ejb3_jboss.ejb3.ext.api>1.0.0</version.org.jboss.ejb3_jboss.ejb3.ext.api>
     <version.org.jboss.javaee_jboss-jms-api>1.1.0.GA</version.org.jboss.javaee_jboss-jms-api>
@@ -151,14 +151,26 @@
       
       <dependency>
         <groupId>org.jboss.shrinkwrap</groupId>
+        <artifactId>shrinkwrap-api</artifactId>
+        <version>${version.org.jboss.shrinkwrap}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap</groupId>
+        <artifactId>shrinkwrap-spi</artifactId>
+        <version>${version.org.jboss.shrinkwrap}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap</groupId>
         <artifactId>shrinkwrap-impl-base</artifactId>
         <version>${version.org.jboss.shrinkwrap}</version>
         <scope>test</scope>
       </dependency>
       
       <dependency>
-        <groupId>org.jboss.arquillian</groupId>
-        <artifactId>arquillian-container-openejb</artifactId>
+        <groupId>org.jboss.arquillian.container</groupId>
+        <artifactId>arquillian-openejb</artifactId>
         <version>${version.org.jboss.arquillian}</version>
         <scope>test</scope>
       </dependency>
