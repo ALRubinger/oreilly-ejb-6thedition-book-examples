@@ -37,17 +37,6 @@ public interface TunerLocalBusiness
    //-------------------------------------------------------------------------------------||
 
    /**
-    * @deprecated Use Global JNDI Bindings EJBBOOK-2 
-    */
-   //TODO
-   @Deprecated
-   String JNDI_NAME = "TunerBean/local";
-
-   //-------------------------------------------------------------------------------------||
-   // Constants --------------------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
     * Obtains the stream containing viewable content 
     * for the specified television channel.  Supported channels are 1 and 2.
     * 
