@@ -102,7 +102,8 @@ public class RssCacheUnitTestCase extends RssCacheTestCaseBase
    // Required Implementations -----------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
-   /* (non-Javadoc)
+   /**
+    * {@inheritDoc}
     * @see org.jboss.ejb3.examples.ch07.envinfo.EnvironmentInformationTestCaseBase#getEnvInfoBean()
     */
    @Override
