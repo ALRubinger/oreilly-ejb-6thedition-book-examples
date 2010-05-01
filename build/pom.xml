@@ -52,13 +52,6 @@
       </plugin>
 
       <!-- Surefire (Tests) Plugin -->
-
-      <!--
-        To pass JVM Arguments (ie. Remote Debugging w/ suspend), pass
-        "maven.surefire.debug" as system property, ie: mvn test
-        -Dmaven.surefire.debug="-Xdebug
-        -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8787"
-      -->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
