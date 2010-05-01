@@ -21,6 +21,8 @@
  */
 package org.jboss.ejb3.examples.ch09.secureschool.api;
 
+import org.jboss.ejb3.examples.ch09.secureschool.impl.Roles;
+
 /**
  * Represents a school holding doors which may be 
  * opened by various users.  Using the EJB Security model,
@@ -56,8 +58,13 @@ public interface SecureSchoolLocalBusiness
     * Opens the front door.  While school is open, 
     * any authenticated user may open the door, else 
     * only the {@link Roles#ADMIN} may open.
+    * 
+    * @throws SchoolClosedException If the current user
+    * is not in {@link Roles#ADMIN} and is attempting to open 
+    * the door while {@link SecureSchoolLocalBusiness#isOpen()}
+    * is false.
     */
-   void openFrontDoor();
+   void openFrontDoor() throws SchoolClosedException;
 
    /**
     * Opens the service door. Users in {@link Roles#STUDENT}

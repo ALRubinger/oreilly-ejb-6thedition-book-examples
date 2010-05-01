@@ -33,7 +33,6 @@ import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
-import org.jboss.ejb3.examples.ch09.secureschool.api.Roles;
 import org.jboss.ejb3.examples.ch09.secureschool.api.SchoolClosedException;
 import org.jboss.ejb3.examples.ch09.secureschool.api.SecureSchoolLocalBusiness;
 
@@ -142,7 +141,6 @@ public class SecureSchoolBean implements SecureSchoolLocalBusiness
    public void close()
    {
       this.open = false;
-
    }
 
    /**

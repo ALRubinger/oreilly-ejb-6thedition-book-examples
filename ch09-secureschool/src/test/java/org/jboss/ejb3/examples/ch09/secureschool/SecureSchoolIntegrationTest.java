@@ -40,6 +40,7 @@ import javax.naming.NamingException;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.prototyping.context.api.ArquillianContext;
+import org.jboss.ejb3.examples.ch09.secureschool.api.FireDepartmentLocalBusiness;
 import org.jboss.ejb3.examples.ch09.secureschool.api.SchoolClosedException;
 import org.jboss.ejb3.examples.ch09.secureschool.api.SecureSchoolLocalBusiness;
 import org.jboss.ejb3.examples.ch09.secureschool.impl.SecureSchoolBean;
@@ -135,7 +136,15 @@ public class SecureSchoolIntegrationTest
     * login properties to inject the proxy into this target.
     */
    @EJB
-   private SecureSchoolLocalBusiness unauthenticatedEjbReference;
+   private SecureSchoolLocalBusiness unauthenticatedSchool;
+
+   /**
+    * Reference to the fire department from an unauthenticated user.
+    * If we use this EJB to declare an emergency, anyone may close
+    * the school.
+    */
+   @EJB
+   private FireDepartmentLocalBusiness fireDepartment;
 
    //-------------------------------------------------------------------------------------||
    // Tests ------------------------------------------------------------------------------||
@@ -149,7 +158,7 @@ public class SecureSchoolIntegrationTest
    {
 
       // Try to open the front door before we've authenticated; should fail
-      unauthenticatedEjbReference.openFrontDoor();
+      unauthenticatedSchool.openFrontDoor();
    }
 
    /**
@@ -314,7 +323,7 @@ public class SecureSchoolIntegrationTest
    {
 
       // See if school is open
-      Assert.assertTrue("Unauthenticated user should see that school is open", unauthenticatedEjbReference.isOpen());
+      Assert.assertTrue("Unauthenticated user should see that school is open", unauthenticatedSchool.isOpen());
    }
 
    /**
@@ -405,6 +414,57 @@ public class SecureSchoolIntegrationTest
          context.close();
 
       }
+   }
+
+   /**
+    * Ensures that any unauthenticated user can declare an emergency, hence closing the school
+    */
+   @Test
+   public void anyoneCanDeclareEmergencyAndCloseSchool() throws NamingException
+   {
+
+      // First check that school's open
+      Assert.assertTrue("School should be open to start the test", unauthenticatedSchool.isOpen());
+
+      // Ensure we can't close the school directly (we don't have access)
+      boolean gotAccessException = false;
+      try
+      {
+         unauthenticatedSchool.close();
+      }
+      catch (final EJBAccessException e)
+      {
+         // Expected
+         log.info("We can't close the school on our own, make an emergency");
+         gotAccessException = true;
+      }
+      Assert.assertTrue("We shouldn't be able to close school directly", gotAccessException);
+
+      // Now declare an emergency via the fire department
+      fireDepartment.declareEmergency();
+
+      // The school should now be closed, even though the don't have rights to do that directly on our own.
+      Assert.assertFalse("School should be closed after emergency was declared", unauthenticatedSchool.isOpen());
+
+      // Reset the school to open
+      // Cleanup and open the school for other tests
+      final Context context = this.login(USER_NAME_ADMIN, PASSWORD_ADMIN);
+      try
+      {
+         final SecureSchoolLocalBusiness school = this.getEjb(context);
+
+         // Reset the school to open for subsequent tests
+         school.open();
+
+         // Test
+         Assert.assertTrue("School should now be open", school.isOpen());
+      }
+      finally
+      {
+         // Clean up, closing the context to log out
+         context.close();
+      }
+
    }
 
    //-------------------------------------------------------------------------------------||

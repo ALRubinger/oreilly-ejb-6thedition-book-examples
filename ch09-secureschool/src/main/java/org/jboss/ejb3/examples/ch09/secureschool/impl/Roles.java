@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.ch09.secureschool.api;
+package org.jboss.ejb3.examples.ch09.secureschool.impl;
 
 /**
  * Holds the list of roles with which users of the school 
