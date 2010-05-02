@@ -443,7 +443,7 @@ public class SecureSchoolIntegrationTest
       // Now declare an emergency via the fire department
       fireDepartment.declareEmergency();
 
-      // The school should now be closed, even though the don't have rights to do that directly on our own.
+      // The school should now be closed, even though we don't have rights to do that directly on our own.
       Assert.assertFalse("School should be closed after emergency was declared", unauthenticatedSchool.isOpen());
 
       // Reset the school to open
