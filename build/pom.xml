@@ -17,7 +17,7 @@
 
     <!-- Versioning -->
 
-    <version.junit_junit>4.5</version.junit_junit>
+    <version.junit_junit>4.7</version.junit_junit>
     <version.org.jboss.embedded>1.0.0-alpha-1</version.org.jboss.embedded>
     <version.org.jboss.jbossas>6.0.0.M1</version.org.jboss.jbossas>
     <version.org.jboss.shrinkwrap>1.0.0-alpha-9</version.org.jboss.shrinkwrap>
@@ -27,6 +27,7 @@
     <version.org.jboss.logging_jboss.logging.log4j>2.0.6.GA</version.org.jboss.logging_jboss.logging.log4j>
     <version.org.jboss.logging_jboss.logging.spi>2.0.5.GA</version.org.jboss.logging_jboss.logging.spi>
     <version.org.jboss.arquillian>1.0.0-SNAPSHOT</version.org.jboss.arquillian>
+    <version.org.glassfish>3.0.1-b16</version.org.glassfish>
 
   </properties>
 
@@ -167,14 +168,25 @@
         <version>${version.org.jboss.arquillian}</version>
         <scope>test</scope>
       </dependency>
-      
+      <dependency>
+        <groupId>org.jboss.arquillian.container</groupId>
+        <artifactId>arquillian-glassfish-embedded-30</artifactId>
+        <version>${version.org.jboss.arquillian}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.arquillian.container</groupId>
+        <artifactId>arquillian-jbossas-embedded-60</artifactId>
+        <version>${version.org.jboss.arquillian}</version>
+        <scope>test</scope>
+      </dependency>
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-junit</artifactId>
         <version>${version.org.jboss.arquillian}</version>
         <scope>test</scope>
       </dependency>
-     
+      
     </dependencies>
 
   </dependencyManagement>
