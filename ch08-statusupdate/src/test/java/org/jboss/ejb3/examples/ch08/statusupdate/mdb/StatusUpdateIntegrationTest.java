@@ -48,7 +48,7 @@ import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdateConstants;
 import org.jboss.embedded.api.server.JBossASEmbeddedServer;
 import org.jboss.embedded.api.server.JBossASEmbeddedServerFactory;
 import org.jboss.embedded.api.server.JBossHomeClassLoader;
-import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -210,7 +210,7 @@ public class StatusUpdateIntegrationTest extends StatusUpdateTestBase
       }
 
       // Package up the test MDB, all required classes, and a Topic descriptor
-      final JavaArchive archive = Archives.create(NAME_MDB_ARCHIVE, JavaArchive.class).addClasses(StatusUpdate.class,
+      final JavaArchive archive = ShrinkWrap.create(NAME_MDB_ARCHIVE, JavaArchive.class).addClasses(StatusUpdate.class,
             StatusUpdateConstants.class, LoggingStatusUpdateMdb.class, StatusUpdateBeanBase.class,
             TwitterUpdateBlockingTestMdb.class, SecurityActions.class, TwitterUpdateMdb.class).addResource(
             NAME_RESOURCE_TOPIC_DEPLOYMENT);

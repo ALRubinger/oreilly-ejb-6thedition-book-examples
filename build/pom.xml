@@ -19,7 +19,7 @@
 
     <version.junit_junit>4.7</version.junit_junit>
     <version.org.jboss.embedded>1.0.0-alpha-1</version.org.jboss.embedded>
-    <version.org.jboss.jbossas>6.0.0.M1</version.org.jboss.jbossas>
+    <version.org.jboss.jbossas>6.0.0.20100429-M3</version.org.jboss.jbossas>
     <version.org.jboss.shrinkwrap>1.0.0-alpha-9</version.org.jboss.shrinkwrap>
     <version.org.jboss.ejb3_jboss.ejb3.api>3.1.0-Alpha1</version.org.jboss.ejb3_jboss.ejb3.api>
     <version.org.jboss.ejb3_jboss.ejb3.ext.api>1.0.0</version.org.jboss.ejb3_jboss.ejb3.ext.api>
@@ -135,14 +135,15 @@
         <version>${version.org.jboss.logging_jboss.logging.spi}</version>
         <optional>true</optional>
       </dependency>
-    
-      <dependency>
-        <groupId>org.jboss.embedded</groupId>
-        <artifactId>jboss-embedded-api</artifactId>
-        <version>${version.org.jboss.embedded}</version>
-        <scope>test</scope>
-      </dependency>
       
+      <dependency>
+        <groupId>org.jboss.jbossas</groupId>
+        <artifactId>jboss-as-depchain</artifactId>
+        <version>${version.org.jboss.jbossas}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    
       <dependency>
         <groupId>org.jboss.shrinkwrap</groupId>
         <artifactId>shrinkwrap-api</artifactId>

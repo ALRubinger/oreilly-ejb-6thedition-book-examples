@@ -37,74 +37,16 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.jboss.ejb3</groupId>
-      <artifactId>jboss-ejb3-api</artifactId>
-      <!-- Must exclude jboss-metadata to prevent class leaking onto the appCL which breaks booting AS?  
-      In an isolated CL context this is not a problem EJBBOOK-12
-      -->
-      <exclusions>
-        <exclusion>
-          <groupId>jboss.jbossws</groupId>
-          <artifactId>jboss-jaxrpc</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.ejb3</groupId>
-      <artifactId>jboss-ejb3-ext-api</artifactId>
-      <!-- TODO: Resolve this need for extra configuration -->
-      <!-- Must exclude jboss-metadata to prevent class leaking onto the appCL which breaks booting AS?  
-      In an isolated CL context this is not a problem EJBBOOK-12
-      -->
-      <exclusions>
-        <exclusion>
-          <groupId>org.jboss.metadata</groupId>
-          <artifactId>jboss-metadata</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.jboss.javaee</groupId>
-          <artifactId>jboss-ejb-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    
-    <!-- TODO Remove this when we can, or when it's addressed at another CL level; this is needed at runtime 
-    TODO We need all jnpserver just to be a client of JNDI?
-    EJBBOOK-12
-    
-    <dependency>
-      <groupId>org.jboss.naming</groupId>
-      <artifactId>jnpserver</artifactId>
-      <version>5.0.4.GA</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.jboss</groupId>
-          <artifactId>jboss-common-core</artifactId>
-        </exclusion>
-      </exclusions> 
-    </dependency>
--->
-
-    <dependency>
-      <groupId>org.jboss.javaee</groupId>
-      <artifactId>jboss-jms-api</artifactId>
+      <groupId>org.jboss.jbossas</groupId>
+      <artifactId>jboss-as-depchain</artifactId>
+      <type>pom</type>
+      <scope>provided</scope>
+      <version>${version.org.jboss.jbossas}</version>
     </dependency>
 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.logging</groupId>
-      <artifactId>jboss-logging-log4j</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.logging</groupId>
-      <artifactId>jboss-logging-spi</artifactId>
     </dependency>
 
     <!-- 
@@ -121,50 +63,9 @@
     Test Dependencies
      -->
 
-    <dependency>
-      <groupId>org.jboss.embedded</groupId>
-      <artifactId>jboss-embedded-api</artifactId>
-    </dependency>
-    <!-- TODO: Remove the dependency on the full AS depchain; it pollutes the CP. EJBBOOK-12
--->
-    <dependency>
-      <groupId>org.jboss.embedded</groupId>
-      <artifactId>jboss-embedded-depchain</artifactId>
-      <scope>test</scope>
-      <version>${version.org.jboss.embedded}</version>
-      <type>pom</type>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.jboss.shrinkwrap</groupId>
-      <artifactId>shrinkwrap-impl-base</artifactId>
-    </dependency>
-
   </dependencies>
   
   <dependencyManagement>
-  
-  <dependencies>
-  <!--
-    Manually use an older version of ShrinkWrap to support EmbeddedAS
-    for now
-  -->
-  <dependency>
-    <groupId>org.jboss.shrinkwrap</groupId>
-    <artifactId>shrinkwrap-impl-base</artifactId>
-    <version>1.0.0-alpha-2</version>
-  </dependency>
-  <dependency>
-    <groupId>org.jboss.shrinkwrap</groupId>
-    <artifactId>shrinkwrap-api</artifactId>
-    <version>1.0.0-alpha-2</version>
-  </dependency>
-  <dependency>
-    <groupId>org.jboss.shrinkwrap</groupId>
-    <artifactId>shrinkwrap-spi</artifactId>
-    <version>1.0.0-alpha-2</version>
-  </dependency>
-</dependencies>
   
   </dependencyManagement>
 
@@ -191,7 +92,7 @@
                 </goals>
                 <configuration>
                   <additionalClasspathElements>
-                    <additionalClasspathElement>${JBOSS_HOME}/bin/run.jar</additionalClasspathElement>
+                    <additionalClasspathElement>${JBOSS_HOME}/client/jbossws-native-client.jar</additionalClasspathElement>
                   </additionalClasspathElements>
                   <redirectTestOutputToFile>true</redirectTestOutputToFile>
                   <trimStackTrace>false</trimStackTrace>
@@ -200,7 +101,7 @@
                     <include>**/*IntegrationTest.java</include>
                   </includes>
                   <forkMode>always</forkMode>
-                  <argLine>-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djava.endorsed.dirs=${JBOSS_HOME}/lib/endorsed -Djboss.home=${JBOSS_HOME}</argLine>
+                  <argLine>-disableassertions -Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Djava.endorsed.dirs=${JBOSS_HOME}/lib/endorsed -Djboss.home=${JBOSS_HOME} -Djboss.boot.server.log.dir=${JBOSS_HOME}</argLine>
                 </configuration>
               </execution>
             </executions>
@@ -226,25 +127,6 @@
                       <type>zip</type>
                       <overWrite>false</overWrite>
                       <outputDirectory>${project.build.directory}</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-              <!-- Other deps, not part of AS, into "target/deps" -->
-              <execution>
-                <id>copy</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>copy</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.jboss.embedded</groupId>
-                      <artifactId>jboss-embedded-core</artifactId>
-                      <version>${version.org.jboss.embedded}</version>
-                      <overWrite>false</overWrite>
-                      <outputDirectory>${project.build.directory}/deps</outputDirectory>
                     </artifactItem>
                   </artifactItems>
                 </configuration>
