@@ -36,7 +36,7 @@ import twitter4j.Twitter;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-class EnvironmentSpecificTwitterClientUtil
+public class EnvironmentSpecificTwitterClientUtil
 {
 
    //-------------------------------------------------------------------------------------||

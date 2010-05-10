@@ -21,19 +21,18 @@
  */
 package org.jboss.ejb3.examples.ch08.statusupdate.mdb;
 
-import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.MessageListener;
 
-import org.jboss.ejb3.annotation.Depends;
 import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdate;
 import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdateConstants;
 
 /**
- * Extends the {@link TwitterUpdateMdb} example to add a barrier to
+ * Extends the {@link TwitterUpdateMdb} example to add a latch to
  * be shared in testing only, such that tests can be sure we're done 
  * processing before they proceed
  *
@@ -44,8 +43,6 @@ import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdateConstants;
 {
       @ActivationConfigProperty(propertyName = "destinationType", propertyValue = StatusUpdateConstants.TYPE_DESTINATION_STATUSUPDATE),
       @ActivationConfigProperty(propertyName = "destination", propertyValue = StatusUpdateConstants.JNDI_NAME_TOPIC_STATUSUPDATE)})
-@Depends(StatusUpdateConstants.OBJECT_NAME_TOPIC_STATUSUPDATE)
-// Dependency matches the name in the topic descriptor XML
 public class TwitterUpdateBlockingTestMdb extends TwitterUpdateMdb implements MessageListener
 {
 
@@ -59,14 +56,14 @@ public class TwitterUpdateBlockingTestMdb extends TwitterUpdateMdb implements Me
    private static final Logger log = Logger.getLogger(TwitterUpdateBlockingTestMdb.class.getName());
 
    /**
-    * Shared barrier, so tests can wait until the MDB is processed.  In POJO
+    * Shared latch, so tests can wait until the MDB is processed.  In POJO
     * testing this is wholly unnecessary as we've got a single-threaded environment, but 
     * when testing in an EJB Container running in the *same* JVM as the test, the test 
     * can use this to wait until the MDB has been invoked, strengthening the integrity
     * of the test.  It's not recommended to put this piece into a production EJB; instead
     * test an extension of your EJB which adds this (and only this) support.
     */
-   public static CyclicBarrier BARRIER = new CyclicBarrier(2);
+   public static CountDownLatch LATCH = new CountDownLatch(1);
 
    //-------------------------------------------------------------------------------------||
    // Overridden Implementations ---------------------------------------------------------||
@@ -82,11 +79,17 @@ public class TwitterUpdateBlockingTestMdb extends TwitterUpdateMdb implements Me
    public void updateStatus(final StatusUpdate newStatus) throws IllegalArgumentException, Exception
    {
       // Call the super implementation
-      super.updateStatus(newStatus);
+      try
+      {
+         super.updateStatus(newStatus);
+      }
+      finally
+      {
+         // Count down the latch
+         log.info("Counting down the latch...");
+         LATCH.countDown();
+      }
 
-      // Wait on the barrier
-      log.info("Waiting on the barrier...");
-      BARRIER.await();
    }
 
 }

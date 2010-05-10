@@ -27,7 +27,6 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.MessageListener;
 
-import org.jboss.ejb3.annotation.Depends;
 import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdate;
 import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdateConstants;
 
@@ -45,8 +44,6 @@ import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdateConstants;
 {
       @ActivationConfigProperty(propertyName = "destinationType", propertyValue = StatusUpdateConstants.TYPE_DESTINATION_STATUSUPDATE),
       @ActivationConfigProperty(propertyName = "destination", propertyValue = StatusUpdateConstants.JNDI_NAME_TOPIC_STATUSUPDATE)})
-@Depends(StatusUpdateConstants.OBJECT_NAME_TOPIC_STATUSUPDATE)
-// Dependency matches the name in the topic descriptor XML
 public class LoggingStatusUpdateMdb extends StatusUpdateBeanBase implements MessageListener
 {
 

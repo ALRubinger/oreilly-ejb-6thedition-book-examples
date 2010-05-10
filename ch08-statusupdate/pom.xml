@@ -44,11 +44,6 @@
       <version>${version.org.jboss.jbossas}</version>
     </dependency>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-    </dependency>
-
     <!-- 
     http://yusuke.homeip.net/twitter4j/en/index.html
      -->
@@ -59,9 +54,20 @@
     </dependency>
 
     <!-- 
-    
     Test Dependencies
      -->
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-jbossas-embedded-60</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian</groupId>
+      <artifactId>arquillian-junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
 
   </dependencies>
   
@@ -75,6 +81,9 @@
 
       <!-- Declare the "Integration Test" Profile -->
       <id>it</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
 
       <build>
 
@@ -94,7 +103,7 @@
                   <additionalClasspathElements>
                     <additionalClasspathElement>${JBOSS_HOME}/client/jbossws-native-client.jar</additionalClasspathElement>
                   </additionalClasspathElements>
-                  <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                  <redirectTestOutputToFile>false</redirectTestOutputToFile>
                   <trimStackTrace>false</trimStackTrace>
                   <printSummary>true</printSummary>
                   <includes>
