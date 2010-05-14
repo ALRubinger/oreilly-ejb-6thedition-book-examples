@@ -53,13 +53,7 @@ public class User extends IdentityBase
     * The user's poker account
     */
    @OneToOne(cascade = CascadeType.PERSIST)
-   private Account pokerAccount;
-
-   /**
-    * The user's personal account
-    */
-   @OneToOne(cascade = CascadeType.PERSIST)
-   private Account personalAccount;
+   private Account account;
 
    //-------------------------------------------------------------------------------------||
    // Accessors / Mutators ---------------------------------------------------------------||
@@ -98,35 +92,19 @@ public class User extends IdentityBase
    }
 
    /**
-    * @return the pokerAccount
+    * @return the account
     */
-   public Account getPokerAccount()
+   public Account getAccount()
    {
-      return pokerAccount;
+      return account;
    }
 
    /**
-    * @param pokerAccount the pokerAccount to set
+    * @param account the account to set
     */
-   public void setPokerAccount(Account pokerAccount)
+   public void setAccount(Account account)
    {
-      this.pokerAccount = pokerAccount;
-   }
-
-   /**
-    * @return the personalAccount
-    */
-   public Account getPersonalAccount()
-   {
-      return personalAccount;
-   }
-
-   /**
-    * @param personalAccount the personalAccount to set
-    */
-   public void setPersonalAccount(final Account personalAccount)
-   {
-      this.personalAccount = personalAccount;
+      this.account = account;
    }
 
    //-------------------------------------------------------------------------------------||
@@ -140,8 +118,7 @@ public class User extends IdentityBase
    @Override
    public String toString()
    {
-      return "User [id=" + this.getId() + ", email=" + email + ", name=" + name + ", personalAccount="
-            + personalAccount + ", pokerAccount=" + pokerAccount + "]";
+      return "User [id=" + this.getId() + ", email=" + email + ", name=" + name + ", pokerAccount=" + account + "]";
    }
 
 }

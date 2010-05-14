@@ -19,15 +19,18 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.transactions;
+package org.jboss.ejb3.examples.chxx.transactions.ejb;
 
 import java.util.Collection;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.Local;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transaction;
@@ -46,8 +49,13 @@ import org.jboss.ejb3.examples.chxx.transactions.entity.User;
  */
 @Singleton
 @Startup
+@Local(DbInitializerLocalBusiness.class)
 @LocalBinding(jndiBinding = DbInitializerLocalBusiness.JNDI_NAME)
 // JBoss-specific JNDI Binding annotation
+@TransactionManagement(TransactionManagementType.BEAN)
+// We'll use bean-managed Tx's here, because @PostConstruct is fired in a
+// non-transactional context anyway, and we want to have consistent
+// handling when we call via "refreshWithDefaultData".
 public class DbInitializerBean implements DbInitializerLocalBusiness
 {
 
@@ -73,7 +81,10 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
    /**
     * Because @PostConstruct runs in an unspecified
     * Tx context (as invoked by the container), we'll
-    * make one via this manager.
+    * make one via this manager.  For EJBs that use
+    * TransactionManagementType.BEAN, this is the hook
+    * we use to programmatically demarcate transactional
+    * boundaries.
     */
    @Resource(mappedName = "java:/TransactionManager")
    private TransactionManager txManager;
@@ -92,14 +103,14 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
    public void populateDatabase() throws Exception
    {
 
-      // See if we need to manage our own Tx (is this called by the container, 
-      // or from "refreshWithDefaultData"?)
-      final Transaction currentTx = txManager.getTransaction();
-      final boolean beanManaged = currentTx == null;
-      // If there's no Tx currently in play, it's on us to manage things
-      if (beanManaged)
+      // Get the current Tx (if we have one, we may have been invoked via 
+      // "refreshWithDefaultData"
+      final Transaction tx = txManager.getTransaction();
+      final boolean startOurOwnTx = tx == null;
+      // If we need to start our own Tx (ie. this was called by the container as @PostConstruct)
+      if (startOurOwnTx)
       {
-         // Start a Tx
+         // Start a Tx via the injected TransactionManager
          txManager.begin();
       }
 
@@ -112,39 +123,32 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
       alrubinger.setId(USER_ALRUBINGER_ID);
       alrubinger.setName(USER_ALRUBINGER_NAME);
       alrubinger.setEmail(USER_ALRUBINGER_EMAIL);
-      final Account alrubingerPersonalAccount = new Account();
-      alrubingerPersonalAccount.deposit(INITIAL_PERSONAL_ACCOUNT_BALANCE_ALR);
-      alrubingerPersonalAccount.setOwner(alrubinger);
-      alrubingerPersonalAccount.setId(ACCOUNT_ALRUBINGER_PERSONAL_ID);
-      alrubinger.setPersonalAccount(alrubingerPersonalAccount);
-      final Account alrubingerPokerAccount = new Account();
-      alrubingerPokerAccount.setOwner(alrubinger);
-      alrubingerPokerAccount.setId(ACCOUNT_ALRUBINGER_POKER_ID);
-      alrubinger.setPokerAccount(alrubingerPokerAccount);
+      final Account alrubingerAccount = new Account();
+      alrubingerAccount.deposit(INITIAL_ACCOUNT_BALANCE_ALR);
+      alrubingerAccount.setOwner(alrubinger);
+      alrubingerAccount.setId(ACCOUNT_ALRUBINGERL_ID);
+      alrubinger.setAccount(alrubingerAccount);
 
-      // DER
-      final User derudman = new User();
-      derudman.setId(USER_DERUDMAN_ID);
-      derudman.setName(USER_DERUDMAN_NAME);
-      derudman.setEmail(USER_DERUDMAN_EMAIL);
-      final Account derudmanPersonalAccount = new Account();
-      derudmanPersonalAccount.deposit(INITIAL_PERSONAL_ACCOUNT_BALANCE_DER);
-      derudmanPersonalAccount.setOwner(derudman);
-      derudmanPersonalAccount.setId(ACCOUNT_DERUDMAN_PERSONAL_ID);
-      derudman.setPersonalAccount(derudmanPersonalAccount);
-      final Account derudmanPokerAccount = new Account();
-      derudmanPokerAccount.setOwner(derudman);
-      derudmanPokerAccount.setId(ACCOUNT_DERUDMAN_POKER_ID);
-      derudman.setPokerAccount(derudmanPokerAccount);
+      // Poker Game Service
+      final User pokerGameService = new User();
+      pokerGameService.setId(USER_POKERGAME_ID);
+      pokerGameService.setName(USER_POKERGAME_NAME);
+      pokerGameService.setEmail(USER_POKERGAME_EMAIL);
+      final Account pokerGameAccount = new Account();
+      pokerGameAccount.deposit(INITIAL_ACCOUNT_BALANCE_POKERGAME);
+      pokerGameAccount.setOwner(pokerGameService);
+      pokerGameAccount.setId(ACCOUNT_POKERGAME_ID);
+      pokerGameService.setAccount(pokerGameAccount);
 
       // Persist
       em.persist(alrubinger);
       log.info("Created: " + alrubinger);
-      em.persist(derudman);
-      log.info("Created: " + derudman);
+      em.persist(pokerGameService);
+      log.info("Created: " + pokerGameService);
 
-      // We're done with the Tx; commit and have the EM flush everything out
-      if (beanManaged)
+      // Mark the end of the Tx if we started it; will trigger the EntityManager to flush
+      // outgoing changes
+      if (startOurOwnTx)
       {
          txManager.commit();
       }
@@ -153,33 +157,43 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.chxx.transactions.DbInitializerLocalBusiness#refreshWithDefaultData()
+    * @see org.jboss.ejb3.examples.chxx.transactions.ejb.DbInitializerLocalBusiness#refreshWithDefaultData()
     */
    @Override
-   public void refreshWithDefaultData()
+   public void refreshWithDefaultData() throws Exception
    {
-      // Delete existing data
-      final Collection<Account> accounts = em.createQuery("SELECT o FROM " + Account.class.getSimpleName() + " o",
-            Account.class).getResultList();
-      final Collection<User> users = em.createQuery("SELECT o FROM " + User.class.getSimpleName() + " o", User.class)
-            .getResultList();
-      for (final Account account : accounts)
-      {
-         em.remove(account);
-      }
-      for (final User user : users)
-      {
-         em.remove(user);
-      }
-
-      // Repopulate
+      // Start a Tx
+      txManager.begin();
       try
       {
-         this.populateDatabase();
+
+         // Delete existing data
+         final Collection<Account> accounts = em.createQuery("SELECT o FROM " + Account.class.getSimpleName() + " o",
+               Account.class).getResultList();
+         final Collection<User> users = em
+               .createQuery("SELECT o FROM " + User.class.getSimpleName() + " o", User.class).getResultList();
+         for (final Account account : accounts)
+         {
+            em.remove(account);
+         }
+         for (final User user : users)
+         {
+            em.remove(user);
+         }
+
+         // Repopulate
+         try
+         {
+            this.populateDatabase();
+         }
+         catch (final Exception e)
+         {
+            throw new RuntimeException("Could not prepopulate DB, may be in inconsistent state", e);
+         }
       }
-      catch (final Exception e)
+      finally
       {
-         throw new RuntimeException("Could not prepopulate DB, may be in inconsistent state", e);
+         txManager.commit();
       }
 
    }

@@ -19,62 +19,44 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.transactions;
+package org.jboss.ejb3.examples.chxx.transactions.ejb;
 
-import java.math.BigDecimal;
+import javax.ejb.ApplicationException;
 
 /**
- * Contract of an EJB which can reset and populate a database with
- * known data for user tests
+ * May be thrown manually by the test to force a transactional
+ * rollback condition
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface DbInitializerLocalBusiness
+@ApplicationException(rollback = true)
+public class ForcedTestException extends Exception
 {
    //-------------------------------------------------------------------------------------||
-   // Constants --------------------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-   
-   /**
-    * Name we'll ind to in JNDI
-    */
-   String JNDI_NAME = "DbInitializer";
-
-   /*
-    * Test Data
-    */
-
-   public static final long USER_ALRUBINGER_ID = 1L;
-
-   public static final String USER_ALRUBINGER_NAME = "Andrew Lee Rubinger";
-
-   public static final String USER_ALRUBINGER_EMAIL = "alr@fake.com";
-
-   public static final long ACCOUNT_ALRUBINGER_PERSONAL_ID = 1L;
-
-   public static final long ACCOUNT_ALRUBINGER_POKER_ID = 2L;
-
-   public static final long USER_DERUDMAN_ID = 2L;
-
-   public static final String USER_DERUDMAN_NAME = "David Edward Rudman";
-
-   public static final String USER_DERUDMAN_EMAIL = "der@fake.com";
-
-   public static final long ACCOUNT_DERUDMAN_PERSONAL_ID = 3L;
-
-   public static final long ACCOUNT_DERUDMAN_POKER_ID = 4L;
-
-   public static final BigDecimal INITIAL_PERSONAL_ACCOUNT_BALANCE_ALR = new BigDecimal(500);
-
-   public static final BigDecimal INITIAL_PERSONAL_ACCOUNT_BALANCE_DER = new BigDecimal(1000);
-
-   //-------------------------------------------------------------------------------------||
-   // Contracts --------------------------------------------------------------------------||
+   // Class Members ----------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Clears and repopulates the database with default test data
+    * serialVersionUID
     */
-   void refreshWithDefaultData();
+   private static final long serialVersionUID = 1L;
+
+   /**
+    * Message to be thrown
+    */
+   private static final String MESSAGE = "Intentional Test Exception";
+
+   //-------------------------------------------------------------------------------------||
+   // Constructor ------------------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * Creates a new instance 
+    */
+   public ForcedTestException()
+   {
+      super(MESSAGE);
+   }
+
 }

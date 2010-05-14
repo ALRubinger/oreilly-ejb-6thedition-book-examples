@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.transactions.api;
+package org.jboss.ejb3.examples.chxx.transactions.impl;
 
 import java.math.BigDecimal;
 import java.util.logging.Logger;
@@ -33,6 +33,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 
 import org.jboss.ejb3.annotation.LocalBinding;
+import org.jboss.ejb3.examples.chxx.transactions.api.BankLocalBusiness;
+import org.jboss.ejb3.examples.chxx.transactions.api.InsufficientBalanceException;
 import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
 
 /**
