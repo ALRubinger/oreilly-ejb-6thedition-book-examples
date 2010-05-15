@@ -31,7 +31,8 @@ import javax.ejb.TransactionAttributeType;
 import org.jboss.ejb3.annotation.LocalBinding;
 
 /**
- * EJB which wraps 
+ * EJB which wraps a specified series of {@link Callable}
+ * tasks within the context of a new Transaction
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $

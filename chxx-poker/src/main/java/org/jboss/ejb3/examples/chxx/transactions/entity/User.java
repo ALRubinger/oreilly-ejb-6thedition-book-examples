@@ -45,11 +45,6 @@ public class User extends IdentityBase
    private String name;
 
    /**
-    * Email address of the user
-    */
-   private String email;
-
-   /**
     * The user's poker account
     */
    @OneToOne(cascade = CascadeType.PERSIST)
@@ -73,22 +68,6 @@ public class User extends IdentityBase
    public void setName(final String name)
    {
       this.name = name;
-   }
-
-   /**
-    * @return the email
-    */
-   public String getEmail()
-   {
-      return email;
-   }
-
-   /**
-    * @param email the email to set
-    */
-   public void setEmail(final String email)
-   {
-      this.email = email;
    }
 
    /**
@@ -118,7 +97,7 @@ public class User extends IdentityBase
    @Override
    public String toString()
    {
-      return "User [id=" + this.getId() + ", email=" + email + ", name=" + name + ", pokerAccount=" + account + "]";
+      return "User [id=" + this.getId() + ", name=" + name + ", pokerAccount=" + account + "]";
    }
 
 }

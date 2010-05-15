@@ -19,48 +19,49 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.transactions.ejb;
+package org.jboss.ejb3.examples.chxx.transactions.api;
 
 import java.math.BigDecimal;
 
+import org.jboss.ejb3.examples.chxx.transactions.entity.User;
+
 /**
- * Contract of an EJB which can reset and populate a database with
- * known data for user tests
+ * Contract of a service capable of simulating
+ * a single game of poker.  The actual gameplay is not modeled,
+ * only the inputs and outputs of a single trial. 
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface DbInitializerLocalBusiness
+public interface PokerGameLocalBusiness
 {
    //-------------------------------------------------------------------------------------||
    // Constants --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Name we'll ind to in JNDI
+    * Name to which we'll bind in JNDI
     */
-   String JNDI_NAME = "DbInitializer";
-
-   /*
-    * Test Data
-    */
-
-   long USER_ALRUBINGER_ID = 2L;
-
-   String USER_ALRUBINGER_NAME = "Andrew Lee Rubinger";
-
-   long ACCOUNT_ALRUBINGER_ID = 2L;
-
-   BigDecimal INITIAL_ACCOUNT_BALANCE_ALR = new BigDecimal(500);
+   String JNDI_NAME = "PokerGameLocal";
 
    //-------------------------------------------------------------------------------------||
    // Contracts --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Clears and repopulates the database with default test data
-    * 
-    * @throws Exception If an error occurred in refreshing with default data
+    * Places a single bet, returning if the bet won or lost.  If the result 
+    * is a win, the amount specified will be transferred from the Poker Service
+    * account to {@link User#getAccount()}, else it will be deducted from the user account
+    * and placed into the Poker Service account.
+    *   
+    * @return Whether the bet won or lost
+    * @param userId The ID of the user placing the bet
+    * @param amount The amount of the bet
+    * @throws IllegalArgumentException If either the user of the amount is not specified or
+    *   the amount is a negative number.
+    * @throws InsufficientBalanceException If the user does not have enough in his/her account
+    *       to cover the bet
     */
-   void refreshWithDefaultData() throws Exception;
+   boolean bet(long userId, BigDecimal amount) throws IllegalArgumentException, InsufficientBalanceException;
+
 }

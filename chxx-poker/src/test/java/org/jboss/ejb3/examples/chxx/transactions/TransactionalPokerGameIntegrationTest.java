@@ -36,6 +36,7 @@ import org.jboss.arquillian.api.RunMode;
 import org.jboss.arquillian.api.RunModeType;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.ejb3.examples.chxx.transactions.api.BankLocalBusiness;
+import org.jboss.ejb3.examples.chxx.transactions.api.PokerGameLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.DbInitializerBean;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.DbInitializerLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.DbQueryLocalBusiness;
@@ -45,6 +46,7 @@ import org.jboss.ejb3.examples.chxx.transactions.ejb.TxWrappingLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
 import org.jboss.ejb3.examples.chxx.transactions.entity.User;
 import org.jboss.ejb3.examples.chxx.transactions.impl.BankBean;
+import org.jboss.ejb3.examples.chxx.transactions.impl.PokerServiceConstants;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
@@ -54,7 +56,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Testing dev only 
+ * Test cases to ensure that the Poker Game
+ * is respecting transactional boundaries at the appropriate
+ * granularity.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
@@ -75,7 +79,9 @@ public class TransactionalPokerGameIntegrationTest
 
    /**
     * Naming Context
+    * @deprecated Remove when Arquillian will inject the EJB proxies
     */
+   @Deprecated
    private static Context jndiContext;
 
    /**
@@ -120,6 +126,12 @@ public class TransactionalPokerGameIntegrationTest
    // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
    private BankLocalBusiness bank;
 
+   /**
+    * Poker Game EJB Proxy
+    */
+   // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
+   private PokerGameLocalBusiness pokerGame;
+
    //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
@@ -143,15 +155,11 @@ public class TransactionalPokerGameIntegrationTest
    public void injectEjbs() throws Exception
    {
       // Fake injection by doing manual lookups for the time being
-      Object obj = jndiContext.lookup(DbInitializerLocalBusiness.JNDI_NAME);
-      log.info(obj.getClass().getClassLoader().toString());
-      log.info(DbInitializerLocalBusiness.class.getClassLoader().toString());
-      log.info((obj instanceof DbInitializerLocalBusiness) + "");
-
       dbInitializer = (DbInitializerLocalBusiness) jndiContext.lookup(DbInitializerLocalBusiness.JNDI_NAME);
       txWrapper = (TxWrappingLocalBusiness) jndiContext.lookup(TxWrappingLocalBusiness.JNDI_NAME);
       db = (DbQueryLocalBusiness) jndiContext.lookup(DbQueryLocalBusiness.JNDI_NAME);
       bank = (BankLocalBusiness) jndiContext.lookup(BankLocalBusiness.JNDI_NAME);
+      pokerGame = (PokerGameLocalBusiness) jndiContext.lookup(PokerGameLocalBusiness.JNDI_NAME);
    }
 
    /**
@@ -166,11 +174,7 @@ public class TransactionalPokerGameIntegrationTest
    }
 
    //-------------------------------------------------------------------------------------||
-   // Required Implementations -----------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   //-------------------------------------------------------------------------------------||
-   // Functional Methods -----------------------------------------------------------------||
+   // Tests ------------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
@@ -181,19 +185,22 @@ public class TransactionalPokerGameIntegrationTest
    {
 
       // Init
-      final long alrubingerAccountId = DbInitializerBean.ACCOUNT_ALRUBINGERL_ID;
-      final long pokerAccountId = DbInitializerBean.ACCOUNT_POKERGAME_ID;
+      final long alrubingerAccountId = DbInitializerBean.ACCOUNT_ALRUBINGER_ID;
+      final long pokerAccountId = PokerServiceConstants.ACCOUNT_POKERGAME_ID;
 
-      // Ensure there's $500 in the ALR account, and $0 in the poker account
-      this.executeInTx(new CheckBalanceOfAccountTask(alrubingerAccountId, new BigDecimal(500)),
-            new CheckBalanceOfAccountTask(pokerAccountId, new BigDecimal(0)));
+      // Ensure there's the expected amounts in both the ALR and Poker accounts
+      final BigDecimal expectedinitialALR = DbInitializerLocalBusiness.INITIAL_ACCOUNT_BALANCE_ALR;
+      final BigDecimal expectedinitialPoker = PokerServiceConstants.INITIAL_ACCOUNT_BALANCE_POKERGAME;
+      this.executeInTx(new CheckBalanceOfAccountTask(alrubingerAccountId, expectedinitialALR),
+            new CheckBalanceOfAccountTask(pokerAccountId, expectedinitialPoker));
 
-      // Transfer $100
-      bank.transfer(alrubingerAccountId, pokerAccountId, new BigDecimal(100));
+      // Transfer $100 from ALR to Poker
+      final BigDecimal oneHundred = new BigDecimal(100);
+      bank.transfer(alrubingerAccountId, pokerAccountId, oneHundred);
 
-      // Ensure there's $400 in the ALR account, and 100 in the poker account
-      this.executeInTx(new CheckBalanceOfAccountTask(alrubingerAccountId, new BigDecimal(400)),
-            new CheckBalanceOfAccountTask(pokerAccountId, new BigDecimal(100)));
+      // Ensure there's $100 less in the ALR account, and $100 more in the poker account
+      this.executeInTx(new CheckBalanceOfAccountTask(alrubingerAccountId, expectedinitialALR.subtract(oneHundred)),
+            new CheckBalanceOfAccountTask(pokerAccountId, expectedinitialPoker.add(oneHundred)));
 
       // Now make a transfer, check it succeeded within the context of a Transaction, then 
       // intentionally throw an exception.  The Tx should complete as rolled back, 
@@ -204,16 +211,15 @@ public class TransactionalPokerGameIntegrationTest
          @Override
          public Void call() throws Exception
          {
-            bank.transfer(alrubingerAccountId, pokerAccountId, new BigDecimal(100));
+            bank.transfer(alrubingerAccountId, pokerAccountId, oneHundred);
             return null;
          }
       };
       try
       {
-         this.executeInTx(transferTask,
-               new CheckBalanceOfAccountTask(alrubingerAccountId, new BigDecimal(300)),
-               new CheckBalanceOfAccountTask(pokerAccountId, new BigDecimal(200)),
-               ForcedTestExceptionTask.INSTANCE);
+         this.executeInTx(transferTask, new CheckBalanceOfAccountTask(alrubingerAccountId, expectedinitialALR.subtract(
+               oneHundred).subtract(oneHundred)), new CheckBalanceOfAccountTask(pokerAccountId, expectedinitialPoker
+               .add(oneHundred).add(oneHundred)), ForcedTestExceptionTask.INSTANCE);
       }
       // Expected
       catch (final ForcedTestException fte)
@@ -223,16 +229,148 @@ public class TransactionalPokerGameIntegrationTest
       Assert.assertTrue("Did not receive expected exception as signaled from the test; was not rolled back",
             gotExpectedException);
 
-      // Now that we've checked the tranfer succeeded from within the Tx, then we threw an
+      // Now that we've checked the transfer succeeded from within the Tx, then we threw an
       // exception before committed, ensure the Tx rolled back and the transfer was reverted from the 
       // perspective of everyone outside the Tx.
-      this.executeInTx(new CheckBalanceOfAccountTask(alrubingerAccountId, new BigDecimal(400)),
-            new CheckBalanceOfAccountTask(pokerAccountId, new BigDecimal(100)));
+      this.executeInTx(new CheckBalanceOfAccountTask(alrubingerAccountId, expectedinitialALR.subtract(oneHundred)),
+            new CheckBalanceOfAccountTask(pokerAccountId, expectedinitialPoker.add(oneHundred)));
+   }
+
+   /**
+    * Ensures that when we make a sequence of bets enclosed in a single Tx,
+    * some exceptional condition at the end doesn't roll back the prior
+    * history.  Once we've won/lost a bet, that bet's done.  This tests that 
+    * each bet takes place in its own isolated Tx. 
+    */
+   @Test
+   public void sequenceOfBetsDoesntRollBackAll() throws Throwable
+   {
+      // Get the original balance for ALR; this is done outside a Tx
+      final BigDecimal originalBalance = bank.getBalance(DbInitializerLocalBusiness.ACCOUNT_ALRUBINGER_ID);
+      log.info("Starting balance before playing poker: " + originalBalance);
+
+      // Execute 11 bets enclosed in a new Tx, and ensure that the account transfers
+      // took place as expected.  Then throw an exception to rollback the parent Tx.
+      final BigDecimal betAmount = new BigDecimal(20);
+      final Place11BetsThenForceExceptionTask task = new Place11BetsThenForceExceptionTask(betAmount);
+      boolean gotForcedException = false;
+      try
+      {
+         this.executeInTx(task);
+      }
+      catch (final ForcedTestException tfe)
+      {
+         // Expected
+         gotForcedException = true;
+      }
+      Assert.assertTrue("Did not obtain the test exception as expected", gotForcedException);
+
+      // Now we've ensured that from inside the calling Tx we saw the account balances 
+      // were as expected.  But we rolled back that enclosing Tx, so ensure that the outcome
+      // of the games was not ignored
+      final BigDecimal afterBetsBalance = bank.getBalance(DbInitializerLocalBusiness.ACCOUNT_ALRUBINGER_ID);
+      final int gameOutcomeCount = task.gameOutcomeCount;
+      new AssertGameOutcome(originalBalance, afterBetsBalance, gameOutcomeCount, betAmount).call();
    }
 
    //-------------------------------------------------------------------------------------||
    // Internal Helpers -------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
+
+   /**
+    * Task which asserts given an account original balance, 
+    * ending balance, game outcome count, and bet amount, that funds 
+    * remaining are as expected.
+    */
+   private static final class AssertGameOutcome implements Callable<Void>
+   {
+      private final BigDecimal originalBalance;
+
+      private final int gameOutcomeCount;
+
+      private final BigDecimal betAmount;
+
+      private final BigDecimal afterBetsBalance;
+
+      AssertGameOutcome(final BigDecimal originalBalance, final BigDecimal afterBetsBalance,
+            final int gameOutcomeCount, final BigDecimal betAmount)
+      {
+         this.originalBalance = originalBalance;
+         this.gameOutcomeCount = gameOutcomeCount;
+         this.betAmount = betAmount;
+         this.afterBetsBalance = afterBetsBalance;
+      }
+
+      @Override
+      public Void call() throws Exception
+      {
+         // Calculate expected
+         final BigDecimal expectedGains = betAmount.multiply(new BigDecimal(gameOutcomeCount));
+         final BigDecimal expectedBalance = originalBalance.add(expectedGains);
+
+         // Assert
+         Assert.assertTrue("Balance after all bets was not as expected " + expectedBalance + " but was "
+               + afterBetsBalance, expectedBalance.compareTo(afterBetsBalance) == 0);
+
+         // Return
+         return null;
+      }
+
+   }
+
+   /**
+    * A task that places 11 bets, then manually throws a {@link ForcedTestException}.
+    * This is so we may check that the balance transfers happened as 
+    * expected from within the context of the Tx in which this task will run, but
+    * also such that we can ensure that even if an exceptional case happens after bets have taken
+    * place, the completed bets do not roll back.  Once the money's on the table, you can't take
+    * it back. ;)
+    */
+   private final class Place11BetsThenForceExceptionTask implements Callable<Void>
+   {
+      /**
+       * Tracks how many games won/lost.  A negative 
+       * number indicates games lost; positive: won.
+       */
+      private int gameOutcomeCount = 0;
+
+      private final BigDecimal betAmount;
+
+      Place11BetsThenForceExceptionTask(final BigDecimal betAmount)
+      {
+         this.betAmount = betAmount;
+      }
+
+      @Override
+      public Void call() throws Exception
+      {
+
+         // Find the starting balance
+         final long alrubingerAccountId = DbInitializerLocalBusiness.ACCOUNT_ALRUBINGER_ID;
+         final BigDecimal startingBalance = bank.getBalance(alrubingerAccountId);
+
+         // Now run 11 bets
+         for (int i = 0; i < 11; i++)
+         {
+            // Track whether we win or lose
+            final boolean win = pokerGame.bet(DbInitializerLocalBusiness.ACCOUNT_ALRUBINGER_ID, betAmount);
+            gameOutcomeCount += win ? 1 : -1;
+         }
+         log.info("Won " + gameOutcomeCount + " games at " + betAmount + "/game");
+
+         // Get the user's balance after the bets
+         final BigDecimal afterBetsBalance = bank.getBalance(alrubingerAccountId);
+
+         // Ensure that money's been allocated properly
+         new AssertGameOutcome(startingBalance, afterBetsBalance, gameOutcomeCount, betAmount).call();
+
+         // Now force an exception to get a Tx rollback.  This should *not* affect the 
+         // money already transferred during the bets, as they should have taken place
+         // in nested Txs and already committed.
+         throw new ForcedTestException();
+      }
+
+   }
 
    /**
     * A task that checks that the account balance of an {@link Account}
@@ -261,7 +399,7 @@ public class TransactionalPokerGameIntegrationTest
       public Void call() throws Exception
       {
          final Account account = db.find(Account.class, accountId);
-         Assert.assertEquals("Balance was not as expected", expectedBalance, account.getBalance());
+         Assert.assertTrue("Balance was not as expected", expectedBalance.compareTo(account.getBalance()) == 0);
          return null;
       }
 
@@ -302,6 +440,7 @@ public class TransactionalPokerGameIntegrationTest
       }
       catch (final TaskExecutionException tee)
       {
+         // Unwrap the real cause
          throw tee.getCause();
       }
    }

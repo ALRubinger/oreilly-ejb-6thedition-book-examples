@@ -19,26 +19,28 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.transactions.api;
+package org.jboss.ejb3.examples.chxx.transactions.impl;
 
 import java.math.BigDecimal;
 
-import org.jboss.ejb3.examples.chxx.transactions.entity.User;
-
 /**
- * Contract of a service capable of simulating
- * a single game of poker.  The actual gameplay is not modeled,
- * only the inputs and outputs of a single trial. 
+ * Constants used by the implementation of the 
+ * {@link PokerGameBean}
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface PokerGame
+public interface PokerServiceConstants
 {
    //-------------------------------------------------------------------------------------||
-   // Contracts --------------------------------------------------------------------------||
+   // Constants --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
-   boolean bet(User user, BigDecimal amount);
+   long USER_POKERGAME_ID = 1L;
 
+   String USER_POKERGAME_NAME = "The Poker Game System";
+
+   long ACCOUNT_POKERGAME_ID = 1L;
+
+   BigDecimal INITIAL_ACCOUNT_BALANCE_POKERGAME = new BigDecimal(10000);
 }

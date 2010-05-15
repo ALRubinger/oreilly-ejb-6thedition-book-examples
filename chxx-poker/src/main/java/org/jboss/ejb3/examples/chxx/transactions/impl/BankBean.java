@@ -39,10 +39,10 @@ import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
 
 /**
  * The bank with which users and the Poker provider 
- * may interact with underlying accounts.  For instance users
- * may wish to make cash deposits into their personal account, 
- * or the Poker provider may transfer money from the user's account
- * to the poker account when the user places a bet.
+ * may interact with underlying accounts.  For instance 
+ * winning or losing a bet will result in an account
+ * transfer between the user account and te poker
+ * system account.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
@@ -106,8 +106,14 @@ public class BankBean implements BankLocalBusiness
       // Get the account
       final Account account = this.getAccount(accountId);
 
+      // We don't expose this account object to callers at all; its changes
+      // elsewhere in the (optional) Tx should not be synchronized with the DB
+      // in case of a write
+      em.detach(account);
+
       // Return the current balance
       return account.getBalance();
+
    }
 
    /**
@@ -123,6 +129,31 @@ public class BankBean implements BankLocalBusiness
       // Get the accounts in question
       final Account accountFrom = this.getAccount(accountIdFrom);
       final Account accountTo = this.getAccount(accountIdTo);
+
+      // Delegate
+      this.transfer(accountFrom, accountTo, amount);
+
+   }
+
+   /**
+    * {@inheritDoc}
+    * @see org.jboss.ejb3.examples.chxx.transactions.api.BankLocalBusiness#transfer(org.jboss.ejb3.examples.chxx.transactions.entity.Account, org.jboss.ejb3.examples.chxx.transactions.entity.Account, java.math.BigDecimal)
+    */
+   @Override
+   @TransactionAttribute(TransactionAttributeType.REQUIRED)
+   // Default Tx Attribute; create a new Tx if not present, else use the existing
+   public void transfer(final Account accountFrom, final Account accountTo, final BigDecimal amount)
+         throws IllegalArgumentException, InsufficientBalanceException
+   {
+      // Precondition checks
+      if (accountFrom == null)
+      {
+         throw new IllegalArgumentException("accountFrom must be specified");
+      }
+      if (accountTo == null)
+      {
+         throw new IllegalArgumentException("accountTo must be specified");
+      }
 
       // Withdraw (which will throw InsufficientBalance if that's the case)
       accountFrom.withdraw(amount);

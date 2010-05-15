@@ -87,4 +87,17 @@ public interface BankLocalBusiness
     */
    void transfer(long accountIdFrom, long accountIdTo, BigDecimal amount) throws IllegalArgumentException,
          InsufficientBalanceException;
+
+   /**
+    * Transfers the specified amount from one account to another
+    * @param accountFrom The account from which we'll withdraw
+    * @param accountTo The account to which we'll deposit
+    * @param amount The amount to be transferred
+    * @throws IllegalArgumentException If the amount is not specified, the amount is 
+    *   less that 0, or either account ID is invalid
+    * @throws InsufficientBalanceException If the amount is greater than the current 
+    *   balance of the "from" account
+    */
+   void transfer(Account accountFrom, Account accountTo, BigDecimal amount) throws IllegalArgumentException,
+         InsufficientBalanceException;
 }

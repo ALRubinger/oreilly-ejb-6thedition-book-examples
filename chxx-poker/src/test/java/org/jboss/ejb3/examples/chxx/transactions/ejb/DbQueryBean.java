@@ -31,7 +31,11 @@ import javax.persistence.PersistenceContext;
 import org.jboss.ejb3.annotation.LocalBinding;
 
 /**
- * 
+ * Implementation of a test EJB which exposes generic database
+ * query operations directly via the {@link EntityManager}.
+ * Used in validating pre- and postconditions during testing.
+ * All methods will be executed in an existing Transaction, which
+ * is {@link TransactionAttributeType#MANDATORY}. 
  * 
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>

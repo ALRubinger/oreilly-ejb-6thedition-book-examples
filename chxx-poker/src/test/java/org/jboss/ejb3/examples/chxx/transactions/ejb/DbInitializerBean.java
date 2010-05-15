@@ -39,10 +39,13 @@ import javax.transaction.TransactionManager;
 import org.jboss.ejb3.annotation.LocalBinding;
 import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
 import org.jboss.ejb3.examples.chxx.transactions.entity.User;
+import org.jboss.ejb3.examples.chxx.transactions.impl.PokerServiceConstants;
 
 /**
  * Singleton EJB to initialize and prepropulate
- * the database state before running tests.
+ * the database state before running tests.  Also permits
+ * refreshing the DB with default state via 
+ * {@link DbInitializerLocalBusiness#refreshWithDefaultData()}.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
@@ -122,22 +125,20 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
       final User alrubinger = new User();
       alrubinger.setId(USER_ALRUBINGER_ID);
       alrubinger.setName(USER_ALRUBINGER_NAME);
-      alrubinger.setEmail(USER_ALRUBINGER_EMAIL);
       final Account alrubingerAccount = new Account();
       alrubingerAccount.deposit(INITIAL_ACCOUNT_BALANCE_ALR);
       alrubingerAccount.setOwner(alrubinger);
-      alrubingerAccount.setId(ACCOUNT_ALRUBINGERL_ID);
+      alrubingerAccount.setId(ACCOUNT_ALRUBINGER_ID);
       alrubinger.setAccount(alrubingerAccount);
 
       // Poker Game Service
       final User pokerGameService = new User();
-      pokerGameService.setId(USER_POKERGAME_ID);
-      pokerGameService.setName(USER_POKERGAME_NAME);
-      pokerGameService.setEmail(USER_POKERGAME_EMAIL);
+      pokerGameService.setId(PokerServiceConstants.USER_POKERGAME_ID);
+      pokerGameService.setName(PokerServiceConstants.USER_POKERGAME_NAME);
       final Account pokerGameAccount = new Account();
-      pokerGameAccount.deposit(INITIAL_ACCOUNT_BALANCE_POKERGAME);
+      pokerGameAccount.deposit(PokerServiceConstants.INITIAL_ACCOUNT_BALANCE_POKERGAME);
       pokerGameAccount.setOwner(pokerGameService);
-      pokerGameAccount.setId(ACCOUNT_POKERGAME_ID);
+      pokerGameAccount.setId(PokerServiceConstants.ACCOUNT_POKERGAME_ID);
       pokerGameService.setAccount(pokerGameAccount);
 
       // Persist
