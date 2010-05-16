@@ -24,6 +24,7 @@
     <module>ch09-secureschool</module>
     <module>chxx-interceptors</module>
     <module>chxx-poker</module>
+    <module>chxx-timer</module>
   </modules>
 
 </project>
