@@ -103,7 +103,7 @@
                   <additionalClasspathElements>
                     <additionalClasspathElement>${JBOSS_HOME}/client/jbossws-native-client.jar</additionalClasspathElement>
                   </additionalClasspathElements>
-                  <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                  <redirectTestOutputToFile>true</redirectTestOutputToFile>
                   <trimStackTrace>false</trimStackTrace>
                   <printSummary>true</printSummary>
                   <includes>
