@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- Parent Information -->
+  <parent>
+    <groupId>org.jboss.ejb3.examples</groupId>
+    <artifactId>jboss-ejb3-examples-build</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <!-- Model Version -->
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Artifact Information -->
+  <artifactId>jboss-ejb3-examples-chxx-timer</artifactId>
+  <name>JBoss EJB 3.x Examples - Chapter XX: EJB Timer Service</name>
+  <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter XX</description>
+
+  <!-- Build -->
+  <build>
+  </build>
+
+
+  <!-- Properties -->
+  <properties>
+
+    <!-- Versioning -->
+
+  </properties>
+
+  <!-- Dependencies -->
+  <dependencies>
+
+    <dependency>
+      <groupId>org.jboss.spec.javax.ejb</groupId>
+      <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+    </dependency>
+
+    <!-- 
+    
+    Test Dependencies
+     -->
+
+    <!-- Arquillian Test Harness  
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-glassfish-embedded-30</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-openejb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian</groupId>
+      <artifactId>arquillian-junit</artifactId>
+    </dependency> -->
+    
+    <!-- JUnit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+   
+    <!-- GlassFish Embedded v3 
+    <dependency>
+      <groupId>org.glassfish.extras</groupId>
+      <artifactId>glassfish-embedded-all</artifactId>   
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.extras</groupId>
+      <artifactId>glassfish-embedded-shell</artifactId>
+     </dependency>
+     <dependency>
+      <groupId>org.glassfish.ejb</groupId>
+      <artifactId>ejb-timer-service-app</artifactId>
+      <type>war</type>
+    </dependency> -->
+   
+   <!--  OpenEJB
+    <dependency>
+      <groupId>org.apache.openejb</groupId>
+      <artifactId>openejb-core</artifactId>
+      <scope>test</scope>
+    </dependency> -->
+     
+  </dependencies>
+
+</project>
