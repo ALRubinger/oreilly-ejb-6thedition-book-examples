@@ -98,6 +98,14 @@ public class CreditCardTransactionProcessingBean implements CreditCardTransactio
    private SessionContext context;
 
    /**
+    * We can directly inject the {@link TimerService} as well.
+    */
+   @Resource
+   @SuppressWarnings("unused")
+   // Just for example
+   private TimerService timerService;
+
+   /**
     * {@link List} of all pending transactions.  Guarded
     * by the concurrency policies of this EJB.
     */
