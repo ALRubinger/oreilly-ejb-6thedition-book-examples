@@ -48,7 +48,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * 
+ * Tests to ensure that we can do simple CRUD operations 
+ * upon an object view (Entity beans), and see our changes persisted
+ * across transactions.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
@@ -57,10 +59,6 @@ import org.junit.runner.RunWith;
 @RunMode(RunModeType.LOCAL)
 public class EmployeeIntegrationTest
 {
-
-   //-------------------------------------------------------------------------------------||
-   // Class Members ----------------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
    // Class Members ----------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
