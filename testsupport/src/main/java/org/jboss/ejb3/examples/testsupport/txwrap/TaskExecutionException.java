@@ -19,40 +19,50 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.transactions.ejb;
+package org.jboss.ejb3.examples.testsupport.txwrap;
 
-import java.util.concurrent.Callable;
+import javax.ejb.ApplicationException;
+import javax.ejb.EJBException;
 
 /**
- * Contract of an EJB which wraps arbitrary {@link Callable}
- * tasks inside of a new Tx.
+ * Indicates that an exception has occurred while submitting
+ * a task to {@link TxWrappingLocalBusiness#wrapInTx(java.util.concurrent.Callable...)}.
+ * Not wrapped in {@link EJBException} because this is an {@link ApplicationException}
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface TxWrappingLocalBusiness
+@ApplicationException(rollback = true)
+public class TaskExecutionException extends Exception
 {
-
    //-------------------------------------------------------------------------------------||
-   // Constants --------------------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
-    * Name we'll ind to in JNDI
-    */
-   String JNDI_NAME = "TxWrappingLocal";
-
-   //-------------------------------------------------------------------------------------||
-   // Contracts --------------------------------------------------------------------------||
+   // Class Members ----------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Wraps the specified tasks in a new Transaction
-    * 
-    * @param task
-    * @throws IllegalArgumentException If no tasks are specified
-    * @throws TaskExecutionException If an error occurred in invoking {@link Callable#call()} 
+    * serialVersionUID
     */
-   void wrapInTx(Callable<?>... tasks) throws IllegalArgumentException, TaskExecutionException;
+   private static final long serialVersionUID = 1L;
+
+   //-------------------------------------------------------------------------------------||
+   // Constructor ------------------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * Creates a new instance with the specified root cause
+    */
+   public TaskExecutionException(final Throwable cause)
+   {
+      super(cause);
+   }
+
+   /**
+    * Creates a new instance with the specified message
+    * @param message
+    */
+   public TaskExecutionException(String message)
+   {
+      super(message);
+   }
 
 }

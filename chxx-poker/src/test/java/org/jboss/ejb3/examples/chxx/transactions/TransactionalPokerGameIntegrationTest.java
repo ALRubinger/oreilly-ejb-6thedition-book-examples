@@ -39,9 +39,6 @@ import org.jboss.ejb3.examples.chxx.transactions.api.BankLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.api.PokerGameLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.DbInitializerBean;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.ExampleUserData;
-import org.jboss.ejb3.examples.chxx.transactions.ejb.ForcedTestException;
-import org.jboss.ejb3.examples.chxx.transactions.ejb.TaskExecutionException;
-import org.jboss.ejb3.examples.chxx.transactions.ejb.TxWrappingLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
 import org.jboss.ejb3.examples.chxx.transactions.entity.User;
 import org.jboss.ejb3.examples.chxx.transactions.impl.BankBean;
@@ -49,6 +46,9 @@ import org.jboss.ejb3.examples.chxx.transactions.impl.PokerServiceConstants;
 import org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerLocalBusiness;
 import org.jboss.ejb3.examples.testsupport.dbquery.DbQueryBean;
 import org.jboss.ejb3.examples.testsupport.dbquery.DbQueryLocalBusiness;
+import org.jboss.ejb3.examples.testsupport.txwrap.ForcedTestException;
+import org.jboss.ejb3.examples.testsupport.txwrap.TaskExecutionException;
+import org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingLocalBusiness;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
@@ -94,8 +94,9 @@ public class TransactionalPokerGameIntegrationTest
    {
       final JavaArchive archive = ShrinkWrap.create("test.jar", JavaArchive.class).addPackages(true,
             BankLocalBusiness.class.getPackage(), User.class.getPackage()).addManifestResource("persistence.xml")
-            .addPackages(false, DbInitializerBean.class.getPackage(), BankBean.class.getPackage(),
-                  DbInitializerLocalBusiness.class.getPackage(), DbQueryBean.class.getPackage());
+            .addPackages(false, DbInitializerBean.class.getPackage(), TxWrappingLocalBusiness.class.getPackage(),
+                  BankBean.class.getPackage(), DbInitializerLocalBusiness.class.getPackage(),
+                  DbQueryBean.class.getPackage());
       log.info(archive.toString(true));
       return archive;
    }
@@ -159,7 +160,7 @@ public class TransactionalPokerGameIntegrationTest
    {
       // Fake injection by doing manual lookups for the time being
       dbInitializer = (DbInitializerLocalBusiness) jndiContext.lookup("DbInitializerBean/local");
-      txWrapper = (TxWrappingLocalBusiness) jndiContext.lookup(TxWrappingLocalBusiness.JNDI_NAME);
+      txWrapper = (TxWrappingLocalBusiness) jndiContext.lookup("TxWrappingBean/local");
       db = (DbQueryLocalBusiness) jndiContext.lookup("DbQueryBean/local");
       bank = (BankLocalBusiness) jndiContext.lookup(BankLocalBusiness.JNDI_NAME);
       pokerGame = (PokerGameLocalBusiness) jndiContext.lookup(PokerGameLocalBusiness.JNDI_NAME);

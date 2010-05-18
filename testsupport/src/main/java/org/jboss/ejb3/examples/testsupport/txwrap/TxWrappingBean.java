@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.transactions.ejb;
+package org.jboss.ejb3.examples.testsupport.txwrap;
 
 import java.util.concurrent.Callable;
 
@@ -27,8 +27,6 @@ import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-
-import org.jboss.ejb3.annotation.LocalBinding;
 
 /**
  * EJB which wraps a specified series of {@link Callable}
@@ -41,7 +39,6 @@ import org.jboss.ejb3.annotation.LocalBinding;
 @Local(TxWrappingLocalBusiness.class)
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 // We always require a new Tx here, so we ensure to wrap 
-@LocalBinding(jndiBinding = TxWrappingLocalBusiness.JNDI_NAME)
 public class TxWrappingBean implements TxWrappingLocalBusiness
 {
    //-------------------------------------------------------------------------------------||
