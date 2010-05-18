@@ -25,6 +25,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
+import org.jboss.ejb3.examples.testsupport.entity.IdentityBase;
+
 /**
  * Entity representing a user of the poker service
  *

@@ -30,6 +30,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.jboss.ejb3.examples.chxx.transactions.api.InsufficientBalanceException;
+import org.jboss.ejb3.examples.testsupport.entity.IdentityBase;
 
 /**
  * Entity representing a bank account; maintains a current balance

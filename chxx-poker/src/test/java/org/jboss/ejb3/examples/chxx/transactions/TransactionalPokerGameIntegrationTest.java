@@ -46,6 +46,7 @@ import org.jboss.ejb3.examples.chxx.transactions.impl.PokerServiceConstants;
 import org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerLocalBusiness;
 import org.jboss.ejb3.examples.testsupport.dbquery.DbQueryBean;
 import org.jboss.ejb3.examples.testsupport.dbquery.DbQueryLocalBusiness;
+import org.jboss.ejb3.examples.testsupport.entity.IdentityBase;
 import org.jboss.ejb3.examples.testsupport.txwrap.ForcedTestException;
 import org.jboss.ejb3.examples.testsupport.txwrap.TaskExecutionException;
 import org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingLocalBusiness;
@@ -96,7 +97,7 @@ public class TransactionalPokerGameIntegrationTest
             BankLocalBusiness.class.getPackage(), User.class.getPackage()).addManifestResource("persistence.xml")
             .addPackages(false, DbInitializerBean.class.getPackage(), TxWrappingLocalBusiness.class.getPackage(),
                   BankBean.class.getPackage(), DbInitializerLocalBusiness.class.getPackage(),
-                  DbQueryBean.class.getPackage());
+                  DbQueryBean.class.getPackage(), IdentityBase.class.getPackage());
       log.info(archive.toString(true));
       return archive;
    }
