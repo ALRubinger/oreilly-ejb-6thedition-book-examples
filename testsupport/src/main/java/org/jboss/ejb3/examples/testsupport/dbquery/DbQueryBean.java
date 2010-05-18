@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.transactions.ejb;
+package org.jboss.ejb3.examples.testsupport.dbquery;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -27,8 +27,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import org.jboss.ejb3.annotation.LocalBinding;
 
 /**
  * Implementation of a test EJB which exposes generic database
@@ -49,7 +47,6 @@ import org.jboss.ejb3.annotation.LocalBinding;
 // on it without fear that we'll run into Exceptions.  We can use a TxWrappingBean to submit the test logic and
 // execute it in the context of a new Transaction.  David Blevins has a writeup of this technique: 
 // http://openejb.apache.org/3.0/testing-transactions-example.html
-@LocalBinding(jndiBinding = DbQueryLocalBusiness.JNDI_NAME)
 public class DbQueryBean implements DbQueryLocalBusiness
 {
 
@@ -72,7 +69,7 @@ public class DbQueryBean implements DbQueryLocalBusiness
    //-------------------------------------------------------------------------------------||
 
    /**
-    * @see org.jboss.ejb3.examples.chxx.transactions.ejb.DbQueryLocalBusiness#find(java.lang.Class, java.lang.Object)
+    * @see org.jboss.ejb3.examples.testsupport.dbquery.DbQueryLocalBusiness#find(java.lang.Class, java.lang.Object)
     */
    @Override
    public <T> T find(final Class<T> type, final Object id) throws IllegalArgumentException

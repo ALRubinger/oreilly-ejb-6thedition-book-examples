@@ -19,47 +19,27 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.transactions.ejb;
+package org.jboss.ejb3.examples.testsupport.dbinit;
 
-import java.util.Collection;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.ejb.Local;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 
-import org.jboss.ejb3.annotation.LocalBinding;
-import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
-import org.jboss.ejb3.examples.chxx.transactions.entity.User;
-import org.jboss.ejb3.examples.chxx.transactions.impl.PokerServiceConstants;
-
 /**
- * Singleton EJB to initialize and prepropulate
- * the database state before running tests.  Also permits
+ * Base support for prepopulating the database with
+ * some default data.  Also permits
  * refreshing the DB with default state via 
  * {@link DbInitializerLocalBusiness#refreshWithDefaultData()}.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-@Singleton
-@Startup
-@Local(DbInitializerLocalBusiness.class)
-@LocalBinding(jndiBinding = DbInitializerLocalBusiness.JNDI_NAME)
-// JBoss-specific JNDI Binding annotation
-@TransactionManagement(TransactionManagementType.BEAN)
-// We'll use bean-managed Tx's here, because @PostConstruct is fired in a
-// non-transactional context anyway, and we want to have consistent
-// handling when we call via "refreshWithDefaultData".
-public class DbInitializerBean implements DbInitializerLocalBusiness
+public abstract class DbInitializerBeanBase implements DbInitializerLocalBusiness
 {
 
    //-------------------------------------------------------------------------------------||
@@ -69,7 +49,7 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(DbInitializerBean.class.getName());
+   protected static final Logger log = Logger.getLogger(DbInitializerBeanBase.class.getName());
 
    //-------------------------------------------------------------------------------------||
    // Instance Members -------------------------------------------------------------------||
@@ -79,7 +59,7 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
     * Hook to interact w/ the database via JPA
     */
    @PersistenceContext
-   private EntityManager em;
+   protected EntityManager em;
 
    /**
     * Because @PostConstruct runs in an unspecified
@@ -96,6 +76,10 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
    // Functional Methods -----------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
+   public abstract void populateDefaultData() throws Exception;
+
+   public abstract void cleanup() throws Exception;
+
    /**
     * Called by the container on startup; populates the database with test data.
     * Because EJB lifecycle operations are invoked outside of a 
@@ -105,7 +89,6 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
    @PostConstruct
    public void populateDatabase() throws Exception
    {
-
       // Get the current Tx (if we have one, we may have been invoked via 
       // "refreshWithDefaultData"
       final Transaction tx = txManager.getTransaction();
@@ -117,48 +100,25 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
          txManager.begin();
       }
 
-      /*
-       *  Create some users
-       */
-
-      // ALR
-      final User alrubinger = new User();
-      alrubinger.setId(USER_ALRUBINGER_ID);
-      alrubinger.setName(USER_ALRUBINGER_NAME);
-      final Account alrubingerAccount = new Account();
-      alrubingerAccount.deposit(INITIAL_ACCOUNT_BALANCE_ALR);
-      alrubingerAccount.setOwner(alrubinger);
-      alrubingerAccount.setId(ACCOUNT_ALRUBINGER_ID);
-      alrubinger.setAccount(alrubingerAccount);
-
-      // Poker Game Service
-      final User pokerGameService = new User();
-      pokerGameService.setId(PokerServiceConstants.USER_POKERGAME_ID);
-      pokerGameService.setName(PokerServiceConstants.USER_POKERGAME_NAME);
-      final Account pokerGameAccount = new Account();
-      pokerGameAccount.deposit(PokerServiceConstants.INITIAL_ACCOUNT_BALANCE_POKERGAME);
-      pokerGameAccount.setOwner(pokerGameService);
-      pokerGameAccount.setId(PokerServiceConstants.ACCOUNT_POKERGAME_ID);
-      pokerGameService.setAccount(pokerGameAccount);
-
-      // Persist
-      em.persist(alrubinger);
-      log.info("Created: " + alrubinger);
-      em.persist(pokerGameService);
-      log.info("Created: " + pokerGameService);
-
-      // Mark the end of the Tx if we started it; will trigger the EntityManager to flush
-      // outgoing changes
-      if (startOurOwnTx)
+      // Populate with default data
+      try
       {
-         txManager.commit();
+         this.populateDefaultData();
       }
-
+      finally
+      {
+         // Mark the end of the Tx if we started it; will trigger the EntityManager to flush
+         // outgoing changes
+         if (startOurOwnTx)
+         {
+            txManager.commit();
+         }
+      }
    }
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.chxx.transactions.ejb.DbInitializerLocalBusiness#refreshWithDefaultData()
+    * @see org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerLocalBusiness#refreshWithDefaultData()
     */
    @Override
    public void refreshWithDefaultData() throws Exception
@@ -167,30 +127,12 @@ public class DbInitializerBean implements DbInitializerLocalBusiness
       txManager.begin();
       try
       {
-
-         // Delete existing data
-         final Collection<Account> accounts = em.createQuery("SELECT o FROM " + Account.class.getSimpleName() + " o",
-               Account.class).getResultList();
-         final Collection<User> users = em
-               .createQuery("SELECT o FROM " + User.class.getSimpleName() + " o", User.class).getResultList();
-         for (final Account account : accounts)
-         {
-            em.remove(account);
-         }
-         for (final User user : users)
-         {
-            em.remove(user);
-         }
+         // Cleanup
+         this.cleanup();
 
          // Repopulate
-         try
-         {
-            this.populateDatabase();
-         }
-         catch (final Exception e)
-         {
-            throw new RuntimeException("Could not prepopulate DB, may be in inconsistent state", e);
-         }
+         this.populateDatabase();
+
       }
       finally
       {

@@ -13,8 +13,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Artifact Information -->
-  <artifactId>jboss-ejb3-examples-chxx-transactions</artifactId>
-  <name>JBoss EJB 3.x Examples - Chapter XX: Transactional EJBs</name>
+  <artifactId>jboss-ejb3-examples-chxx-pokergame</artifactId>
+  <name>JBoss EJB 3.x Examples - Chapter XX: Transactional Poker Game EJBs</name>
   <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter XX</description>
 
   <!-- Build -->
@@ -47,6 +47,13 @@
     
     Test Dependencies
      -->
+     
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>jboss-ejb3-examples-testsupport</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
 
     <!-- Arquillian Test Harness -->
     <dependency>

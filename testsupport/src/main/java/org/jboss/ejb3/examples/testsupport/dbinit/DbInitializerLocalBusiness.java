@@ -19,41 +19,43 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.transactions.ejb;
+package org.jboss.ejb3.examples.testsupport.dbinit;
 
-import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 
 /**
- * Contract of a test EJB which exposes generic database
- * query operations directly via the {@link EntityManager}.
- * Used in validating pre- and postconditions during testing.
- * All methods will be executed in an existing Transaction, which
- * is {@link TransactionAttributeType#MANDATORY}. 
+ * Contract of an EJB which can reset and populate a database with
+ * known data for user tests
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface DbQueryLocalBusiness
+public interface DbInitializerLocalBusiness
 {
    //-------------------------------------------------------------------------------------||
    // Constants --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
-   
-   /**
-    * Name we'll ind to in JNDI
+
+   /*
+    * Test Data
     */
-   String JNDI_NAME = "DbQueryLocal";
-   
+
+   long USER_ALRUBINGER_ID = 2L;
+
+   String USER_ALRUBINGER_NAME = "Andrew Lee Rubinger";
+
+   long ACCOUNT_ALRUBINGER_ID = 2L;
+
+   BigDecimal INITIAL_ACCOUNT_BALANCE_ALR = new BigDecimal(500);
+
    //-------------------------------------------------------------------------------------||
    // Contracts --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Delegates to {@link EntityManager#find(Class, Object)}
+    * Clears and repopulates the database with default test data
     * 
-    * @return
-    * @throws IllegalArgumentException If either argument was not specified
+    * @throws Exception If an error occurred in refreshing with default data
     */
-   <T> T find(Class<T> type, Object id) throws IllegalArgumentException;
+   void refreshWithDefaultData() throws Exception;
 }

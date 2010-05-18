@@ -25,6 +25,7 @@
     <module>chxx-interceptors</module>
     <module>chxx-poker</module>
     <module>chxx-timer</module>
+    <module>testsupport</module>
   </modules>
 
 </project>

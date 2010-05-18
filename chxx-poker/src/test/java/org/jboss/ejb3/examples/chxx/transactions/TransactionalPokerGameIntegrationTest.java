@@ -38,8 +38,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.ejb3.examples.chxx.transactions.api.BankLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.api.PokerGameLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.DbInitializerBean;
-import org.jboss.ejb3.examples.chxx.transactions.ejb.DbInitializerLocalBusiness;
-import org.jboss.ejb3.examples.chxx.transactions.ejb.DbQueryLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.ForcedTestException;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.TaskExecutionException;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.TxWrappingLocalBusiness;
@@ -47,6 +45,10 @@ import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
 import org.jboss.ejb3.examples.chxx.transactions.entity.User;
 import org.jboss.ejb3.examples.chxx.transactions.impl.BankBean;
 import org.jboss.ejb3.examples.chxx.transactions.impl.PokerServiceConstants;
+import org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerBeanBase;
+import org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerLocalBusiness;
+import org.jboss.ejb3.examples.testsupport.dbquery.DbQueryBean;
+import org.jboss.ejb3.examples.testsupport.dbquery.DbQueryLocalBusiness;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
@@ -92,7 +94,8 @@ public class TransactionalPokerGameIntegrationTest
    {
       final JavaArchive archive = ShrinkWrap.create("test.jar", JavaArchive.class).addPackages(true,
             BankLocalBusiness.class.getPackage(), User.class.getPackage()).addManifestResource("persistence.xml")
-            .addPackages(false, DbInitializerBean.class.getPackage(), BankBean.class.getPackage());
+            .addPackages(false, DbInitializerBean.class.getPackage(), BankBean.class.getPackage(),
+                  DbInitializerLocalBusiness.class.getPackage(), DbQueryBean.class.getPackage());
       log.info(archive.toString(true));
       return archive;
    }
@@ -155,9 +158,9 @@ public class TransactionalPokerGameIntegrationTest
    public void injectEjbs() throws Exception
    {
       // Fake injection by doing manual lookups for the time being
-      dbInitializer = (DbInitializerLocalBusiness) jndiContext.lookup(DbInitializerLocalBusiness.JNDI_NAME);
+      dbInitializer = (DbInitializerLocalBusiness) jndiContext.lookup("DbInitializerBean/local");
       txWrapper = (TxWrappingLocalBusiness) jndiContext.lookup(TxWrappingLocalBusiness.JNDI_NAME);
-      db = (DbQueryLocalBusiness) jndiContext.lookup(DbQueryLocalBusiness.JNDI_NAME);
+      db = (DbQueryLocalBusiness) jndiContext.lookup("DbQueryBean/local");
       bank = (BankLocalBusiness) jndiContext.lookup(BankLocalBusiness.JNDI_NAME);
       pokerGame = (PokerGameLocalBusiness) jndiContext.lookup(PokerGameLocalBusiness.JNDI_NAME);
    }
@@ -185,7 +188,7 @@ public class TransactionalPokerGameIntegrationTest
    {
 
       // Init
-      final long alrubingerAccountId = DbInitializerBean.ACCOUNT_ALRUBINGER_ID;
+      final long alrubingerAccountId = DbInitializerBeanBase.ACCOUNT_ALRUBINGER_ID;
       final long pokerAccountId = PokerServiceConstants.ACCOUNT_POKERGAME_ID;
 
       // Ensure there's the expected amounts in both the ALR and Poker accounts
