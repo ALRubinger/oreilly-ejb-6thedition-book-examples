@@ -13,8 +13,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Artifact Information -->
-  <artifactId>jboss-ejb3-examples-chxx-pokergame</artifactId>
-  <name>JBoss EJB 3.x Examples - Chapter XX: Transactional Poker Game EJBs</name>
+  <artifactId>jboss-ejb3-examples-chxx-employeeregistry</artifactId>
+  <name>JBoss EJB 3.x Examples - Chapter XX: Employee Registry EJBs</name>
   <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter XX</description>
 
   <!-- Build -->
@@ -28,8 +28,6 @@
     <!-- Versioning -->
     <!-- JBOSS_HOME (We'll unpack into here -->
     <JBOSS_HOME>${project.build.directory}/jboss-${version.org.jboss.jbossas}</JBOSS_HOME>
-    <!-- The target version of AS to be used -->
-    <version.org.jboss.jbossas>6.0.0.20100429-M3</version.org.jboss.jbossas>
 
   </properties>
 
@@ -43,17 +41,21 @@
       <scope>provided</scope>
     </dependency>
   -->
-
+  
+    <!-- Examples Support -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>jboss-ejb3-examples-testsupport</artifactId>
       <version>${project.version}</version>
     </dependency>
-  
+    
+    
     <!-- 
     
     Test Dependencies
      -->
+     
+    
 
     <!-- Arquillian Test Harness -->
     <dependency>

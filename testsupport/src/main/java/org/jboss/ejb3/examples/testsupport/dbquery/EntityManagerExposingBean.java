@@ -33,20 +33,20 @@ import javax.persistence.PersistenceContext;
  * query operations directly via the {@link EntityManager}.
  * Used in validating pre- and postconditions during testing.
  * All methods will be executed in an existing Transaction, which
- * is {@link TransactionAttributeType#MANDATORY}. 
+ * is {@link TransactionAttributeType#MANDATORY}.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
 @Stateless
-@Local(DbQueryLocalBusiness.class)
+@Local(EntityManagerExposingLocalBusiness.class)
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 // We make a current Tx mandatory from the caller so that the 
 // caller is sure to get back an entity instance which is still attached.  This way we can run any tests/checks
 // on it without fear that we'll run into Exceptions.  We can use a TxWrappingBean to submit the test logic and
 // execute it in the context of a new Transaction.  David Blevins has a writeup of this technique: 
 // http://openejb.apache.org/3.0/testing-transactions-example.html
-public class DbQueryBean implements DbQueryLocalBusiness
+public class EntityManagerExposingBean implements EntityManagerExposingLocalBusiness
 {
 
    //-------------------------------------------------------------------------------------||
@@ -64,22 +64,17 @@ public class DbQueryBean implements DbQueryLocalBusiness
    //-------------------------------------------------------------------------------------||
 
    /**
-    * @see org.jboss.ejb3.examples.testsupport.dbquery.DbQueryLocalBusiness#find(java.lang.Class, java.lang.Object)
+    * {@inheritDoc}
+    * @see org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingLocalBusiness#getEntityManager()
     */
    @Override
-   public <T> T find(final Class<T> type, final Object id) throws IllegalArgumentException
+   public EntityManager getEntityManager()
    {
-      // Precondition checks
-      if (type == null)
+      if (em == null)
       {
-         throw new IllegalArgumentException("type must be specified");
+         throw new IllegalStateException(EntityManager.class.getSimpleName() + " was not injected.");
       }
-      if (id == null)
-      {
-         throw new IllegalArgumentException("id must be specified");
-      }
-
-      // Find
-      return em.find(type, id);
+      return em;
    }
+
 }

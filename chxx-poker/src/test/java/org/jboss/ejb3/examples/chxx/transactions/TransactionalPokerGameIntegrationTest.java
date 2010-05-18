@@ -44,11 +44,12 @@ import org.jboss.ejb3.examples.chxx.transactions.entity.User;
 import org.jboss.ejb3.examples.chxx.transactions.impl.BankBean;
 import org.jboss.ejb3.examples.chxx.transactions.impl.PokerServiceConstants;
 import org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerLocalBusiness;
-import org.jboss.ejb3.examples.testsupport.dbquery.DbQueryBean;
-import org.jboss.ejb3.examples.testsupport.dbquery.DbQueryLocalBusiness;
+import org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingBean;
+import org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingLocalBusiness;
 import org.jboss.ejb3.examples.testsupport.entity.IdentityBase;
 import org.jboss.ejb3.examples.testsupport.txwrap.ForcedTestException;
 import org.jboss.ejb3.examples.testsupport.txwrap.TaskExecutionException;
+import org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingBean;
 import org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingLocalBusiness;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -97,7 +98,7 @@ public class TransactionalPokerGameIntegrationTest
             BankLocalBusiness.class.getPackage(), User.class.getPackage()).addManifestResource("persistence.xml")
             .addPackages(false, DbInitializerBean.class.getPackage(), TxWrappingLocalBusiness.class.getPackage(),
                   BankBean.class.getPackage(), DbInitializerLocalBusiness.class.getPackage(),
-                  DbQueryBean.class.getPackage(), IdentityBase.class.getPackage());
+                  EntityManagerExposingBean.class.getPackage(), IdentityBase.class.getPackage());
       log.info(archive.toString(true));
       return archive;
    }
@@ -123,7 +124,7 @@ public class TransactionalPokerGameIntegrationTest
     * Must be called inside an existing Tx so that returned entities are not detached.
     */
    // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
-   private DbQueryLocalBusiness db;
+   private EntityManagerExposingLocalBusiness emHook;
 
    /**
     * Bank EJB Proxy
@@ -160,9 +161,11 @@ public class TransactionalPokerGameIntegrationTest
    public void injectEjbs() throws Exception
    {
       // Fake injection by doing manual lookups for the time being
-      dbInitializer = (DbInitializerLocalBusiness) jndiContext.lookup("DbInitializerBean/local");
-      txWrapper = (TxWrappingLocalBusiness) jndiContext.lookup("TxWrappingBean/local");
-      db = (DbQueryLocalBusiness) jndiContext.lookup("DbQueryBean/local");
+      dbInitializer = (DbInitializerLocalBusiness) jndiContext.lookup(DbInitializerBean.class.getSimpleName()
+            + "/local");
+      txWrapper = (TxWrappingLocalBusiness) jndiContext.lookup(TxWrappingBean.class.getSimpleName() + "/local");
+      emHook = (EntityManagerExposingLocalBusiness) jndiContext.lookup(EntityManagerExposingBean.class.getSimpleName()
+            + "/local");
       bank = (BankLocalBusiness) jndiContext.lookup(BankLocalBusiness.JNDI_NAME);
       pokerGame = (PokerGameLocalBusiness) jndiContext.lookup(PokerGameLocalBusiness.JNDI_NAME);
    }
@@ -403,7 +406,7 @@ public class TransactionalPokerGameIntegrationTest
       @Override
       public Void call() throws Exception
       {
-         final Account account = db.find(Account.class, accountId);
+         final Account account = emHook.getEntityManager().find(Account.class, accountId);
          Assert.assertTrue("Balance was not as expected", expectedBalance.compareTo(account.getBalance()) == 0);
          return null;
       }

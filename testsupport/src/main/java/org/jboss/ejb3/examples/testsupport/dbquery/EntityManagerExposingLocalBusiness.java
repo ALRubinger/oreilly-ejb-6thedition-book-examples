@@ -26,7 +26,7 @@ import javax.persistence.EntityManager;
 
 /**
  * Contract of a test EJB which exposes generic database
- * query operations directly via the {@link EntityManager}.
+ * operations directly via the {@link EntityManager}.
  * Used in validating pre- and postconditions during testing.
  * All methods will be executed in an existing Transaction, which
  * is {@link TransactionAttributeType#MANDATORY}. 
@@ -34,7 +34,7 @@ import javax.persistence.EntityManager;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface DbQueryLocalBusiness
+public interface EntityManagerExposingLocalBusiness
 {
 
    //-------------------------------------------------------------------------------------||
@@ -42,10 +42,10 @@ public interface DbQueryLocalBusiness
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Delegates to {@link EntityManager#find(Class, Object)}
-    * 
-    * @return
-    * @throws IllegalArgumentException If either argument was not specified
+    * Obtains a direct reference to the underlying {@link EntityManager}, 
+    * which may be used directly from tests (in the context of a running
+    * Transaction) to perform direct operations such as {@link EntityManager#persist(Object)},
+    * {@link EntityManager#find(Class, Object)}, and {@link EntityManager#remove(Object)}.
     */
-   <T> T find(Class<T> type, Object id) throws IllegalArgumentException;
+   EntityManager getEntityManager();
 }
