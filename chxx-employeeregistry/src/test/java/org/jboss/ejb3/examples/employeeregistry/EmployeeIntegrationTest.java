@@ -169,7 +169,7 @@ public class EmployeeIntegrationTest
             @Override
             public Void call() throws Exception
             {
-               // EJB QL String to remove all Employees
+               // JPA QL String to remove all Employees
                final EntityManager em = emHook.getEntityManager();
                em.createQuery("DELETE FROM " + Employee.class.getSimpleName() + " o").executeUpdate();
                return null;
