@@ -270,8 +270,11 @@ public class EmployeeIntegrationTest
                // Get an EM
                final EntityManager em = emHook.getEntityManager();
 
-               // Look up "Dave" again
-               final Employee dave = em.find(Employee.class, ID_DAVE);
+               // Make a new "Dave" as a detached object with same primary key, but a different name
+               final Employee dave = new Employee(ID_DAVE, NAME_DAVE_NEW);
+
+               // Merge these changes on the detached instance with the DB
+               em.merge(dave);
 
                // Ensure we see the name change
                Assert.assertEquals("Employee Dave's name should have been changed", NAME_DAVE_NEW, dave.getName());
@@ -302,7 +305,7 @@ public class EmployeeIntegrationTest
                // Get an EM
                final EntityManager em = emHook.getEntityManager();
 
-               // Look up "Dave" again by ID from the EM
+               // Make a new "Dave" instance
                final Employee dave = em.find(Employee.class, ID_DAVE);
                log.info("Lookup of Dave after we changed his name on a detached instance: " + dave);
 
