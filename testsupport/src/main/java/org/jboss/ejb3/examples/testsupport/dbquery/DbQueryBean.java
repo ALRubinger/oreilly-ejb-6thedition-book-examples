@@ -34,7 +34,6 @@ import javax.persistence.PersistenceContext;
  * Used in validating pre- and postconditions during testing.
  * All methods will be executed in an existing Transaction, which
  * is {@link TransactionAttributeType#MANDATORY}. 
- * 
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
@@ -49,10 +48,6 @@ import javax.persistence.PersistenceContext;
 // http://openejb.apache.org/3.0/testing-transactions-example.html
 public class DbQueryBean implements DbQueryLocalBusiness
 {
-
-   //-------------------------------------------------------------------------------------||
-   // Class Members ----------------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
 
    //-------------------------------------------------------------------------------------||
    // Instance Members -------------------------------------------------------------------||
@@ -87,12 +82,4 @@ public class DbQueryBean implements DbQueryLocalBusiness
       // Find
       return em.find(type, id);
    }
-
-   //-------------------------------------------------------------------------------------||
-   // Functional Methods -----------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   //-------------------------------------------------------------------------------------||
-   // Internal Helper Methods ------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
 }

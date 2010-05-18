@@ -97,12 +97,12 @@ public class DbInitializerBean extends DbInitializerBeanBase
 
       // ALR
       final User alrubinger = new User();
-      alrubinger.setId(USER_ALRUBINGER_ID);
-      alrubinger.setName(USER_ALRUBINGER_NAME);
+      alrubinger.setId(ExampleUserData.USER_ALRUBINGER_ID);
+      alrubinger.setName(ExampleUserData.USER_ALRUBINGER_NAME);
       final Account alrubingerAccount = new Account();
-      alrubingerAccount.deposit(INITIAL_ACCOUNT_BALANCE_ALR);
+      alrubingerAccount.deposit(ExampleUserData.INITIAL_ACCOUNT_BALANCE_ALR);
       alrubingerAccount.setOwner(alrubinger);
-      alrubingerAccount.setId(ACCOUNT_ALRUBINGER_ID);
+      alrubingerAccount.setId(ExampleUserData.ACCOUNT_ALRUBINGER_ID);
       alrubinger.setAccount(alrubingerAccount);
 
       // Poker Game Service

@@ -19,25 +19,27 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.testsupport.dbinit;
+package org.jboss.ejb3.examples.chxx.transactions.ejb;
+
+import java.math.BigDecimal;
 
 /**
- * Contract of an EJB which can reset and populate a database with
- * known data for user tests
+ * Contains example user data to be seeded in testing
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface DbInitializerLocalBusiness
+public interface ExampleUserData
 {
-   //-------------------------------------------------------------------------------------||
-   // Contracts --------------------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
-    * Clears and repopulates the database with default test data
-    * 
-    * @throws Exception If an error occurred in refreshing with default data
+   /*
+    * Test Data
     */
-   void refreshWithDefaultData() throws Exception;
+
+   long USER_ALRUBINGER_ID = 2L;
+
+   String USER_ALRUBINGER_NAME = "Andrew Lee Rubinger";
+
+   long ACCOUNT_ALRUBINGER_ID = 2L;
+
+   BigDecimal INITIAL_ACCOUNT_BALANCE_ALR = new BigDecimal(500);
 }

@@ -38,6 +38,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.ejb3.examples.chxx.transactions.api.BankLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.api.PokerGameLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.DbInitializerBean;
+import org.jboss.ejb3.examples.chxx.transactions.ejb.ExampleUserData;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.ForcedTestException;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.TaskExecutionException;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.TxWrappingLocalBusiness;
@@ -45,7 +46,6 @@ import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
 import org.jboss.ejb3.examples.chxx.transactions.entity.User;
 import org.jboss.ejb3.examples.chxx.transactions.impl.BankBean;
 import org.jboss.ejb3.examples.chxx.transactions.impl.PokerServiceConstants;
-import org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerBeanBase;
 import org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerLocalBusiness;
 import org.jboss.ejb3.examples.testsupport.dbquery.DbQueryBean;
 import org.jboss.ejb3.examples.testsupport.dbquery.DbQueryLocalBusiness;
@@ -188,11 +188,11 @@ public class TransactionalPokerGameIntegrationTest
    {
 
       // Init
-      final long alrubingerAccountId = DbInitializerBeanBase.ACCOUNT_ALRUBINGER_ID;
+      final long alrubingerAccountId = ExampleUserData.ACCOUNT_ALRUBINGER_ID;
       final long pokerAccountId = PokerServiceConstants.ACCOUNT_POKERGAME_ID;
 
       // Ensure there's the expected amounts in both the ALR and Poker accounts
-      final BigDecimal expectedinitialALR = DbInitializerLocalBusiness.INITIAL_ACCOUNT_BALANCE_ALR;
+      final BigDecimal expectedinitialALR = ExampleUserData.INITIAL_ACCOUNT_BALANCE_ALR;
       final BigDecimal expectedinitialPoker = PokerServiceConstants.INITIAL_ACCOUNT_BALANCE_POKERGAME;
       this.executeInTx(new CheckBalanceOfAccountTask(alrubingerAccountId, expectedinitialALR),
             new CheckBalanceOfAccountTask(pokerAccountId, expectedinitialPoker));
@@ -249,7 +249,7 @@ public class TransactionalPokerGameIntegrationTest
    public void sequenceOfBetsDoesntRollBackAll() throws Throwable
    {
       // Get the original balance for ALR; this is done outside a Tx
-      final BigDecimal originalBalance = bank.getBalance(DbInitializerLocalBusiness.ACCOUNT_ALRUBINGER_ID);
+      final BigDecimal originalBalance = bank.getBalance(ExampleUserData.ACCOUNT_ALRUBINGER_ID);
       log.info("Starting balance before playing poker: " + originalBalance);
 
       // Execute 11 bets enclosed in a new Tx, and ensure that the account transfers
@@ -271,7 +271,7 @@ public class TransactionalPokerGameIntegrationTest
       // Now we've ensured that from inside the calling Tx we saw the account balances 
       // were as expected.  But we rolled back that enclosing Tx, so ensure that the outcome
       // of the games was not ignored
-      final BigDecimal afterBetsBalance = bank.getBalance(DbInitializerLocalBusiness.ACCOUNT_ALRUBINGER_ID);
+      final BigDecimal afterBetsBalance = bank.getBalance(ExampleUserData.ACCOUNT_ALRUBINGER_ID);
       final int gameOutcomeCount = task.gameOutcomeCount;
       new AssertGameOutcome(originalBalance, afterBetsBalance, gameOutcomeCount, betAmount).call();
    }
@@ -349,14 +349,14 @@ public class TransactionalPokerGameIntegrationTest
       {
 
          // Find the starting balance
-         final long alrubingerAccountId = DbInitializerLocalBusiness.ACCOUNT_ALRUBINGER_ID;
+         final long alrubingerAccountId = ExampleUserData.ACCOUNT_ALRUBINGER_ID;
          final BigDecimal startingBalance = bank.getBalance(alrubingerAccountId);
 
          // Now run 11 bets
          for (int i = 0; i < 11; i++)
          {
             // Track whether we win or lose
-            final boolean win = pokerGame.bet(DbInitializerLocalBusiness.ACCOUNT_ALRUBINGER_ID, betAmount);
+            final boolean win = pokerGame.bet(ExampleUserData.ACCOUNT_ALRUBINGER_ID, betAmount);
             gameOutcomeCount += win ? 1 : -1;
          }
          log.info("Won " + gameOutcomeCount + " games at " + betAmount + "/game");
