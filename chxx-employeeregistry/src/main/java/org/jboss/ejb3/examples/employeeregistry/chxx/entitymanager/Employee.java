@@ -19,21 +19,22 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.testsupport.entity;
+package org.jboss.ejb3.examples.employeeregistry.chxx.entitymanager;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 
 /**
- * Base class for all entities with a manually-assigned ID
+ * Represents an Employee in the system.  Modeled as a simple
+ * value object with some additional EJB and JPA annotations.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
 @Entity
-@MappedSuperclass
-public abstract class IdentityBase
+// Mark that we're an Entity Bean, EJB's integration point
+// with Java Persistence
+public class Employee
 {
 
    //-------------------------------------------------------------------------------------||
@@ -41,10 +42,38 @@ public abstract class IdentityBase
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Primary key 
+    * Primary key of this entity 
     */
    @Id
+   // Mark that this field is the primary key
    private Long id;
+
+   /**
+    * Name of the employee
+    */
+   private String name;
+
+   //-------------------------------------------------------------------------------------||
+   // Constructor ------------------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * Default constructor, required by JPA
+    */
+   public Employee()
+   {
+
+   }
+
+   /**
+    * Convenience constructor
+    */
+   public Employee(final long id, final String name)
+   {
+      // Set
+      this.id = id;
+      this.name = name;
+   }
 
    //-------------------------------------------------------------------------------------||
    // Accessors / Mutators ---------------------------------------------------------------||
@@ -66,4 +95,29 @@ public abstract class IdentityBase
       this.id = id;
    }
 
+   /**
+    * @return the name
+    */
+   public String getName()
+   {
+      return name;
+   }
+
+   /**
+    * @param name the name to set
+    */
+   public void setName(final String name)
+   {
+      this.name = name;
+   }
+
+   /**
+    * {@inheritDoc}
+    * @see java.lang.Object#toString()
+    */
+   @Override
+   public String toString()
+   {
+      return Employee.class.getSimpleName() + " [id=" + id + ", name=" + name + "]";
+   }
 }

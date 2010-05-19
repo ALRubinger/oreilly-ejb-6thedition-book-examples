@@ -38,6 +38,15 @@ public interface TxWrappingLocalBusiness
    //-------------------------------------------------------------------------------------||
 
    /**
+    * Wraps the specified task in a new Transaction, returning the value
+    * 
+    * @param task
+    * @throws IllegalArgumentException If no task is specified
+    * @throws TaskExecutionException If an error occurred in invoking {@link Callable#call()} 
+    */
+   <T> T wrapInTx(Callable<T> task) throws IllegalArgumentException, TaskExecutionException;
+
+   /**
     * Wraps the specified tasks in a new Transaction
     * 
     * @param task

@@ -19,21 +19,23 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.testsupport.entity;
+package org.jboss.ejb3.examples.employeeregistry.chyy.mapping;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 
 /**
- * Base class for all entities with a manually-assigned ID
+ * Represents an Employee in the system.  The identity
+ * (primary key) is determined by embedded properties
+ * via the {@link EmbeddedEmployeePK}.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
 @Entity
-@MappedSuperclass
-public abstract class IdentityBase
+// Mark that we're an Entity Bean, EJB's integration point
+// with Java Persistence
+public class EmployeeWithEmbeddedPK
 {
 
    //-------------------------------------------------------------------------------------||
@@ -41,10 +43,22 @@ public abstract class IdentityBase
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Primary key 
+    * Last Name
     */
-   @Id
-   private Long id;
+   @EmbeddedId
+   private EmbeddedEmployeePK id;
+
+   //-------------------------------------------------------------------------------------||
+   // Constructor ------------------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * Default constructor, required by JPA
+    */
+   public EmployeeWithEmbeddedPK()
+   {
+
+   }
 
    //-------------------------------------------------------------------------------------||
    // Accessors / Mutators ---------------------------------------------------------------||
@@ -53,7 +67,7 @@ public abstract class IdentityBase
    /**
     * @return the id
     */
-   public Long getId()
+   public EmbeddedEmployeePK getId()
    {
       return id;
    }
@@ -61,9 +75,23 @@ public abstract class IdentityBase
    /**
     * @param id the id to set
     */
-   public void setId(final Long id)
+   public void setId(final EmbeddedEmployeePK id)
    {
       this.id = id;
+   }
+
+   //-------------------------------------------------------------------------------------||
+   // Overridden Implementations ---------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * {@inheritDoc}
+    * @see java.lang.Object#toString()
+    */
+   @Override
+   public String toString()
+   {
+      return EmployeeWithEmbeddedPK.class.getSimpleName() + " [id=" + id + "]";
    }
 
 }

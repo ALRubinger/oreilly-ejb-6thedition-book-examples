@@ -19,51 +19,17 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.testsupport.entity;
+package org.jboss.ejb3.examples.employeeregistry.chyy.mapping;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Enumerated;
 
 /**
- * Base class for all entities with a manually-assigned ID
+ * Types of employees in the system.  Used to show {@link Enumerated}
+ * in the entity {@link EmployeeWithProperties}.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-@Entity
-@MappedSuperclass
-public abstract class IdentityBase
-{
-
-   //-------------------------------------------------------------------------------------||
-   // Instance Members -------------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
-    * Primary key 
-    */
-   @Id
-   private Long id;
-
-   //-------------------------------------------------------------------------------------||
-   // Accessors / Mutators ---------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
-    * @return the id
-    */
-   public Long getId()
-   {
-      return id;
-   }
-
-   /**
-    * @param id the id to set
-    */
-   public void setId(final Long id)
-   {
-      this.id = id;
-   }
-
+public enum EmployeeType {
+   MANAGER, PEON;
 }

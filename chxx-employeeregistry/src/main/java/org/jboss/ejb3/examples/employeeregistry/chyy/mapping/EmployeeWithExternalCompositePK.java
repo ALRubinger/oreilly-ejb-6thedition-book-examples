@@ -19,14 +19,16 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.employeeregistry.entity;
+package org.jboss.ejb3.examples.employeeregistry.chyy.mapping;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 
 /**
- * Represents an Employee in the system.  Modeled as a simple
- * value object with some additional EJB and JPA annotations.
+ * Represents an Employee in the system.  The identity
+ * (primary key) is determined by composite properties
+ * defined by {@link ExternalEmployeePK}.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
@@ -34,7 +36,9 @@ import javax.persistence.Id;
 @Entity
 // Mark that we're an Entity Bean, EJB's integration point
 // with Java Persistence
-public class Employee
+@IdClass(ExternalEmployeePK.class)
+// Use a composite primary key using a custom PK class
+public class EmployeeWithExternalCompositePK
 {
 
    //-------------------------------------------------------------------------------------||
@@ -42,16 +46,16 @@ public class Employee
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Primary key of this entity 
+    * Last Name
     */
    @Id
-   // Mark that this field is the primary key
-   private Long id;
+   private String lastName;
 
    /**
-    * Name of the employee
+    * Social Security Number (United States Federal ID)
     */
-   private String name;
+   @Id
+   private Long ssn;
 
    //-------------------------------------------------------------------------------------||
    // Constructor ------------------------------------------------------------------------||
@@ -60,19 +64,9 @@ public class Employee
    /**
     * Default constructor, required by JPA
     */
-   public Employee()
+   public EmployeeWithExternalCompositePK()
    {
 
-   }
-
-   /**
-    * Convenience constructor
-    */
-   public Employee(final long id, final String name)
-   {
-      // Set
-      this.id = id;
-      this.name = name;
    }
 
    //-------------------------------------------------------------------------------------||
@@ -80,36 +74,40 @@ public class Employee
    //-------------------------------------------------------------------------------------||
 
    /**
-    * @return the id
+    * @return the lastName
     */
-   public Long getId()
+   public String getLastName()
    {
-      return id;
+      return lastName;
    }
 
    /**
-    * @param id the id to set
+    * @param lastName the lastName to set
     */
-   public void setId(final Long id)
+   public void setLastName(final String lastName)
    {
-      this.id = id;
+      this.lastName = lastName;
    }
 
    /**
-    * @return the name
+    * @return the ssn
     */
-   public String getName()
+   public Long getSsn()
    {
-      return name;
+      return ssn;
    }
 
    /**
-    * @param name the name to set
+    * @param ssn the ssn to set
     */
-   public void setName(final String name)
+   public void setSsn(final Long ssn)
    {
-      this.name = name;
+      this.ssn = ssn;
    }
+
+   //-------------------------------------------------------------------------------------||
+   // Overridden Implementations ---------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
 
    /**
     * {@inheritDoc}
@@ -118,6 +116,7 @@ public class Employee
    @Override
    public String toString()
    {
-      return "Employee [id=" + id + ", name=" + name + "]";
+      return EmployeeWithExternalCompositePK.class.getSimpleName() + " [lastName=" + lastName + ", ssn=" + ssn + "]";
    }
+
 }

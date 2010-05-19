@@ -61,17 +61,28 @@ public class TxWrappingBean implements TxWrappingLocalBusiness
       // Just delegate along to the tasks in order; now it's executed inside of a Tx
       for (final Callable<?> task : tasks)
       {
-         try
-         {
-            task.call();
-         }
-         // Every problem we encounter here becomes an ApplicationException
-         // to be unwrapped later by the caller (so the container doesn't wrap 
-         // in EJBException
-         catch (final Throwable e)
-         {
-            throw new TaskExecutionException(e);
-         }
+         this.wrapInTx(task);
+      }
+   }
+
+   /**
+    * {@inheritDoc}
+    * @see org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingLocalBusiness#wrapInTx(java.util.concurrent.Callable)
+    */
+   @Override
+   public <T> T wrapInTx(final Callable<T> task) throws IllegalArgumentException, TaskExecutionException
+   {
+      try
+      {
+         // Invoke
+         return task.call();
+      }
+      // Every problem we encounter here becomes an ApplicationException
+      // to be unwrapped later by the caller (so the container doesn't wrap 
+      // in EJBException
+      catch (final Throwable e)
+      {
+         throw new TaskExecutionException(e);
       }
    }
 }

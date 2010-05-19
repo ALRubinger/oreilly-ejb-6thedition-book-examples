@@ -21,20 +21,33 @@
  */
 package org.jboss.ejb3.examples.employeeregistry;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.persistence.EmbeddedId;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.IdClass;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.api.RunMode;
 import org.jboss.arquillian.api.RunModeType;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.ejb3.examples.employeeregistry.entity.Employee;
+import org.jboss.ejb3.examples.employeeregistry.chxx.entitymanager.Employee;
+import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmbeddedEmployeePK;
+import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmployeeType;
+import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmployeeWithEmbeddedPK;
+import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmployeeWithExternalCompositePK;
+import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmployeeWithMappedSuperClassId;
+import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmployeeWithProperties;
+import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.ExternalEmployeePK;
 import org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingBean;
 import org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingLocalBusiness;
+import org.jboss.ejb3.examples.testsupport.entity.IdentityBase;
 import org.jboss.ejb3.examples.testsupport.txwrap.TaskExecutionException;
 import org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingBean;
 import org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingLocalBusiness;
@@ -82,8 +95,9 @@ public class EmployeeIntegrationTest
    public static JavaArchive getDeployment()
    {
       final JavaArchive archive = ShrinkWrap.create("test.jar", JavaArchive.class).addPackages(true,
-            Employee.class.getPackage()).addManifestResource("persistence.xml").addPackages(false,
-            TxWrappingLocalBusiness.class.getPackage(), EntityManagerExposingBean.class.getPackage());
+            Employee.class.getPackage(), EmployeeWithMappedSuperClassId.class.getPackage()).addManifestResource(
+            "persistence.xml").addPackages(false, TxWrappingLocalBusiness.class.getPackage(),
+            EntityManagerExposingBean.class.getPackage());
       log.info(archive.toString(true));
       return archive;
    }
@@ -172,6 +186,12 @@ public class EmployeeIntegrationTest
                // JPA QL String to remove all Employees
                final EntityManager em = emHook.getEntityManager();
                em.createQuery("DELETE FROM " + Employee.class.getSimpleName() + " o").executeUpdate();
+               em.createQuery("DELETE FROM " + EmployeeWithMappedSuperClassId.class.getSimpleName() + " o")
+                     .executeUpdate();
+               em.createQuery("DELETE FROM " + EmployeeWithExternalCompositePK.class.getSimpleName() + " o");
+               em.createQuery("DELETE FROM " + EmployeeWithProperties.class.getSimpleName() + " o")
+
+               .executeUpdate();
                return null;
             }
 
@@ -371,5 +391,263 @@ public class EmployeeIntegrationTest
          throw tee.getCause();
       }
 
+   }
+
+   /**
+    * Shows usage of JPA autogeneration of primary keys, using 
+    * {@link EmployeeWithMappedSuperClassId} which inherits PK support from
+    * {@link IdentityBase#getId()}.
+    * @throws Throwable
+    */
+   @Test
+   public void autogenPrimaryKeyFromMappedSuperClass() throws Throwable
+   {
+      try
+      {
+         // Create a new Employee, and let JPA give us the PK value
+         final Long id = txWrapper.wrapInTx(new Callable<Long>()
+         {
+
+            @Override
+            public Long call() throws Exception
+            {
+               // Make a new Employee
+               final EmployeeWithMappedSuperClassId alrubinger = new EmployeeWithMappedSuperClassId(
+                     "Andrew Lee Rubinger");
+
+               // Ensure we have no ID now
+               Assert.assertNull("Primary key should not be set yet", alrubinger.getId());
+
+               // Persist
+               emHook.getEntityManager().persist(alrubinger);
+
+               // Now show that JPA gave us a primary key as generated
+               final Long id = alrubinger.getId();
+               Assert.assertNotNull("Persisting an entity with PK " + GeneratedValue.class.getName()
+                     + " should be created", id);
+               log.info("Persisted: " + alrubinger);
+
+               // Return
+               return id;
+            }
+
+         });
+
+         // Ensure we can look up this new entity by the PK we've been given
+         txWrapper.wrapInTx(new Callable<Void>()
+         {
+
+            @Override
+            public Void call() throws Exception
+            {
+               // Look up the Employee by the ID we just gave
+               final EmployeeWithMappedSuperClassId employee = emHook.getEntityManager().find(
+                     EmployeeWithMappedSuperClassId.class, id);
+
+               // Ensure found
+               Assert.assertNotNull("Employee should be able to be looked up by PK", employee);
+
+               // Return
+               return null;
+            }
+
+         });
+      }
+      catch (final TaskExecutionException tee)
+      {
+         // Unwrap
+         throw tee.getCause();
+      }
+   }
+
+   /**
+    * Shows usage of an entity which gets its identity via an 
+    * {@link IdClass} - {@link ExternalEmployeePK}.
+    * @throws Throwable
+    */
+   @Test
+   public void externalCompositePrimaryKey() throws Throwable
+   {
+      try
+      {
+         txWrapper.wrapInTx(new Callable<Void>()
+         {
+
+            @Override
+            public Void call() throws Exception
+            {
+               // Define the values to compose a primary key identity
+               final String lastName = "Rubinger";
+               final Long ssn = 100L; // Not real ;)
+
+               // Create a new Employee which uses a custom @IdClass
+               final EmployeeWithExternalCompositePK employee = new EmployeeWithExternalCompositePK();
+               employee.setLastName(lastName);
+               employee.setSsn(ssn);
+
+               // Persist
+               final EntityManager em = emHook.getEntityManager();
+               em.persist(employee);
+               log.info("Persisted: " + employee);
+
+               // Now look up using our custom composite PK value class
+               final ExternalEmployeePK pk = new ExternalEmployeePK();
+               pk.setLastName(lastName);
+               pk.setSsn(ssn);
+               final EmployeeWithExternalCompositePK roundtrip = em.find(EmployeeWithExternalCompositePK.class, pk);
+
+               // Ensure found
+               Assert.assertNotNull("Should have been able to look up record via a custom PK composite class",
+                     roundtrip);
+
+               // Return
+               return null;
+            }
+
+         });
+      }
+      catch (final TaskExecutionException tee)
+      {
+         // Unwrap
+         throw tee.getCause();
+      }
+   }
+
+   /**
+    * Shows usage of an entity which gets its identity via an 
+    * {@link EmbeddedId} - {@link EmployeeWithEmbeddedPK}
+    * @throws Throwable
+    */
+   @Test
+   public void embeddedCompositePrimaryKey() throws Throwable
+   {
+      try
+      {
+         txWrapper.wrapInTx(new Callable<Void>()
+         {
+
+            @Override
+            public Void call() throws Exception
+            {
+               // Define the values to compose a primary key identity
+               final String lastName = "Rubinger";
+               final Long ssn = 100L; // Not real ;)
+
+               // Create a new Employee which uses an Embedded PK Class
+               final EmployeeWithEmbeddedPK employee = new EmployeeWithEmbeddedPK();
+               final EmbeddedEmployeePK pk = new EmbeddedEmployeePK();
+               pk.setLastName(lastName);
+               pk.setSsn(ssn);
+               employee.setId(pk);
+
+               // Persist
+               final EntityManager em = emHook.getEntityManager();
+               em.persist(employee);
+               log.info("Persisted: " + employee);
+
+               // Now look up using our custom composite PK value class
+               final EmployeeWithEmbeddedPK roundtrip = em.find(EmployeeWithEmbeddedPK.class, pk);
+
+               // Ensure found
+               Assert
+                     .assertNotNull("Should have been able to look up record via a custom embedded PK class", roundtrip);
+
+               // Return
+               return null;
+            }
+
+         });
+      }
+      catch (final TaskExecutionException tee)
+      {
+         // Unwrap
+         throw tee.getCause();
+      }
+   }
+
+   /**
+    * Shows usage of an entity with a series of nonstandard
+    * mappings which require additional JPA metadata to show
+    * the ORM layer how things should be represented in the DB.
+    */
+   @Test
+   public void propertyMappings() throws Throwable
+   {
+      // Define the values for our employee
+      final byte[] image = new byte[]
+      {0x00};
+      final Date since = new Date(0L); // Employed since the epoch
+      final EmployeeType type = EmployeeType.PEON;
+      final String currentAssignment = "Learn JPA and EJB!";
+
+      try
+      {
+         final Long id = txWrapper.wrapInTx(new Callable<Long>()
+         {
+
+            @Override
+            public Long call() throws Exception
+            {
+
+               // Create a new Employee
+               final EmployeeWithProperties employee = new EmployeeWithProperties();
+               employee.setImage(image);
+               employee.setSince(since);
+               employee.setType(type);
+               employee.setCurrentAssignment(currentAssignment);
+
+               // Persist
+               final EntityManager em = emHook.getEntityManager();
+               em.persist(employee);
+               log.info("Persisted: " + employee);
+
+               // Get the ID, now that one's been assigned 
+               final Long id = employee.getId();
+
+               // Return
+               return id;
+            }
+
+         });
+
+         // Now execute in another Tx, to ensure we get a real DB load from the EM, 
+         // and not just a direct reference back to the object we persisted.
+         txWrapper.wrapInTx(new Callable<Void>()
+         {
+
+            @Override
+            public Void call() throws Exception
+            {
+               // Roundtrip lookup
+               final EmployeeWithProperties roundtrip = emHook.getEntityManager()
+                     .find(EmployeeWithProperties.class, id);
+               log.info("Roundtrip: " + roundtrip);
+
+               final Calendar suppliedSince = Calendar.getInstance();
+               suppliedSince.setTime(since);
+               final Calendar obtainedSince = Calendar.getInstance();
+               obtainedSince.setTime(roundtrip.getSince());
+
+               // Assert all values are as expected
+               Assert.assertEquals("Binary object was not mapped properly", image[0], roundtrip.getImage()[0]);
+               Assert.assertEquals("Temporal value was not mapped properly", suppliedSince.get(Calendar.YEAR),
+                     obtainedSince.get(Calendar.YEAR));
+               Assert.assertEquals("Temporal value was not mapped properly", suppliedSince.get(Calendar.MONTH),
+                     obtainedSince.get(Calendar.MONTH));
+               Assert.assertEquals("Temporal value was not mapped properly", suppliedSince.get(Calendar.DATE),
+                     obtainedSince.get(Calendar.DATE));
+               Assert.assertEquals("Enumerated value was not as expected", type, roundtrip.getType());
+               Assert.assertNull("Transient property should not have been persisted", roundtrip.getCurrentAssignment());
+
+               // Return
+               return null;
+            }
+         });
+      }
+      catch (final TaskExecutionException tee)
+      {
+         // Unwrap
+         throw tee.getCause();
+      }
    }
 }
