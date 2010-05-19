@@ -43,7 +43,7 @@ public class EmployeeWithEmbeddedPK
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Last Name
+    * Primary key, composite and embedded
     */
    @EmbeddedId
    private EmbeddedEmployeePK id;
