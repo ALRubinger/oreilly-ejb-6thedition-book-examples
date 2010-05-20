@@ -37,7 +37,14 @@ import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.api.RunMode;
 import org.jboss.arquillian.api.RunModeType;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.ejb3.examples.employeeregistry.chxx.entitymanager.Employee;
+import org.jboss.ejb3.examples.employeeregistry.chxx.entitymanager.SimpleEmployee;
+import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.Address;
+import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.Computer;
+import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.Customer;
+import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.Employee;
+import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.Phone;
+import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.Task;
+import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.Team;
 import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmbeddedEmployeePK;
 import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmployeeType;
 import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmployeeWithEmbeddedPK;
@@ -94,10 +101,10 @@ public class EmployeeIntegrationTest
    @Deployment
    public static JavaArchive getDeployment()
    {
-      final JavaArchive archive = ShrinkWrap.create("test.jar", JavaArchive.class).addPackages(true,
-            Employee.class.getPackage(), EmployeeWithMappedSuperClassId.class.getPackage()).addManifestResource(
-            "persistence.xml").addPackages(false, TxWrappingLocalBusiness.class.getPackage(),
-            EntityManagerExposingBean.class.getPackage());
+      final JavaArchive archive = ShrinkWrap.create("entities.jar", JavaArchive.class).addPackages(false,
+            SimpleEmployee.class.getPackage(), EmployeeWithMappedSuperClassId.class.getPackage(),
+            Employee.class.getPackage(), TxWrappingLocalBusiness.class.getPackage(),
+            EntityManagerExposingBean.class.getPackage()).addManifestResource("persistence.xml");
       log.info(archive.toString(true));
       return archive;
    }
@@ -183,15 +190,20 @@ public class EmployeeIntegrationTest
             @Override
             public Void call() throws Exception
             {
-               // JPA QL String to remove all Employees
-               final EntityManager em = emHook.getEntityManager();
-               em.createQuery("DELETE FROM " + Employee.class.getSimpleName() + " o").executeUpdate();
-               em.createQuery("DELETE FROM " + EmployeeWithMappedSuperClassId.class.getSimpleName() + " o")
-                     .executeUpdate();
-               em.createQuery("DELETE FROM " + EmployeeWithExternalCompositePK.class.getSimpleName() + " o");
-               em.createQuery("DELETE FROM " + EmployeeWithProperties.class.getSimpleName() + " o")
 
-               .executeUpdate();
+               final EntityManager em = emHook.getEntityManager();
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(SimpleEmployee.class, em);
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(EmployeeWithMappedSuperClassId.class, em);
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(EmployeeWithExternalCompositePK.class, em);
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(EmployeeWithProperties.class, em);
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(Address.class, em);
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(Phone.class, em);
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(Computer.class, em);
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(Customer.class, em);
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(Task.class, em);
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(Team.class, em);
+               EmployeeIntegrationTest.this.deleteAllEntitiesOfType(Employee.class, em);
+
                return null;
             }
 
@@ -228,17 +240,17 @@ public class EmployeeIntegrationTest
             public Void call() throws Exception
             {
                // Create a few plain instances
-               final Employee josh = new Employee(ID_DAVE, NAME_DAVE);
-               final Employee dave = new Employee(ID_JOSH, NAME_JOSH);
-               final Employee rick = new Employee(ID_RICK, NAME_RICK);
+               final SimpleEmployee josh = new SimpleEmployee(ID_DAVE, NAME_DAVE);
+               final SimpleEmployee dave = new SimpleEmployee(ID_JOSH, NAME_JOSH);
+               final SimpleEmployee rick = new SimpleEmployee(ID_RICK, NAME_RICK);
 
                // Get the EntityManager from our test hook
                final EntityManager em = emHook.getEntityManager();
 
                // Now first check if any employees are found in the underlying persistent
                // storage (shouldn't be)
-               Assert
-                     .assertNull("Employees should not have been added to the EM yet", em.find(Employee.class, ID_DAVE));
+               Assert.assertNull("Employees should not have been added to the EM yet", em.find(SimpleEmployee.class,
+                     ID_DAVE));
 
                // Check if the object is managed (shouldn't be) 
                Assert.assertFalse("Employee should not be managed yet", em.contains(josh));
@@ -268,7 +280,7 @@ public class EmployeeIntegrationTest
                final EntityManager em = emHook.getEntityManager();
 
                // Look up "Dave" by ID from the EM
-               final Employee dave = em.find(Employee.class, ID_DAVE);
+               final SimpleEmployee dave = em.find(SimpleEmployee.class, ID_DAVE);
 
                // Change Dave's name
                dave.setName(NAME_DAVE_NEW);
@@ -291,7 +303,7 @@ public class EmployeeIntegrationTest
                final EntityManager em = emHook.getEntityManager();
 
                // Make a new "Dave" as a detached object with same primary key, but a different name
-               final Employee dave = new Employee(ID_DAVE, NAME_DAVE_NEW);
+               final SimpleEmployee dave = new SimpleEmployee(ID_DAVE, NAME_DAVE_NEW);
 
                // Merge these changes on the detached instance with the DB
                em.merge(dave);
@@ -326,7 +338,7 @@ public class EmployeeIntegrationTest
                final EntityManager em = emHook.getEntityManager();
 
                // Make a new "Dave" instance
-               final Employee dave = em.find(Employee.class, ID_DAVE);
+               final SimpleEmployee dave = em.find(SimpleEmployee.class, ID_DAVE);
                log.info("Lookup of Dave after we changed his name on a detached instance: " + dave);
 
                // Ensure that the last name change we gave to Dave did not take affect
@@ -350,7 +362,7 @@ public class EmployeeIntegrationTest
                final EntityManager em = emHook.getEntityManager();
 
                // Look up Rick
-               final Employee rick = em.find(Employee.class, ID_RICK);
+               final SimpleEmployee rick = em.find(SimpleEmployee.class, ID_RICK);
 
                // Remove
                em.remove(rick);
@@ -373,7 +385,7 @@ public class EmployeeIntegrationTest
                final EntityManager em = emHook.getEntityManager();
 
                // Look up Rick
-               final Employee rick = em.find(Employee.class, ID_RICK);
+               final SimpleEmployee rick = em.find(SimpleEmployee.class, ID_RICK);
 
                // Assert
                Assert.assertNull("Rick should have been removed from the DB", rick);
@@ -649,5 +661,23 @@ public class EmployeeIntegrationTest
          // Unwrap
          throw tee.getCause();
       }
+   }
+
+   //-------------------------------------------------------------------------------------||
+   // Internal Helper Methods -----------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * Issues a JPA QL Update to remove all entities of the specified type
+    * @param type
+    * @param em
+    */
+   private void deleteAllEntitiesOfType(final Class<?> type, final EntityManager em)
+   {
+      assert em != null : EntityManager.class.getSimpleName() + " must be specified";
+      assert type != null : "type to be removed must be specified";
+      // JPA QL String to remove all of the specified type
+      log.info("Removed: " + em.createQuery("DELETE FROM " + type.getSimpleName() + " o").executeUpdate()
+            + " entities of type " + type);
    }
 }

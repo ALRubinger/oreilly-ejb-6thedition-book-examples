@@ -19,14 +19,17 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.employeeregistry.chxx.entitymanager;
+package org.jboss.ejb3.examples.employeeregistry.chxx.relationships;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import org.jboss.ejb3.examples.testsupport.entity.AutogenIdentityBase;
 
 /**
- * Represents an Employee in the system.  Modeled as a simple
- * value object with some additional EJB and JPA annotations.
+ * Represents a Phone number.  An {@link Employee}
+ * may have many, but the relationship is unidirectional.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
@@ -34,7 +37,7 @@ import javax.persistence.Id;
 @Entity
 // Mark that we're an Entity Bean, EJB's integration point
 // with Java Persistence
-public class Employee
+public class Phone extends AutogenIdentityBase
 {
 
    //-------------------------------------------------------------------------------------||
@@ -42,74 +45,55 @@ public class Employee
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Primary key of this entity 
+    * Phone number
     */
-   @Id
-   // Mark that this field is the primary key
-   private Long id;
+   private String number;
 
    /**
-    * Name of the employee
+    * Type
     */
-   private String name;
-
-   //-------------------------------------------------------------------------------------||
-   // Constructor ------------------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
-    * Default constructor, required by JPA
-    */
-   public Employee()
-   {
-
-   }
-
-   /**
-    * Convenience constructor
-    */
-   public Employee(final long id, final String name)
-   {
-      // Set
-      this.id = id;
-      this.name = name;
-   }
+   @Enumerated(EnumType.STRING)
+   private PhoneType type;
 
    //-------------------------------------------------------------------------------------||
    // Accessors / Mutators ---------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * @return the id
+    * @return the number
     */
-   public Long getId()
+   public String getNumber()
    {
-      return id;
+      return number;
    }
 
    /**
-    * @param id the id to set
+    * @param number the number to set
     */
-   public void setId(final Long id)
+   public void setNumber(String number)
    {
-      this.id = id;
+      this.number = number;
    }
 
    /**
-    * @return the name
+    * @return the type
     */
-   public String getName()
+   public PhoneType getType()
    {
-      return name;
+      return type;
    }
 
    /**
-    * @param name the name to set
+    * @param type the type to set
     */
-   public void setName(final String name)
+   public void setType(PhoneType type)
    {
-      this.name = name;
+      this.type = type;
    }
+
+   //-------------------------------------------------------------------------------------||
+   // Required Implementations -----------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
 
    /**
     * {@inheritDoc}
@@ -118,6 +102,7 @@ public class Employee
    @Override
    public String toString()
    {
-      return Employee.class.getSimpleName() + " [id=" + id + ", name=" + name + "]";
+      return Phone.class.getSimpleName() + " [number=" + number + ", type=" + type + "]";
    }
+
 }
