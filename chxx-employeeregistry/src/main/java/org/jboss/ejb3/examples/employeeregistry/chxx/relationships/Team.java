@@ -67,6 +67,16 @@ public class Team extends AutogenIdentityBase
       members = new ArrayList<Employee>();
    }
 
+   /**
+    * Convenience constructor
+    * @param name
+    */
+   public Team(final String name)
+   {
+      this();
+      this.name = name;
+   }
+
    //-------------------------------------------------------------------------------------||
    // Accessors / Mutators ---------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
@@ -114,6 +124,6 @@ public class Team extends AutogenIdentityBase
    @Override
    public String toString()
    {
-      return Team.class.getSimpleName() + " [name=" + name + "]";
+      return Team.class.getSimpleName() + " [members=" + members + ", name=" + name + ", getId()=" + getId() + "]";
    }
 }

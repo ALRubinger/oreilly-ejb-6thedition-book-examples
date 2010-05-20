@@ -102,7 +102,7 @@ public class Phone extends AutogenIdentityBase
    @Override
    public String toString()
    {
-      return Phone.class.getSimpleName() + " [number=" + number + ", type=" + type + "]";
+      return Phone.class.getSimpleName() + " [number=" + number + ", type=" + type + ", getId()=" + getId() + "]";
    }
 
 }

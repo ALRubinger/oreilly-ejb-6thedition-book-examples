@@ -126,6 +126,7 @@ public class Task extends AutogenIdentityBase
    @Override
    public String toString()
    {
-      return Task.class.getSimpleName() + " [description=" + description + "]";
+      return Task.class.getSimpleName() + " [description=" + description + ", owners=" + owners + ", getId()="
+            + getId() + "]";
    }
 }

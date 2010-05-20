@@ -24,6 +24,7 @@ package org.jboss.ejb3.examples.employeeregistry.chxx.relationships;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -52,6 +53,9 @@ public class Employee extends AutogenIdentityBase
    /**
     * Name
     */
+   @Column(unique = true)
+   // No two employees are to have the same name; not exactly
+   // a real-world restriction, but shows usage. :)
    private String name;
 
    /**
@@ -77,7 +81,7 @@ public class Employee extends AutogenIdentityBase
    /**
     * {@link Employee}s reporting to this {@link Employee}
     */
-   @OneToMany(mappedBy = "peons")
+   @OneToMany(mappedBy = "manager")
    private Collection<Employee> peons;
 
    /**
@@ -237,14 +241,13 @@ public class Employee extends AutogenIdentityBase
    // Overridden Implementations ---------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
-   /**
-    * {@inheritDoc}
+   /* (non-Javadoc)
     * @see java.lang.Object#toString()
     */
    @Override
    public String toString()
    {
-      return Employee.class.getSimpleName() + " [name=" + name + "]";
+      return Employee.class.getSimpleName() + " [name=" + name + ", getId()=" + getId() + "]";
    }
 
 }

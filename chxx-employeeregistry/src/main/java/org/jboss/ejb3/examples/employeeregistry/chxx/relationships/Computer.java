@@ -129,7 +129,8 @@ public class Computer extends AutogenIdentityBase
    @Override
    public String toString()
    {
-      return Computer.class.getSimpleName() + " [make=" + make + ", model=" + model + "]";
+      return Computer.class.getSimpleName() + " [make=" + make + ", model=" + model + ", owner=" + owner + ", getId()="
+            + getId() + "]";
    }
 
 }

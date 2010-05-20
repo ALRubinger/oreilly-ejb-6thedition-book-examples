@@ -150,7 +150,7 @@ public class Address extends AutogenIdentityBase
    @Override
    public String toString()
    {
-      return Address.class.getSimpleName() + " [city=" + city + ", state=" + state + ", street=" + street + "]";
+      return Address.class.getSimpleName() + " [city=" + city + ", state=" + state + ", street=" + street
+            + ", getId()=" + getId() + "]";
    }
-
 }

@@ -115,14 +115,13 @@ public class Customer extends AutogenIdentityBase
    // Overridden Implementations ---------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
-   /**
-    * {@inheritDoc}
+   /* (non-Javadoc)
     * @see java.lang.Object#toString()
     */
    @Override
    public String toString()
    {
-      return Customer.class.getSimpleName() + " [name=" + name + "]";
+      return Customer.class.getSimpleName() + " [name=" + name + ", getId()=" + getId() + "]";
    }
 
 }
