@@ -26,7 +26,7 @@
     <version.org.jboss.javaee_jboss-jms-api>1.1.0.GA</version.org.jboss.javaee_jboss-jms-api>
     <version.org.jboss.logging_jboss.logging.log4j>2.0.6.GA</version.org.jboss.logging_jboss.logging.log4j>
     <version.org.jboss.logging_jboss.logging.spi>2.0.5.GA</version.org.jboss.logging_jboss.logging.spi>
-    <version.org.jboss.arquillian>1.0.0-SNAPSHOT</version.org.jboss.arquillian>
+    <version.org.jboss.arquillian>1.0.0.Alpha2</version.org.jboss.arquillian>
     <version.org.glassfish>3.0.1-b18</version.org.glassfish>
     <version.org.apache.openejb>3.1.2</version.org.apache.openejb>
     <version.org.jboss.spec.javax.ejb>1.0.0.Beta2</version.org.jboss.spec.javax.ejb>
