@@ -28,10 +28,6 @@ import javax.interceptor.InvocationContext;
 
 import junit.framework.TestCase;
 
-import org.jboss.ejb3.examples.chxx.tuner.Channel2AccessPolicy;
-import org.jboss.ejb3.examples.chxx.tuner.Channel2ClosedException;
-import org.jboss.ejb3.examples.chxx.tuner.Channel2Restrictor;
-import org.jboss.ejb3.examples.chxx.tuner.TunerLocalBusiness;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -105,6 +105,17 @@
       <groupId>org.jboss.arquillian</groupId>
       <artifactId>arquillian-junit</artifactId>
     </dependency>
+    
+    <dependency>
+      <groupId>org.apache.openejb</groupId>
+      <artifactId>openejb-core</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
 

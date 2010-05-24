@@ -35,7 +35,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.jboss.arquillian.api.Deployment;
-import org.jboss.arquillian.api.RunMode;
+import org.jboss.arquillian.api.Run;
 import org.jboss.arquillian.api.RunModeType;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdate;
@@ -57,7 +57,7 @@ import twitter4j.Twitter;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-@RunMode(RunModeType.LOCAL)
+@Run(RunModeType.AS_CLIENT)
 public class StatusUpdateIntegrationTest extends StatusUpdateTestBase
 {
 

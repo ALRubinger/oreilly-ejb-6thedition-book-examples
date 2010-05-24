@@ -203,7 +203,7 @@ public class CachingInterceptorUnitTestCase
          }
 
          @Override
-         public Class getInvokedBusinessInterface() throws IllegalStateException
+         public Class<?> getInvokedBusinessInterface() throws IllegalStateException
          {
             throw UNSUPPORTED;
          }

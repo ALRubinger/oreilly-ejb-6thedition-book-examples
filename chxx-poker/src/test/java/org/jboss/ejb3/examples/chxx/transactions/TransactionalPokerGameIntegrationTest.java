@@ -32,7 +32,7 @@ import javax.persistence.EntityManager;
 import junit.framework.Assert;
 
 import org.jboss.arquillian.api.Deployment;
-import org.jboss.arquillian.api.RunMode;
+import org.jboss.arquillian.api.Run;
 import org.jboss.arquillian.api.RunModeType;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.ejb3.examples.chxx.transactions.api.BankLocalBusiness;
@@ -68,7 +68,7 @@ import org.junit.runner.RunWith;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-@RunMode(RunModeType.LOCAL)
+@Run(RunModeType.AS_CLIENT)
 public class TransactionalPokerGameIntegrationTest
 {
 

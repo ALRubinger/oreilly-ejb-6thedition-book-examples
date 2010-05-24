@@ -146,4 +146,12 @@ public class CachingAuditor
       // Copy on export
       return Collections.unmodifiableList(invocations);
    }
+
+   /**
+    * Test-only hook to clear the invocations
+    */
+   static void clearInTesting()
+   {
+      invocations.clear();
+   }
 }
