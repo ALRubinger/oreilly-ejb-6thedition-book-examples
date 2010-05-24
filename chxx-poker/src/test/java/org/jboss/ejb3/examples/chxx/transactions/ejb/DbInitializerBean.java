@@ -31,7 +31,7 @@ import javax.ejb.TransactionManagementType;
 
 import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
 import org.jboss.ejb3.examples.chxx.transactions.entity.User;
-import org.jboss.ejb3.examples.chxx.transactions.impl.PokerServiceConstants;
+import org.jboss.ejb3.examples.chxx.transactions.impl.BlackjackServiceConstants;
 import org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerBeanBase;
 import org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerLocalBusiness;
 
@@ -106,20 +106,20 @@ public class DbInitializerBean extends DbInitializerBeanBase
       alrubinger.setAccount(alrubingerAccount);
 
       // Poker Game Service
-      final User pokerGameService = new User();
-      pokerGameService.setId(PokerServiceConstants.USER_POKERGAME_ID);
-      pokerGameService.setName(PokerServiceConstants.USER_POKERGAME_NAME);
+      final User blackjackGameService = new User();
+      blackjackGameService.setId(BlackjackServiceConstants.USER_BLACKJACKGAME_ID);
+      blackjackGameService.setName(BlackjackServiceConstants.USER_BLACKJACKGAME_NAME);
       final Account pokerGameAccount = new Account();
-      pokerGameAccount.deposit(PokerServiceConstants.INITIAL_ACCOUNT_BALANCE_POKERGAME);
-      pokerGameAccount.setOwner(pokerGameService);
-      pokerGameAccount.setId(PokerServiceConstants.ACCOUNT_POKERGAME_ID);
-      pokerGameService.setAccount(pokerGameAccount);
+      pokerGameAccount.deposit(BlackjackServiceConstants.INITIAL_ACCOUNT_BALANCE_BLACKJACKGAME);
+      pokerGameAccount.setOwner(blackjackGameService);
+      pokerGameAccount.setId(BlackjackServiceConstants.ACCOUNT_BLACKJACKGAME_ID);
+      blackjackGameService.setAccount(pokerGameAccount);
 
       // Persist
       em.persist(alrubinger);
       log.info("Created: " + alrubinger);
-      em.persist(pokerGameService);
-      log.info("Created: " + pokerGameService);
+      em.persist(blackjackGameService);
+      log.info("Created: " + blackjackGameService);
 
    }
 }

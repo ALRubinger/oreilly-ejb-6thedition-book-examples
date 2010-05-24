@@ -25,22 +25,22 @@ import java.math.BigDecimal;
 
 /**
  * Constants used by the implementation of the 
- * {@link PokerGameBean}
+ * {@link BlackjackGameBean}
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface PokerServiceConstants
+public interface BlackjackServiceConstants
 {
    //-------------------------------------------------------------------------------------||
    // Constants --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
-   long USER_POKERGAME_ID = 1L;
+   long USER_BLACKJACKGAME_ID = 1L;
 
-   String USER_POKERGAME_NAME = "The Poker Game System";
+   String USER_BLACKJACKGAME_NAME = "The Blackjack Game System";
 
-   long ACCOUNT_POKERGAME_ID = 1L;
+   long ACCOUNT_BLACKJACKGAME_ID = 1L;
 
-   BigDecimal INITIAL_ACCOUNT_BALANCE_POKERGAME = new BigDecimal(10000);
+   BigDecimal INITIAL_ACCOUNT_BALANCE_BLACKJACKGAME = new BigDecimal(10000);
 }

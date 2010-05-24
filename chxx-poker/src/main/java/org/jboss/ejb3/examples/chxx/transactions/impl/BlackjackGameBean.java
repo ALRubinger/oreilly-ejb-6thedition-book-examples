@@ -34,13 +34,13 @@ import javax.persistence.PersistenceContext;
 import org.jboss.ejb3.annotation.LocalBinding;
 import org.jboss.ejb3.examples.chxx.transactions.api.BankLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.api.InsufficientBalanceException;
-import org.jboss.ejb3.examples.chxx.transactions.api.PokerGameLocalBusiness;
+import org.jboss.ejb3.examples.chxx.transactions.api.BlackjackGameLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
 import org.jboss.ejb3.examples.chxx.transactions.entity.User;
 
 /**
  * Implementation of a service capable of placing single 
- * bets upon a poker game.  Though the gameplay itself is not
+ * bets upon a blackjack game.  Though the gameplay itself is not
  * modeled, its inputs and outputs are done transactionally.
  * Each game is to take place in its own Tx, suspending
  * an existing Tx if one is in play.  This is to ensure
@@ -52,12 +52,12 @@ import org.jboss.ejb3.examples.chxx.transactions.entity.User;
  * @version $Revision: $
  */
 @Stateless
-@Local(PokerGameLocalBusiness.class)
-@LocalBinding(jndiBinding = PokerGameLocalBusiness.JNDI_NAME)
+@Local(BlackjackGameLocalBusiness.class)
+@LocalBinding(jndiBinding = BlackjackGameLocalBusiness.JNDI_NAME)
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 // Each game must be in a new Tx, suspending the existing enclosing Tx if necessary;
 // At the class-level, this annotation now applied to all methods
-public class PokerGameBean implements PokerGameLocalBusiness
+public class BlackjackGameBean implements BlackjackGameLocalBusiness
 {
 
    //-------------------------------------------------------------------------------------||
@@ -90,7 +90,7 @@ public class PokerGameBean implements PokerGameLocalBusiness
    // Required Implementations -----------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
    /**
-    * @see org.jboss.ejb3.examples.chxx.transactions.api.PokerGameLocalBusiness#bet(long, java.math.BigDecimal)
+    * @see org.jboss.ejb3.examples.chxx.transactions.api.BlackjackGameLocalBusiness#bet(long, java.math.BigDecimal)
     */
    @Override
    public boolean bet(final long userId, final BigDecimal amount) throws IllegalArgumentException,
@@ -123,16 +123,16 @@ public class PokerGameBean implements PokerGameLocalBusiness
       final boolean win = Math.random() > 0.5;
 
       // Get the Poker Service account (assume we always have enough to back our bet, these are just tests :))
-      final Account pokerServiceAccount = em.find(Account.class, PokerServiceConstants.ACCOUNT_POKERGAME_ID);
+      final Account blackjackServiceAccount = em.find(Account.class, BlackjackServiceConstants.ACCOUNT_BLACKJACKGAME_ID);
 
       // Transfer the money based upon the outcome
       if (win)
       {
-         bank.transfer(pokerServiceAccount, userAccount, amount);
+         bank.transfer(blackjackServiceAccount, userAccount, amount);
       }
       else
       {
-         bank.transfer(userAccount, pokerServiceAccount, amount);
+         bank.transfer(userAccount, blackjackServiceAccount, amount);
       }
 
       // Return the outcome

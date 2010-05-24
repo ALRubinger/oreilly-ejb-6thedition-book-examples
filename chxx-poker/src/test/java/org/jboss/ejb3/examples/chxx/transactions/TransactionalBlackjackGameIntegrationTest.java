@@ -36,13 +36,13 @@ import org.jboss.arquillian.api.Run;
 import org.jboss.arquillian.api.RunModeType;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.ejb3.examples.chxx.transactions.api.BankLocalBusiness;
-import org.jboss.ejb3.examples.chxx.transactions.api.PokerGameLocalBusiness;
+import org.jboss.ejb3.examples.chxx.transactions.api.BlackjackGameLocalBusiness;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.DbInitializerBean;
 import org.jboss.ejb3.examples.chxx.transactions.ejb.ExampleUserData;
 import org.jboss.ejb3.examples.chxx.transactions.entity.Account;
 import org.jboss.ejb3.examples.chxx.transactions.entity.User;
 import org.jboss.ejb3.examples.chxx.transactions.impl.BankBean;
-import org.jboss.ejb3.examples.chxx.transactions.impl.PokerServiceConstants;
+import org.jboss.ejb3.examples.chxx.transactions.impl.BlackjackServiceConstants;
 import org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerLocalBusiness;
 import org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingBean;
 import org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingLocalBusiness;
@@ -60,7 +60,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Test cases to ensure that the Poker Game
+ * Test cases to ensure that the Blackjack Game
  * is respecting transactional boundaries at the appropriate
  * granularity.
  *
@@ -69,7 +69,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @Run(RunModeType.AS_CLIENT)
-public class TransactionalPokerGameIntegrationTest
+public class TransactionalBlackjackGameIntegrationTest
 {
 
    //-------------------------------------------------------------------------------------||
@@ -79,7 +79,7 @@ public class TransactionalPokerGameIntegrationTest
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(TransactionalPokerGameIntegrationTest.class.getName());
+   private static final Logger log = Logger.getLogger(TransactionalBlackjackGameIntegrationTest.class.getName());
 
    /**
     * Naming Context
@@ -133,10 +133,10 @@ public class TransactionalPokerGameIntegrationTest
    private BankLocalBusiness bank;
 
    /**
-    * Poker Game EJB Proxy
+    * Blackjack Game EJB Proxy
     */
    // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
-   private PokerGameLocalBusiness pokerGame;
+   private BlackjackGameLocalBusiness blackjackGame;
 
    //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
@@ -167,7 +167,7 @@ public class TransactionalPokerGameIntegrationTest
       emHook = (EntityManagerExposingLocalBusiness) jndiContext.lookup(EntityManagerExposingBean.class.getSimpleName()
             + "/local");
       bank = (BankLocalBusiness) jndiContext.lookup(BankLocalBusiness.JNDI_NAME);
-      pokerGame = (PokerGameLocalBusiness) jndiContext.lookup(PokerGameLocalBusiness.JNDI_NAME);
+      blackjackGame = (BlackjackGameLocalBusiness) jndiContext.lookup(BlackjackGameLocalBusiness.JNDI_NAME);
    }
 
    /**
@@ -194,21 +194,21 @@ public class TransactionalPokerGameIntegrationTest
 
       // Init
       final long alrubingerAccountId = ExampleUserData.ACCOUNT_ALRUBINGER_ID;
-      final long pokerAccountId = PokerServiceConstants.ACCOUNT_POKERGAME_ID;
+      final long blackjackAccountId = BlackjackServiceConstants.ACCOUNT_BLACKJACKGAME_ID;
 
-      // Ensure there's the expected amounts in both the ALR and Poker accounts
+      // Ensure there's the expected amounts in both the ALR and Blackjack accounts
       final BigDecimal expectedinitialALR = ExampleUserData.INITIAL_ACCOUNT_BALANCE_ALR;
-      final BigDecimal expectedinitialPoker = PokerServiceConstants.INITIAL_ACCOUNT_BALANCE_POKERGAME;
+      final BigDecimal expectedinitialBlackjack = BlackjackServiceConstants.INITIAL_ACCOUNT_BALANCE_BLACKJACKGAME;
       this.executeInTx(new CheckBalanceOfAccountTask(alrubingerAccountId, expectedinitialALR),
-            new CheckBalanceOfAccountTask(pokerAccountId, expectedinitialPoker));
+            new CheckBalanceOfAccountTask(blackjackAccountId, expectedinitialBlackjack));
 
-      // Transfer $100 from ALR to Poker
+      // Transfer $100 from ALR to Blackjack
       final BigDecimal oneHundred = new BigDecimal(100);
-      bank.transfer(alrubingerAccountId, pokerAccountId, oneHundred);
+      bank.transfer(alrubingerAccountId, blackjackAccountId, oneHundred);
 
-      // Ensure there's $100 less in the ALR account, and $100 more in the poker account
+      // Ensure there's $100 less in the ALR account, and $100 more in the blackjack account
       this.executeInTx(new CheckBalanceOfAccountTask(alrubingerAccountId, expectedinitialALR.subtract(oneHundred)),
-            new CheckBalanceOfAccountTask(pokerAccountId, expectedinitialPoker.add(oneHundred)));
+            new CheckBalanceOfAccountTask(blackjackAccountId, expectedinitialBlackjack.add(oneHundred)));
 
       // Now make a transfer, check it succeeded within the context of a Transaction, then 
       // intentionally throw an exception.  The Tx should complete as rolled back, 
@@ -219,14 +219,14 @@ public class TransactionalPokerGameIntegrationTest
          @Override
          public Void call() throws Exception
          {
-            bank.transfer(alrubingerAccountId, pokerAccountId, oneHundred);
+            bank.transfer(alrubingerAccountId, blackjackAccountId, oneHundred);
             return null;
          }
       };
       try
       {
          this.executeInTx(transferTask, new CheckBalanceOfAccountTask(alrubingerAccountId, expectedinitialALR.subtract(
-               oneHundred).subtract(oneHundred)), new CheckBalanceOfAccountTask(pokerAccountId, expectedinitialPoker
+               oneHundred).subtract(oneHundred)), new CheckBalanceOfAccountTask(blackjackAccountId, expectedinitialBlackjack
                .add(oneHundred).add(oneHundred)), ForcedTestExceptionTask.INSTANCE);
       }
       // Expected
@@ -241,7 +241,7 @@ public class TransactionalPokerGameIntegrationTest
       // exception before committed, ensure the Tx rolled back and the transfer was reverted from the 
       // perspective of everyone outside the Tx.
       this.executeInTx(new CheckBalanceOfAccountTask(alrubingerAccountId, expectedinitialALR.subtract(oneHundred)),
-            new CheckBalanceOfAccountTask(pokerAccountId, expectedinitialPoker.add(oneHundred)));
+            new CheckBalanceOfAccountTask(blackjackAccountId, expectedinitialBlackjack.add(oneHundred)));
    }
 
    /**
@@ -255,7 +255,7 @@ public class TransactionalPokerGameIntegrationTest
    {
       // Get the original balance for ALR; this is done outside a Tx
       final BigDecimal originalBalance = bank.getBalance(ExampleUserData.ACCOUNT_ALRUBINGER_ID);
-      log.info("Starting balance before playing poker: " + originalBalance);
+      log.info("Starting balance before playing blackjack: " + originalBalance);
 
       // Execute 11 bets enclosed in a new Tx, and ensure that the account transfers
       // took place as expected.  Then throw an exception to rollback the parent Tx.
@@ -361,7 +361,7 @@ public class TransactionalPokerGameIntegrationTest
          for (int i = 0; i < 11; i++)
          {
             // Track whether we win or lose
-            final boolean win = pokerGame.bet(ExampleUserData.ACCOUNT_ALRUBINGER_ID, betAmount);
+            final boolean win = blackjackGame.bet(ExampleUserData.ACCOUNT_ALRUBINGER_ID, betAmount);
             gameOutcomeCount += win ? 1 : -1;
          }
          log.info("Won " + gameOutcomeCount + " games at " + betAmount + "/game");
@@ -383,7 +383,7 @@ public class TransactionalPokerGameIntegrationTest
    /**
     * A task that checks that the account balance of an {@link Account}
     * with specified ID equals a specified expected value.  Typically to be run 
-    * inside of a Tx via {@link TransactionalPokerGameIntegrationTest#executeInTx(Callable...)}.
+    * inside of a Tx via {@link TransactionalBlackjackGameIntegrationTest#executeInTx(Callable...)}.
     *
     * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
     * @version $Revision: $

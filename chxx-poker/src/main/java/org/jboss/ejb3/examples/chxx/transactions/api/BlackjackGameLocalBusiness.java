@@ -27,13 +27,13 @@ import org.jboss.ejb3.examples.chxx.transactions.entity.User;
 
 /**
  * Contract of a service capable of simulating
- * a single game of poker.  The actual gameplay is not modeled,
+ * a single game of blackjack.  The actual gameplay is not modeled,
  * only the inputs and outputs of a single trial. 
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public interface PokerGameLocalBusiness
+public interface BlackjackGameLocalBusiness
 {
    //-------------------------------------------------------------------------------------||
    // Constants --------------------------------------------------------------------------||
@@ -50,9 +50,9 @@ public interface PokerGameLocalBusiness
 
    /**
     * Places a single bet, returning if the bet won or lost.  If the result 
-    * is a win, the amount specified will be transferred from the Poker Service
+    * is a win, the amount specified will be transferred from the Blackjack Service
     * account to {@link User#getAccount()}, else it will be deducted from the user account
-    * and placed into the Poker Service account.
+    * and placed into the Blackjack Service account.
     *   
     * @return Whether the bet won or lost
     * @param userId The ID of the user placing the bet
