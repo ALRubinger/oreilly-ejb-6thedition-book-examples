@@ -13,8 +13,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Artifact Information -->
-  <artifactId>jboss-ejb3-examples-chxx-pokergame</artifactId>
-  <name>JBoss EJB 3.x Examples - Chapter XX: Transactional Poker Game EJBs</name>
+  <artifactId>jboss-ejb3-examples-chxx-blackjackgame</artifactId>
+  <name>JBoss EJB 3.x Examples - Chapter XX: Transactional Blackjack Game EJBs</name>
   <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter XX</description>
 
   <!-- Build -->

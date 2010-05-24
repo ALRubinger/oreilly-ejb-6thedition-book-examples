@@ -99,7 +99,7 @@ public class User extends IdentityBase
    @Override
    public String toString()
    {
-      return "User [id=" + this.getId() + ", name=" + name + ", pokerAccount=" + account + "]";
+      return User.class.getSimpleName() + " [id=" + this.getId() + ", name=" + name + ", account=" + account + "]";
    }
 
 }

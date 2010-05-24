@@ -109,11 +109,11 @@ public class DbInitializerBean extends DbInitializerBeanBase
       final User blackjackGameService = new User();
       blackjackGameService.setId(BlackjackServiceConstants.USER_BLACKJACKGAME_ID);
       blackjackGameService.setName(BlackjackServiceConstants.USER_BLACKJACKGAME_NAME);
-      final Account pokerGameAccount = new Account();
-      pokerGameAccount.deposit(BlackjackServiceConstants.INITIAL_ACCOUNT_BALANCE_BLACKJACKGAME);
-      pokerGameAccount.setOwner(blackjackGameService);
-      pokerGameAccount.setId(BlackjackServiceConstants.ACCOUNT_BLACKJACKGAME_ID);
-      blackjackGameService.setAccount(pokerGameAccount);
+      final Account blackjackGameAccount = new Account();
+      blackjackGameAccount.deposit(BlackjackServiceConstants.INITIAL_ACCOUNT_BALANCE_BLACKJACKGAME);
+      blackjackGameAccount.setOwner(blackjackGameService);
+      blackjackGameAccount.setId(BlackjackServiceConstants.ACCOUNT_BLACKJACKGAME_ID);
+      blackjackGameService.setAccount(blackjackGameAccount);
 
       // Persist
       em.persist(alrubinger);
