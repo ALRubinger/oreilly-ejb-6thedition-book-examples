@@ -26,6 +26,7 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -62,6 +63,7 @@ public class Employee extends AutogenIdentityBase
     * The employee's address
     */
    @OneToOne
+   @JoinColumn(name="ADDRESS_ID")
    // Unidirectional relationship
    private Address address;
 
@@ -92,7 +94,7 @@ public class Employee extends AutogenIdentityBase
    private Collection<Phone> phones;
 
    /**
-    * Other {@link Employee}s on this {@link Employee}'s team
+    * The {@link Team}s to which this {@link Employee} belongs
     */
    @ManyToMany(mappedBy = "members")
    private Collection<Team> teams;
