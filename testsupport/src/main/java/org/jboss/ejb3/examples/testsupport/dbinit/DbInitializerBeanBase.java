@@ -105,6 +105,10 @@ public abstract class DbInitializerBeanBase implements DbInitializerLocalBusines
       {
          this.populateDefaultData();
       }
+      catch(final Throwable t)
+      {
+         txManager.setRollbackOnly();
+      }
       finally
       {
          // Mark the end of the Tx if we started it; will trigger the EntityManager to flush
