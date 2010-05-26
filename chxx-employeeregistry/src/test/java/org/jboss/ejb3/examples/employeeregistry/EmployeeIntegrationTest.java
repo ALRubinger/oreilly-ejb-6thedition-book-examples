@@ -47,6 +47,8 @@ import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.Phone;
 import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.PhoneType;
 import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.Task;
 import org.jboss.ejb3.examples.employeeregistry.chxx.relationships.Team;
+import org.jboss.ejb3.examples.employeeregistry.chyy.listener.EntityListenerEmployee;
+import org.jboss.ejb3.examples.employeeregistry.chyy.listener.EventTracker;
 import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmbeddedEmployeePK;
 import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmployeeType;
 import org.jboss.ejb3.examples.employeeregistry.chyy.mapping.EmployeeWithEmbeddedPK;
@@ -106,7 +108,8 @@ public class EmployeeIntegrationTest
       final JavaArchive archive = ShrinkWrap.create("entities.jar", JavaArchive.class).addPackages(false,
             SimpleEmployee.class.getPackage(), EmployeeWithMappedSuperClassId.class.getPackage(),
             Employee.class.getPackage(), TxWrappingLocalBusiness.class.getPackage(),
-            EntityManagerExposingBean.class.getPackage()).addManifestResource("persistence.xml");
+            EntityListenerEmployee.class.getPackage(), EntityManagerExposingBean.class.getPackage())
+            .addManifestResource("persistence.xml");
       log.info(archive.toString(true));
       return archive;
    }
@@ -174,6 +177,15 @@ public class EmployeeIntegrationTest
 
       // Clear all employees before running, just in case
       this.clearAllEmployees();
+   }
+
+   /**
+    * Resets all entity callbacks
+    */
+   @Before
+   public void clearEntityCallbacks()
+   {
+      EventTracker.reset();
    }
 
    /**
@@ -1278,6 +1290,68 @@ public class EmployeeIntegrationTest
          // Unwrap
          throw tee.getCause();
       }
+   }
+
+   /**
+    * Ensures that JPA Entity Callbacks are received
+    * @throws Exception
+    */
+   @Test
+   public void entityCallbacks() throws Exception
+   {
+      // Precondition checks
+      final String preconditionMessage = "Test setup is in error";
+      Assert.assertFalse(preconditionMessage, EventTracker.postLoad);
+      Assert.assertFalse(preconditionMessage, EventTracker.postPersist);
+      Assert.assertFalse(preconditionMessage, EventTracker.postRemove);
+      Assert.assertFalse(preconditionMessage, EventTracker.postUpdate);
+      Assert.assertFalse(preconditionMessage, EventTracker.prePersist);
+      Assert.assertFalse(preconditionMessage, EventTracker.preRemove);
+      Assert.assertFalse(preconditionMessage, EventTracker.preUpdate);
+
+      // Create a new employee
+      final EntityListenerEmployee employee = new EntityListenerEmployee();
+
+      // Put through the full lifecycle
+      txWrapper.wrapInTx(new Callable<Void>()
+      {
+
+         @Override
+         public Void call() throws Exception
+         {
+            // Get EM
+            final EntityManager em = emHook.getEntityManager();
+
+            // Persist
+            em.persist(employee);
+
+            // Refresh
+            em.refresh(employee);
+
+            // Update
+            employee.setName("New Name");
+            em.flush();
+
+            // Lookup
+            em.find(EntityListenerEmployee.class, employee.getId());
+
+            // Remove
+            em.remove(employee);
+
+            // Return
+            return null;
+         }
+      });
+
+      // Assert events fired
+      final String postconditionMessage = "Missing event fired";
+      Assert.assertTrue(postconditionMessage, EventTracker.postLoad);
+      Assert.assertTrue(postconditionMessage, EventTracker.postPersist);
+      Assert.assertTrue(postconditionMessage, EventTracker.postRemove);
+      Assert.assertTrue(postconditionMessage, EventTracker.postUpdate);
+      Assert.assertTrue(postconditionMessage, EventTracker.prePersist);
+      Assert.assertTrue(postconditionMessage, EventTracker.preRemove);
+      Assert.assertTrue(postconditionMessage, EventTracker.preUpdate);
    }
 
    //-------------------------------------------------------------------------------------||
