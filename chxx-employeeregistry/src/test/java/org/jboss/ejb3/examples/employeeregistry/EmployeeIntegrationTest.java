@@ -108,7 +108,10 @@ public class EmployeeIntegrationTest
       final JavaArchive archive = ShrinkWrap.create("entities.jar", JavaArchive.class).addPackages(false,
             SimpleEmployee.class.getPackage(), EmployeeWithMappedSuperClassId.class.getPackage(),
             Employee.class.getPackage(), TxWrappingLocalBusiness.class.getPackage(),
-            EntityListenerEmployee.class.getPackage(), EntityManagerExposingBean.class.getPackage())
+            EntityListenerEmployee.class.getPackage(), EntityManagerExposingBean.class.getPackage(),
+            org.jboss.ejb3.examples.employeeregistry.chyy.inheritance.singleclass.Employee.class.getPackage(),
+            org.jboss.ejb3.examples.employeeregistry.chyy.inheritance.tableperclass.Employee.class.getPackage(),
+            org.jboss.ejb3.examples.employeeregistry.chyy.inheritance.joined.Employee.class.getPackage())
             .addManifestResource("persistence.xml");
       log.info(archive.toString(true));
       return archive;
