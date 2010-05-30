@@ -21,7 +21,6 @@
  */
 package org.jboss.ejb3.examples.testsupport.entity;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -31,7 +30,6 @@ import javax.persistence.MappedSuperclass;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-@Entity
 @MappedSuperclass
 public abstract class IdentityBase
 {
