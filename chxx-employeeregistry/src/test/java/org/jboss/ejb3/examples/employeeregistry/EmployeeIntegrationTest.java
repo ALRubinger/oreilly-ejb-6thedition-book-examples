@@ -33,6 +33,9 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.IdClass;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.api.Run;
@@ -1355,6 +1358,82 @@ public class EmployeeIntegrationTest
       Assert.assertTrue(postconditionMessage, EventTracker.prePersist);
       Assert.assertTrue(postconditionMessage, EventTracker.preRemove);
       Assert.assertTrue(postconditionMessage, EventTracker.preUpdate);
+   }
+
+   /**
+    * Ensures we may look up an entity by a JPA QL Query
+    * @throws Exception
+    */
+   @Test
+   public void jpaQlFind() throws Exception
+   {
+      // Create an employee
+      final SimpleEmployee employee = new SimpleEmployee(ID_DAVE, NAME_DAVE);
+
+      // Persist, then lookup
+      txWrapper.wrapInTx(new Callable<Void>()
+      {
+
+         @Override
+         public Void call() throws Exception
+         {
+            // Get EM
+            final EntityManager em = emHook.getEntityManager();
+
+            // Persist
+            em.persist(employee);
+
+            // Lookup
+            final String jpaQlQuery = "FROM " + SimpleEmployee.class.getSimpleName() + " e WHERE e.name=?1";
+            final SimpleEmployee roundtrip = (SimpleEmployee) em.createQuery(jpaQlQuery).setParameter(1, NAME_DAVE)
+                  .getSingleResult();
+
+            // Test obtained as expected
+            Assert.assertEquals("Employee from JPA QL Query should equal the record added", employee, roundtrip);
+
+            // Return
+            return null;
+         }
+      });
+   }
+
+   /**
+    * Ensures we may look up an entity by a Criteria API Query
+    * @throws Exception
+    */
+   @Test
+   public void criertiaAPIFind() throws Exception
+   {
+      // Create an employee
+      final SimpleEmployee employee = new SimpleEmployee(ID_DAVE, NAME_DAVE);
+
+      // Persist, then lookup
+      txWrapper.wrapInTx(new Callable<Void>()
+      {
+
+         @Override
+         public Void call() throws Exception
+         {
+            // Get EM
+            final EntityManager em = emHook.getEntityManager();
+
+            // Persist
+            em.persist(employee);
+
+            // Lookup
+            final CriteriaBuilder builder = em.getCriteriaBuilder();
+            final CriteriaQuery<SimpleEmployee> query = builder.createQuery(SimpleEmployee.class);
+            Root<SimpleEmployee> root = query.from(SimpleEmployee.class);
+            query.select(root).where(builder.equal(root.get("name"), NAME_DAVE));
+            final SimpleEmployee roundtrip = (SimpleEmployee) em.createQuery(query).getSingleResult();
+
+            // Test obtained as expected
+            Assert.assertEquals("Employee from Criteria API Query should equal the record added", employee, roundtrip);
+
+            // Return
+            return null;
+         }
+      });
    }
 
    //-------------------------------------------------------------------------------------||
