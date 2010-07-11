@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.tuner;
+package org.jboss.ejb3.examples.ch18.tuner;
 
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
@@ -28,6 +28,10 @@ import javax.interceptor.InvocationContext;
 
 import junit.framework.TestCase;
 
+import org.jboss.ejb3.examples.ch18.tuner.Channel2AccessPolicy;
+import org.jboss.ejb3.examples.ch18.tuner.Channel2ClosedException;
+import org.jboss.ejb3.examples.ch18.tuner.Channel2Restrictor;
+import org.jboss.ejb3.examples.ch18.tuner.TunerLocalBusiness;
 import org.junit.Before;
 import org.junit.Test;
 

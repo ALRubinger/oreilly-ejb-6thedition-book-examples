@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.tuner;
+package org.jboss.ejb3.examples.ch18.tuner;
 
 import java.security.Identity;
 import java.security.Principal;
@@ -38,6 +38,9 @@ import javax.xml.rpc.handler.MessageContext;
 
 import junit.framework.TestCase;
 
+import org.jboss.ejb3.examples.ch18.tuner.AuditedInvocation;
+import org.jboss.ejb3.examples.ch18.tuner.CachingAuditor;
+import org.jboss.ejb3.examples.ch18.tuner.TunerLocalBusiness;
 import org.junit.Before;
 import org.junit.Test;
 

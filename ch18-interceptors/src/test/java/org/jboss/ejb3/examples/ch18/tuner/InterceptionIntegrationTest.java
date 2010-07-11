@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.tuner;
+package org.jboss.ejb3.examples.ch18.tuner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +34,12 @@ import junit.framework.TestCase;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.ejb3.examples.ch18.tuner.CachingAuditor;
+import org.jboss.ejb3.examples.ch18.tuner.Channel2AccessPolicy;
+import org.jboss.ejb3.examples.ch18.tuner.Channel2ClosedException;
+import org.jboss.ejb3.examples.ch18.tuner.Channel2Restrictor;
+import org.jboss.ejb3.examples.ch18.tuner.TunerBean;
+import org.jboss.ejb3.examples.ch18.tuner.TunerLocalBusiness;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;

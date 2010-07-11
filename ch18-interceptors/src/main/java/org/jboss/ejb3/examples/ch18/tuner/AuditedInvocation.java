@@ -19,53 +19,71 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.tuner;
+package org.jboss.ejb3.examples.ch18.tuner;
 
-import javax.ejb.ApplicationException;
+import java.security.Principal;
+
+import javax.interceptor.InvocationContext;
 
 /**
- * Denotes that Channel 2 is not currently available for viewing
+ * Data object encapsulating the auditable properties behind an invocation
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-@ApplicationException
-// Denotes that this exception type should be returned to the client as-is, not wrapped
-public class Channel2ClosedException extends Exception
+public class AuditedInvocation
 {
 
    //-------------------------------------------------------------------------------------||
-   // Class Members ----------------------------------------------------------------------||
+   // Instance Members -------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * serialVersionUID
+    * Invoked context
     */
-   private static final long serialVersionUID = 1L;
+   private final InvocationContext context;
 
    /**
-    * The sole instance, this type has no state
+    * Caller
     */
-   public static final Channel2ClosedException INSTANCE;
-   static
-   {
-      INSTANCE = new Channel2ClosedException();
-   }
-
-   /**
-    * Message for all incoming Exceptions
-    */
-   private static final String MSG = "Channel 2 is not currently available for viewing";
+   private final Principal caller;
 
    //-------------------------------------------------------------------------------------||
    // Constructor ------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Constructs a new instance
+    * Creates a new instance
     */
-   private Channel2ClosedException()
+   AuditedInvocation(final InvocationContext context, final Principal caller)
    {
-      super(MSG);
+      // Precondition checks
+      assert context != null : "context must be specified";
+      assert caller != null : "caller must be specified";
+
+      // Set
+      this.context = context;
+      this.caller = caller;
    }
+
+   //-------------------------------------------------------------------------------------||
+   // Functional Methods -----------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * @return the context
+    */
+   public InvocationContext getContext()
+   {
+      return context;
+   }
+
+   /**
+    * @return the caller
+    */
+   public Principal getCaller()
+   {
+      return caller;
+   }
+
 }

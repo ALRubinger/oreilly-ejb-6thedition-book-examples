@@ -19,51 +19,37 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.tuner;
-
-import java.security.Principal;
-
-import javax.interceptor.InvocationContext;
+package org.jboss.ejb3.examples.ch18.tuner;
 
 /**
- * Data object encapsulating the auditable properties behind an invocation
+ * Defines the authoritative policy governing whether or not
+ * Channel 2 should be currently accessible
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public class AuditedInvocation
+public class Channel2AccessPolicy
 {
 
    //-------------------------------------------------------------------------------------||
-   // Instance Members -------------------------------------------------------------------||
+   // Class Members ----------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Invoked context
+    * Flag dictating whether or not Channel 2 should be shown
     */
-   private final InvocationContext context;
-
-   /**
-    * Caller
-    */
-   private final Principal caller;
+   private static boolean channel2Permitted = false;
 
    //-------------------------------------------------------------------------------------||
    // Constructor ------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Creates a new instance
+    * No instantiation
     */
-   AuditedInvocation(final InvocationContext context, final Principal caller)
+   private Channel2AccessPolicy()
    {
-      // Precondition checks
-      assert context != null : "context must be specified";
-      assert caller != null : "caller must be specified";
-
-      // Set
-      this.context = context;
-      this.caller = caller;
+      throw new UnsupportedOperationException("No instances permitted");
    }
 
    //-------------------------------------------------------------------------------------||
@@ -71,19 +57,18 @@ public class AuditedInvocation
    //-------------------------------------------------------------------------------------||
 
    /**
-    * @return the context
+    * Returns whether or not requests to view Channel 2 will be honored
     */
-   public InvocationContext getContext()
+   public static boolean isChannel2Permitted()
    {
-      return context;
+      return channel2Permitted;
    }
 
    /**
-    * @return the caller
+    * Returns whether or not requests to view Channel 2 will be honored
     */
-   public Principal getCaller()
+   public static void setChannel2Permitted(final boolean channel2Permitted)
    {
-      return caller;
+      Channel2AccessPolicy.channel2Permitted = channel2Permitted;
    }
-
 }

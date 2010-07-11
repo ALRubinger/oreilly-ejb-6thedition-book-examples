@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.tuner;
+package org.jboss.ejb3.examples.ch18.tuner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,7 +60,7 @@ public class TunerBean implements TunerLocalBusiness
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.chxx.tuner.TunerLocalBusiness#getChannel(int)
+    * @see org.jboss.ejb3.examples.ch18.tuner.TunerLocalBusiness#getChannel(int)
     */
    // Here we declare method-level interceptors, which will only take place on this method
    @Interceptors(Channel2Restrictor.class)

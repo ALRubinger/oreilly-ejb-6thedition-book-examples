@@ -6,16 +6,16 @@
     <groupId>org.jboss.ejb3.examples</groupId>
     <artifactId>jboss-ejb3-examples-build</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <relativePath>../build/pom.xml</relativePath>
   </parent>
 
   <!-- Model Version -->
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Artifact Information -->
-  <artifactId>jboss-ejb3-examples-chxx-interceptors</artifactId>
-  <name>JBoss EJB 3.x Examples - Chapter XX: Intercepted EJBs</name>
-  <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter XX</description>
+  <artifactId>jboss-ejb3-examples-ch18-interceptors</artifactId>
+  <name>JBoss EJB 3.x Examples - Chapter 18: Intercepted EJBs</name>
+  <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter 18</description>
 
   <!-- Build -->
   <build>

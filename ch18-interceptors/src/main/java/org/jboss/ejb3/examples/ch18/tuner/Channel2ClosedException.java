@@ -19,16 +19,19 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.chxx.tuner;
+package org.jboss.ejb3.examples.ch18.tuner;
+
+import javax.ejb.ApplicationException;
 
 /**
- * Defines the authoritative policy governing whether or not
- * Channel 2 should be currently accessible
+ * Denotes that Channel 2 is not currently available for viewing
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-public class Channel2AccessPolicy
+@ApplicationException
+// Denotes that this exception type should be returned to the client as-is, not wrapped
+public class Channel2ClosedException extends Exception
 {
 
    //-------------------------------------------------------------------------------------||
@@ -36,39 +39,33 @@ public class Channel2AccessPolicy
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Flag dictating whether or not Channel 2 should be shown
+    * serialVersionUID
     */
-   private static boolean channel2Permitted = false;
+   private static final long serialVersionUID = 1L;
+
+   /**
+    * The sole instance, this type has no state
+    */
+   public static final Channel2ClosedException INSTANCE;
+   static
+   {
+      INSTANCE = new Channel2ClosedException();
+   }
+
+   /**
+    * Message for all incoming Exceptions
+    */
+   private static final String MSG = "Channel 2 is not currently available for viewing";
 
    //-------------------------------------------------------------------------------------||
    // Constructor ------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * No instantiation
+    * Constructs a new instance
     */
-   private Channel2AccessPolicy()
+   private Channel2ClosedException()
    {
-      throw new UnsupportedOperationException("No instances permitted");
-   }
-
-   //-------------------------------------------------------------------------------------||
-   // Functional Methods -----------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
-    * Returns whether or not requests to view Channel 2 will be honored
-    */
-   public static boolean isChannel2Permitted()
-   {
-      return channel2Permitted;
-   }
-
-   /**
-    * Returns whether or not requests to view Channel 2 will be honored
-    */
-   public static void setChannel2Permitted(final boolean channel2Permitted)
-   {
-      Channel2AccessPolicy.channel2Permitted = channel2Permitted;
+      super(MSG);
    }
 }
