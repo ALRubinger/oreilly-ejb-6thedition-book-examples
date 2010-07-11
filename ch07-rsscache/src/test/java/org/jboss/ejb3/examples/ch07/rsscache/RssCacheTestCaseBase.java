@@ -29,14 +29,11 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.AbstractHandler;
 
 /**
- * RssCacheTestCaseBase
- * 
  * Base tests for the RssCache @Singleton 
  * test classes, may be extended either from unit or 
  * integration tests.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public abstract class RssCacheTestCaseBase
 {

@@ -31,13 +31,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 /**
- * RssCacheUnitTestCase
- * 
  * Unit Tests for the RssCache classes, 
  * used as a POJO outside the context of the EJB container
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class RssCacheUnitTestCase extends RssCacheTestCaseBase
 {

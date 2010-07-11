@@ -24,12 +24,9 @@ package org.jboss.ejb3.examples.ch07.rsscache.spi;
 import java.net.URL;
 
 /**
- * RssEntry
- * 
  * Defines the contract for a single RSS Entry
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface RssEntry
 {

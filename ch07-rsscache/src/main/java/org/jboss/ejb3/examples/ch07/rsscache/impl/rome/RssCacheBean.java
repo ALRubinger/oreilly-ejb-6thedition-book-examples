@@ -27,13 +27,10 @@ import com.sun.syndication.fetcher.impl.HttpClientFeedFetcher;
 import com.sun.syndication.io.FeedException;
 
 /**
- * RssCacheBean
- * 
  * Singleton EJB, to be eagerly instantiated upon application deployment,
  * exposing a cached view of an RSS Feed
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @Singleton
 @Startup

@@ -30,12 +30,9 @@ import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndEntry;
 
 /**
- * RomeRssEntry
- * 
  * The java.net Rome implementation of an RSS Entry
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class RomeRssEntry implements RssEntry
 {

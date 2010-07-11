@@ -24,13 +24,10 @@ package org.jboss.ejb3.examples.ch07.rsscache.impl.rome;
 import java.net.URL;
 
 /**
- * TestRssCacheBean
- * 
  * Extension of the RSS Cache Bean which exposes support to
  * set the Feed URL for testing
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class TestRssCacheBean extends RssCacheBean
 {

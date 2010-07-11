@@ -25,13 +25,10 @@ import java.net.URL;
 import java.util.List;
 
 /**
- * RssCacheCommonBusiness
- * 
  * Common business interface for beans exposing a cached view of an RSS 
  * Feed (ie. the EJB Container)
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface RssCacheCommonBusiness
 {

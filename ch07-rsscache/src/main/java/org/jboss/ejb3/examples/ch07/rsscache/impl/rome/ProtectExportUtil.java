@@ -25,13 +25,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * ProtectExportUtil
- * 
  * Package-private utilities to protect against mutable
  * state getting exported
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 class ProtectExportUtil
 {
