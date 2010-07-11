@@ -21,11 +21,11 @@
     <module>ch07-rsscache</module>
     <module>ch08-statusupdate</module>
     <module>ch08-messagedestinationlink</module>
+    <module>ch09-14-employeeregistry</module>
     <module>ch15-secureschool</module>
     <module>chxx-interceptors</module>
     <module>chxx-blackjack</module>
     <module>chxx-timer</module>
-    <module>chxx-employeeregistry</module>
     <module>testsupport</module>
   </modules>
 
