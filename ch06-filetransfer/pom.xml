@@ -86,6 +86,21 @@
       <artifactId>ftplet-api</artifactId>
       <version>${version.org.apache.ftpserver_ftpserver.core}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.mina</groupId>
+      <artifactId>mina-core</artifactId>
+      <version>2.0.0-RC1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.easymock</groupId>
+          <artifactId>easymock</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.easymock</groupId>
+          <artifactId>easymockclassextension</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
     <!-- For the FTP Client our SFSB will use under the hood -->
     <dependency>
