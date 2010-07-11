@@ -6,7 +6,7 @@
     <groupId>org.jboss.ejb3.examples</groupId>
     <artifactId>jboss-ejb3-examples-build</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <relativePath>../build/pom.xml</relativePath>
   </parent>
 
   <!-- Model Version -->
