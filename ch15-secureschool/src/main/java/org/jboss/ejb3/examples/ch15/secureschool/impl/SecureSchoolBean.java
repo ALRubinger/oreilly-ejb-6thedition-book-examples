@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.ch09.secureschool.impl;
+package org.jboss.ejb3.examples.ch15.secureschool.impl;
 
 import java.util.logging.Logger;
 
@@ -33,8 +33,8 @@ import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
-import org.jboss.ejb3.examples.ch09.secureschool.api.SchoolClosedException;
-import org.jboss.ejb3.examples.ch09.secureschool.api.SecureSchoolLocalBusiness;
+import org.jboss.ejb3.examples.ch15.secureschool.api.SchoolClosedException;
+import org.jboss.ejb3.examples.ch15.secureschool.api.SecureSchoolLocalBusiness;
 
 /**
  * A secure school which may block requests to 
@@ -86,7 +86,7 @@ public class SecureSchoolBean implements SecureSchoolLocalBusiness
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.ch09.secureschool.api.SecureSchoolLocalBusiness#openFrontDoor()
+    * @see org.jboss.ejb3.examples.ch15.secureschool.api.SecureSchoolLocalBusiness#openFrontDoor()
     */
    // Give everyone access to this method, we may restrict them later
    @RolesAllowed(
@@ -120,7 +120,7 @@ public class SecureSchoolBean implements SecureSchoolLocalBusiness
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.ch09.secureschool.api.SecureSchoolLocalBusiness#openServiceDoor()
+    * @see org.jboss.ejb3.examples.ch15.secureschool.api.SecureSchoolLocalBusiness#openServiceDoor()
     */
    @RolesAllowed(
    {Roles.ADMIN, Roles.JANITOR})
@@ -133,7 +133,7 @@ public class SecureSchoolBean implements SecureSchoolLocalBusiness
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.ch09.secureschool.api.SecureSchoolLocalBusiness#close()
+    * @see org.jboss.ejb3.examples.ch15.secureschool.api.SecureSchoolLocalBusiness#close()
     */
    @RolesAllowed(Roles.ADMIN)
    // Only let admins open and close the school
@@ -145,7 +145,7 @@ public class SecureSchoolBean implements SecureSchoolLocalBusiness
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.ch09.secureschool.api.SecureSchoolLocalBusiness#open()
+    * @see org.jboss.ejb3.examples.ch15.secureschool.api.SecureSchoolLocalBusiness#open()
     */
    @Override
    @PostConstruct
@@ -159,7 +159,7 @@ public class SecureSchoolBean implements SecureSchoolLocalBusiness
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.ch09.secureschool.api.SecureSchoolLocalBusiness#isOpen()
+    * @see org.jboss.ejb3.examples.ch15.secureschool.api.SecureSchoolLocalBusiness#isOpen()
     */
    @Override
    @PermitAll

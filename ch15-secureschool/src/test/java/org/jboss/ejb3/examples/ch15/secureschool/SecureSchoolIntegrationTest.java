@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.ch09.secureschool;
+package org.jboss.ejb3.examples.ch15.secureschool;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,10 +40,10 @@ import javax.naming.NamingException;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.prototyping.context.api.ArquillianContext;
-import org.jboss.ejb3.examples.ch09.secureschool.api.FireDepartmentLocalBusiness;
-import org.jboss.ejb3.examples.ch09.secureschool.api.SchoolClosedException;
-import org.jboss.ejb3.examples.ch09.secureschool.api.SecureSchoolLocalBusiness;
-import org.jboss.ejb3.examples.ch09.secureschool.impl.SecureSchoolBean;
+import org.jboss.ejb3.examples.ch15.secureschool.api.FireDepartmentLocalBusiness;
+import org.jboss.ejb3.examples.ch15.secureschool.api.SchoolClosedException;
+import org.jboss.ejb3.examples.ch15.secureschool.api.SecureSchoolLocalBusiness;
+import org.jboss.ejb3.examples.ch15.secureschool.impl.SecureSchoolBean;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;

@@ -13,9 +13,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Artifact Information -->
-  <artifactId>jboss-ejb3-examples-ch09-secureschool</artifactId>
-  <name>JBoss EJB 3.x Examples - Chapter 9: SecureSchool EJBs</name>
-  <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter 9</description>
+  <artifactId>jboss-ejb3-examples-ch15-secureschool</artifactId>
+  <name>JBoss EJB 3.x Examples - Chapter 15: SecureSchool EJBs</name>
+  <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter 15</description>
 
   <!-- Build -->
   <build>

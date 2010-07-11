@@ -19,64 +19,64 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.ch09.secureschool.impl;
+package org.jboss.ejb3.examples.ch15.secureschool.api;
 
-import java.util.logging.Logger;
+import javax.ejb.ApplicationException;
+import javax.ejb.EJBAccessException;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RunAs;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
-
-import org.jboss.ejb3.examples.ch09.secureschool.api.FireDepartmentLocalBusiness;
-import org.jboss.ejb3.examples.ch09.secureschool.api.SecureSchoolLocalBusiness;
+import org.jboss.ejb3.examples.ch15.secureschool.impl.Roles;
 
 /**
- * Bean implementation class of the fire department.
- * Closes the local school in case of emergency.
+ * Thrown when a user in role other than {@link Roles#ADMIN}
+ * attempts to open the front door to school while it's closed
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-@Singleton
-@RunAs(Roles.ADMIN)
-@PermitAll
-// Implicit, but included here to show access policy
-public class FireDepartmentBean implements FireDepartmentLocalBusiness
+@ApplicationException(rollback = true)
+// So this isn't wrapped in EJBException
+public class SchoolClosedException extends EJBAccessException
 {
-
    //-------------------------------------------------------------------------------------||
    // Class Members ----------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Logger
+    * serialVersionUID
     */
-   private static final Logger log = Logger.getLogger(FireDepartmentBean.class.getName());
+   private static final long serialVersionUID = 1L;
 
    //-------------------------------------------------------------------------------------||
-   // Instance Members -------------------------------------------------------------------||
+   // Constructor ------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * School to close in case of emergency
+    * Constructs a new exception
     */
-   @EJB
-   private SecureSchoolLocalBusiness school;
-
-   //-------------------------------------------------------------------------------------||
-   // Required Implementations -----------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
-    * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.ch09.secureschool.api.FireDepartmentLocalBusiness#declareEmergency()
-    */
-   @Override
-   public void declareEmergency()
+   private SchoolClosedException(final String message)
    {
-      log.info("Dispatching emergency support from the Fire Department, closing local school");
-      school.close();
+      super(message);
+   }
+
+   //-------------------------------------------------------------------------------------||
+   // Factory ----------------------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * Constructs a new exception with the specified, required message
+    * @param message
+    * @throws IllegalArgumentException If the message is not specified
+    */
+   public static SchoolClosedException newInstance(final String message) throws IllegalArgumentException
+   {
+      // Precondition checks
+      if (message == null)
+      {
+         throw new IllegalArgumentException("message must be specified");
+      }
+
+      // Return
+      return new SchoolClosedException(message);
    }
 
 }
