@@ -41,7 +41,6 @@ import twitter4j.Twitter;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @see http://twitter.com
  * @see http://yusuke.homeip.net/twitter4j/en/index.html
- * @version $Revision: $
  */
 public class TwitterUpdateMdb extends StatusUpdateBeanBase implements MessageListener
 {

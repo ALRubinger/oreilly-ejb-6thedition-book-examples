@@ -32,7 +32,6 @@ import java.io.Serializable;
  * the default serialized form. 
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class StatusUpdate implements Serializable
 {

@@ -34,7 +34,6 @@ import twitter4j.Twitter;
  * It is not advised to take this approach in real systems.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class EnvironmentSpecificTwitterClientUtil
 {

@@ -33,7 +33,6 @@ import javax.jms.ObjectMessage;
  * {@link ObjectMessage#getObject()} method; used in testing
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class MockObjectMessage implements ObjectMessage
 {

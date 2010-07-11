@@ -54,7 +54,6 @@ import twitter4j.Twitter;
  * an EJB Container.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @RunWith(Arquillian.class)
 @Run(RunModeType.AS_CLIENT)

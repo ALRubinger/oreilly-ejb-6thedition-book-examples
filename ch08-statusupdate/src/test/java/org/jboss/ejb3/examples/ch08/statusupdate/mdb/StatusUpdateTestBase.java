@@ -39,7 +39,6 @@ import twitter4j.TwitterException;
  * POJO and JavaEE Environments
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class StatusUpdateTestBase
 {

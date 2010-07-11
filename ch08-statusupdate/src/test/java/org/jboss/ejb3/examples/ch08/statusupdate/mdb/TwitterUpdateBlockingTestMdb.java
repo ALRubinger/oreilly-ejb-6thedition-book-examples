@@ -37,7 +37,6 @@ import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdateConstants;
  * processing before they proceed
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @MessageDriven(name = TwitterUpdateMdb.NAME, activationConfig =
 {

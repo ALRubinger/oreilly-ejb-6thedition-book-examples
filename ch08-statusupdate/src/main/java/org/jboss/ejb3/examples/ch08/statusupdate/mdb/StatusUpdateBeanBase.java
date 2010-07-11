@@ -38,7 +38,6 @@ import org.jboss.ejb3.examples.ch08.statusupdate.api.StatusUpdate;
  * are required to supply specialization of this method.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public abstract class StatusUpdateBeanBase implements MessageListener
 {

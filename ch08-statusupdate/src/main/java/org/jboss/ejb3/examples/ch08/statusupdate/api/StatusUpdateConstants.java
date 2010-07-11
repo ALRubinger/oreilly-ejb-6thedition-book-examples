@@ -28,7 +28,6 @@ import javax.management.ObjectName;
  * by clients of the StatusUpdate MDBs.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface StatusUpdateConstants
 {

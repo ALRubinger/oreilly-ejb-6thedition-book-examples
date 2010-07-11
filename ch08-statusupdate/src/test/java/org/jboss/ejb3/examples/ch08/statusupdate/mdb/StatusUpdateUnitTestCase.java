@@ -39,7 +39,6 @@ import twitter4j.TwitterException;
  * logic is intact when running outside the context of an EJB Container.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class StatusUpdateUnitTestCase extends StatusUpdateTestBase
 {

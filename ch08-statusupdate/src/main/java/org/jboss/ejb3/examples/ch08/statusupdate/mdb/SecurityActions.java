@@ -28,7 +28,6 @@ import java.security.PrivilegedAction;
  * Protected security actions not to leak outside this package
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 class SecurityActions
 {
