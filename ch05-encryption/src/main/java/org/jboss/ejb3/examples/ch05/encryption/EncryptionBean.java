@@ -222,8 +222,9 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
    // ---------------------------------------------------------------------------||
    // Required Implementations --------------------------------------------------||
    // ---------------------------------------------------------------------------||
-
-   /* (non-Javadoc)
+   
+   /**
+    * {@inheritDoc}
     * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#compare(java.lang.String, java.lang.String)
     */
    @Override
@@ -249,7 +250,8 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
       return equal;
    }
 
-   /* (non-Javadoc)
+   /**
+    * {@inheritDoc}
     * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#decrypt(java.lang.String)
     */
    @Override
@@ -283,7 +285,8 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
       return result;
    }
 
-   /* (non-Javadoc)
+   /**
+    * {@inheritDoc}
     * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#encrypt(java.lang.String)
     */
    @Override
