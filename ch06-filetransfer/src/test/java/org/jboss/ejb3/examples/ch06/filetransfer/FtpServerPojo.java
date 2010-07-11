@@ -35,8 +35,6 @@ import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.jboss.logging.Logger;
 
 /**
- * FtpServerPojo
- * 
  * POJO Responsible for starting/stopping 
  * the Embedded FTP Server.
  * 
@@ -49,7 +47,6 @@ import org.jboss.logging.Logger;
  * (or perform your own external synchronization).
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public final class FtpServerPojo
 {

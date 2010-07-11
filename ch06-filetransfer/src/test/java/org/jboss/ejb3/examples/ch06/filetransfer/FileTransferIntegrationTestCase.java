@@ -40,8 +40,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * FileTransferIntegrationTestCase
- * 
  * Test cases to ensure that the FileTransferEJB is working as
  * a Stateful Session Bean from the EJB Container.
  * 
@@ -51,7 +49,6 @@ import org.junit.runner.RunWith;
  * of a session means you cannot use it anymore.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @RunWith(Arquillian.class)
 public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase

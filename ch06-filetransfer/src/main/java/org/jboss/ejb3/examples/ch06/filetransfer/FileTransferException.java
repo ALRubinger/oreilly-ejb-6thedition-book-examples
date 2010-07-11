@@ -22,13 +22,10 @@
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
 /**
- * FileTransferException
- * 
  * Exception to indicate that a problem has occurred during 
  * a file transfer operation. 
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class FileTransferException extends RuntimeException
 {

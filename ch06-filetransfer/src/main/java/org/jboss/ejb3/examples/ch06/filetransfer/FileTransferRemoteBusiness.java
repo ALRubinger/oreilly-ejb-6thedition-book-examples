@@ -24,14 +24,11 @@ package org.jboss.ejb3.examples.ch06.filetransfer;
 import javax.ejb.Remove;
 
 /**
- * FileTransferRemoteBusiness
- * 
  * Remote Business interface for the FileTransferEJB.
  * Because this will only be used in EJB environments, we define
  * a method to end the current session.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface FileTransferRemoteBusiness extends FileTransferCommonBusiness
 {

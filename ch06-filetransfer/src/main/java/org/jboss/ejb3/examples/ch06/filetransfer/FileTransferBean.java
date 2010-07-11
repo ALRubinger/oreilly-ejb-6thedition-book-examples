@@ -38,13 +38,10 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.jboss.logging.Logger;
 
 /**
- * FileTransferBean
- * 
  * Bean Implementation class of the FileTransferEJB, modeled
  * as a Stateful Session Bean
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @Stateful(name = FileTransferBean.EJB_NAME)
 @Remote(FileTransferRemoteBusiness.class)

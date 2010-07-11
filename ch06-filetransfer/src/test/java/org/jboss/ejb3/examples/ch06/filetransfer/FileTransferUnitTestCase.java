@@ -42,8 +42,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * FileTransferUnitTestCase
- * 
  * Test cases to ensure that the FileTransfer business
  * logic is intact, outside of the container.
  * 
@@ -52,7 +50,6 @@ import org.junit.Test;
  * is working as expected.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class FileTransferUnitTestCase extends FileTransferTestCaseBase
 {

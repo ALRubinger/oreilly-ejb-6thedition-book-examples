@@ -31,13 +31,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * FileTransferTestCaseBase
- * 
  * Base tests for the file transfer test classes, may
  * be extended either from unit or integration tests.
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public abstract class FileTransferTestCaseBase
 {

@@ -22,8 +22,6 @@
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
 /**
- * FileTransferCommonBusiness
- *
  * Contains the contract for operations common to all
  * business interfaces of the FileTransferEJB.
  * 
@@ -31,7 +29,6 @@ package org.jboss.ejb3.examples.ch06.filetransfer;
  * printing the current working directory, and making directories.
  * 
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface FileTransferCommonBusiness
 {
