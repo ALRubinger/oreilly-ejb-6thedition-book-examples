@@ -28,12 +28,9 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 
 /**
- * CalculatorRemoteHome
- * 
  * EJB 2.x Remote Home of the CalculatorEJB
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface CalculatorRemoteHome extends EJBHome
 {

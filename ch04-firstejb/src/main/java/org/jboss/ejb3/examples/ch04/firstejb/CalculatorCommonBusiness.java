@@ -23,13 +23,10 @@
 package org.jboss.ejb3.examples.ch04.firstejb;
 
 /**
- * CalculatorCommonBusiness
- * 
  * Contains the contract for operations common to 
  * all business interfaces of the CalculatorEJB
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface CalculatorCommonBusiness
 {

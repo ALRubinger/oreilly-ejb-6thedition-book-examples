@@ -23,12 +23,9 @@
 package org.jboss.ejb3.examples.ch04.firstejb;
 
 /**
- * CalculatorRemoteBusiness
- * 
  * Remote business interface for the CalculatorEJB
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface CalculatorRemoteBusiness extends CalculatorCommonBusiness
 {

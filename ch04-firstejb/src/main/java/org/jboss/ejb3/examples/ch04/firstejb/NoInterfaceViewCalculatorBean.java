@@ -22,23 +22,19 @@
 
 package org.jboss.ejb3.examples.ch04.firstejb;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBLocalHome;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 
 /**
- * EJB 2.x Local Home of the CalculatorEJB
+ * Bean implementation class of the CalculatorEJB which
+ * has a no-interface view
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  */
-public interface CalculatorLocalHome extends EJBLocalHome
+@Stateless
+@LocalBean
+//TODO This is not yet tested as OpenEJB 3.1.2 doesn't yet support no-interface views EJBBOOK-28
+public class NoInterfaceViewCalculatorBean extends CalculatorBeanBase
 {
-   // ---------------------------------------------------------------------------||
-   // create<METHOD> Methods ----------------------------------------------------||
-   // ---------------------------------------------------------------------------||
-
-   /**
-    * Returns a reference to a local component view of the CalculatorEJB
-    */
-   CalculatorLocal create() throws CreateException;
-
+   // Implementation in base class
 }

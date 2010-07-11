@@ -23,12 +23,9 @@
 package org.jboss.ejb3.examples.ch04.firstejb;
 
 /**
- * CalculatorLocalBusiness
- * 
  * Local business interface for the CalculatorEJB
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface CalculatorLocalBusiness extends CalculatorCommonBusiness
 {

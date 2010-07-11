@@ -40,7 +40,6 @@ import org.junit.runner.RunWith;
  * business view
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @RunWith(Arquillian.class)
 public class CalculatorIntegrationTestCase

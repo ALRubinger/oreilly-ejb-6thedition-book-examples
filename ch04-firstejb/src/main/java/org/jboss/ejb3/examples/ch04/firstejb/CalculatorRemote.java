@@ -25,12 +25,9 @@ package org.jboss.ejb3.examples.ch04.firstejb;
 import javax.ejb.EJBObject;
 
 /**
- * CalculatorRemote
- * 
  * EJB 2.x Remote Component interface of the CalculatorEJB
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface CalculatorRemote extends CalculatorCommonBusiness, EJBObject
 {

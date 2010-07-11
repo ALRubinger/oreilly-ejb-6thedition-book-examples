@@ -26,13 +26,10 @@ import javax.ejb.Local;
 import javax.ejb.Stateless;
 
 /**
- * SimpleCalculatorBean
- * 
  * Bean implementation class of the CalculatorEJB which
  * exposes one local business view
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @Stateless
 @Local(CalculatorLocalBusiness.class)

@@ -26,14 +26,11 @@ import junit.framework.TestCase;
 import org.jboss.logging.Logger;
 
 /**
- * CalculatorAssertionDelegate
- * 
  * Contains functions to assert that implementations
  * of {@link CalculatorCommonBusiness} are working 
  * as expected 
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 class CalculatorAssertionDelegate
 {

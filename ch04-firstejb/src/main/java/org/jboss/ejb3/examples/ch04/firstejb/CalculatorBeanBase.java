@@ -25,13 +25,10 @@ package org.jboss.ejb3.examples.ch04.firstejb;
 import org.jboss.logging.Logger;
 
 /**
- * CalculatorBeanBase
- * 
  * Base for bean implementation classes of the CalculatorEJB, 
  * provides business logic for required contracts
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class CalculatorBeanBase implements CalculatorCommonBusiness
 {
@@ -48,7 +45,8 @@ public class CalculatorBeanBase implements CalculatorCommonBusiness
    // Required Implementations --------------------------------------------------||
    // ---------------------------------------------------------------------------||
 
-   /* (non-Javadoc)
+   /**
+    * {@inheritDoc}
     * @see org.jboss.ejb3.examples.ch04.firstejb.CalculatorCommonBusiness#add(int[])
     */
    @Override

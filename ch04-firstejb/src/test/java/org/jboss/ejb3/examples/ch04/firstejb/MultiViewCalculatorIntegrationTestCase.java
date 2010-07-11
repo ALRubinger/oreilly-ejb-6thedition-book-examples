@@ -37,12 +37,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * MultiViewCalculatorIntegrationTestCase
- * 
  * Integration tests for the CalculatorEJB, testing many views
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @RunWith(Arquillian.class)
 public class MultiViewCalculatorIntegrationTestCase
@@ -152,5 +149,7 @@ public class MultiViewCalculatorIntegrationTestCase
       log.info("Testing remote component reference...");
       assertionDelegate.assertAdditionSucceeds(calcLocal);
    }
+
+   //TODO Add test for no-interface view when OpenEJB supports it EJBBOOK-28
 
 }

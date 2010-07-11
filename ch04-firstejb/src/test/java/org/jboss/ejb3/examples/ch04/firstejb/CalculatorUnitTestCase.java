@@ -29,13 +29,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * CalculatorUnitTestCase
- * 
  * Tests to ensure that the business methods of the CalculatorEJB
  * are working as expected
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class CalculatorUnitTestCase
 {
