@@ -1,9 +1,0 @@
-Some author notes on this example for the workbook section:
-
-* Shows use of SLSB for non-conversational processing
-* Introduces @PostConstruct lifecycle callback
-* Introduces @Resource injection
-* Introduces env-entry
-* Introduces SessionContext
-
-Possible Exercise: Extend this example such that the iteration count is configurable 
