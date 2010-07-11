@@ -23,8 +23,8 @@
     <module>ch08-messagedestinationlink</module>
     <module>ch09-14-employeeregistry</module>
     <module>ch15-secureschool</module>
+    <module>ch17-blackjack</module>
     <module>chxx-interceptors</module>
-    <module>chxx-blackjack</module>
     <module>chxx-timer</module>
     <module>testsupport</module>
   </modules>
