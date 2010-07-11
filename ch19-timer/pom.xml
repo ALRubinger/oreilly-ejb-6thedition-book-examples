@@ -6,16 +6,16 @@
     <groupId>org.jboss.ejb3.examples</groupId>
     <artifactId>jboss-ejb3-examples-build</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <relativePath>../build/pom.xml</relativePath>
   </parent>
 
   <!-- Model Version -->
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Artifact Information -->
-  <artifactId>jboss-ejb3-examples-chxx-timer</artifactId>
-  <name>JBoss EJB 3.x Examples - Chapter XX: EJB Timer Service</name>
-  <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter XX</description>
+  <artifactId>jboss-ejb3-examples-ch19-timer</artifactId>
+  <name>JBoss EJB 3.x Examples - Chapter 19: EJB Timer Service</name>
+  <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter 19</description>
 
   <!-- Build -->
   <build>

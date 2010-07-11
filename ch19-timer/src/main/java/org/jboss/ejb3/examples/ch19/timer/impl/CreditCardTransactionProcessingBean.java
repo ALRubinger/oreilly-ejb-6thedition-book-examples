@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.ejb3.examples.timer.impl;
+package org.jboss.ejb3.examples.ch19.timer.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,8 +41,8 @@ import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerService;
 
-import org.jboss.ejb3.examples.timer.api.CreditCardTransaction;
-import org.jboss.ejb3.examples.timer.api.CreditCardTransactionProcessingLocalBusiness;
+import org.jboss.ejb3.examples.ch19.timer.api.CreditCardTransaction;
+import org.jboss.ejb3.examples.ch19.timer.api.CreditCardTransactionProcessingLocalBusiness;
 
 /**
  * Implementation of a Service capable of storing pending
@@ -133,7 +133,7 @@ public class CreditCardTransactionProcessingBean implements CreditCardTransactio
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.timer.api.CreditCardTransactionProcessingLocalBusiness#add(org.jboss.ejb3.examples.timer.api.CreditCardTransaction)
+    * @see org.jboss.ejb3.examples.ch19.timer.api.CreditCardTransactionProcessingLocalBusiness#add(org.jboss.ejb3.examples.ch19.timer.api.CreditCardTransaction)
     */
    @Override
    @Lock(LockType.WRITE)
@@ -152,7 +152,7 @@ public class CreditCardTransactionProcessingBean implements CreditCardTransactio
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.timer.api.CreditCardTransactionProcessingLocalBusiness#getPendingTransactions()
+    * @see org.jboss.ejb3.examples.ch19.timer.api.CreditCardTransactionProcessingLocalBusiness#getPendingTransactions()
     */
    @Override
    @Lock(LockType.READ)
@@ -164,7 +164,7 @@ public class CreditCardTransactionProcessingBean implements CreditCardTransactio
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.timer.api.CreditCardTransactionProcessingLocalBusiness#process()
+    * @see org.jboss.ejb3.examples.ch19.timer.api.CreditCardTransactionProcessingLocalBusiness#process()
     */
    @Override
    @Lock(LockType.WRITE)
@@ -184,7 +184,7 @@ public class CreditCardTransactionProcessingBean implements CreditCardTransactio
 
    /**
     * {@inheritDoc}
-    * @see org.jboss.ejb3.examples.timer.api.CreditCardTransactionProcessingLocalBusiness#scheduleProcessing(javax.ejb.ScheduleExpression)
+    * @see org.jboss.ejb3.examples.ch19.timer.api.CreditCardTransactionProcessingLocalBusiness#scheduleProcessing(javax.ejb.ScheduleExpression)
     */
    @Override
    public Date scheduleProcessing(final ScheduleExpression expression) throws IllegalArgumentException
