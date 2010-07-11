@@ -22,13 +22,10 @@
 package org.jboss.ejb3.examples.ch05.encryption;
 
 /**
- * EncryptionCommonBusiness
- * 
  * Contains the contract for operations common to 
  * all business interfaces of the EncryptionEJB
  *
  * @author <a href="mailto:alr@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface EncryptionCommonBusiness
 {

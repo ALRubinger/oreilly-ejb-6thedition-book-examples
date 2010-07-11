@@ -38,12 +38,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * EncryptionIntegrationTestCase
- * 
  * Integration tests for the EncryptionEJB
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @RunWith(Arquillian.class)
 public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport

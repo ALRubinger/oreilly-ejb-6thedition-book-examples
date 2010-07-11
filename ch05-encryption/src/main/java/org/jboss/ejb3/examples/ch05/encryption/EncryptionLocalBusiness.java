@@ -22,12 +22,9 @@
 package org.jboss.ejb3.examples.ch05.encryption;
 
 /**
- * EncryptionLocalBusiness
- * 
  * EJB 3.x Local Business View of the EncryptionEJB
  *
  * @author <a href="mailto:alr@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public interface EncryptionLocalBusiness extends EncryptionCommonBusiness
 {

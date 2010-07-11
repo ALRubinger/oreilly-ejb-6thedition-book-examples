@@ -24,13 +24,10 @@ package org.jboss.ejb3.examples.ch05.encryption;
 import javax.ejb.ApplicationException;
 
 /**
- * EncryptionException
- * 
  * A checked Application Exception denoting
  * some unexpected problem with Encryption operations
  *
  * @author <a href="mailto:alr@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @ApplicationException
 // Explicit annotation, though this is inferred as default because we extend Exception

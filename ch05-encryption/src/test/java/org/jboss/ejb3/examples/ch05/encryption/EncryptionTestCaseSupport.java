@@ -26,13 +26,10 @@ import junit.framework.TestCase;
 import org.jboss.logging.Logger;
 
 /**
- * EncryptionTestCaseSupport
- * 
  * Common base for centralizing test logic used
  * for the Encryption POJO and EncryptionEJB
  *
  * @author <a href="mailto:alr@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class EncryptionTestCaseSupport
 {

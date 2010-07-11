@@ -26,13 +26,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * EncryptionUnitTestCase
- * 
  * Tests to ensure that the business methods of the EncryptionEJB
  * are working as expected
  *
  * @author <a href="mailto:alr@jboss.org">ALR</a>
- * @version $Revision: $
  */
 public class EncryptionUnitTestCase extends EncryptionTestCaseSupport
 {

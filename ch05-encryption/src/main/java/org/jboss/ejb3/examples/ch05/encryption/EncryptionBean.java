@@ -43,15 +43,12 @@ import org.apache.commons.codec.binary.Base64;
 import org.jboss.logging.Logger;
 
 /**
- * EncryptionBean
- * 
  * Bean implementation class of the EncryptionEJB.  Shows
  * how lifecycle callbacks are implemented (@PostConstruct),
  * and two ways of obtaining externalized environment
  * entries. 
  *
  * @author <a href="mailto:alr@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @Stateless(name = EncryptionBean.EJB_NAME)
 @Local(EncryptionLocalBusiness.class)
