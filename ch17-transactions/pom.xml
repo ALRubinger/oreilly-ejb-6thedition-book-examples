@@ -158,27 +158,16 @@
                 <configuration>
                   <additionalClasspathElements>
                     <additionalClasspathElement>${JBOSS_HOME}/client/jbossws-native-client.jar</additionalClasspathElement>
+                    <additionalClasspathElement>${JBOSS_HOME}/server/default/deploy/jbossweb.sar</additionalClasspathElement>
                   </additionalClasspathElements>
-          
                   <redirectTestOutputToFile>true</redirectTestOutputToFile>
                   <trimStackTrace>false</trimStackTrace>
                   <printSummary>true</printSummary>
                   <includes>
                     <include>**/*IntegrationTest.java</include>
                   </includes>
-                  <forkMode>always</forkMode>
-                  <!--
-                    MaxPermSize Required to bump the space for relective
-                    data like classes, methods, etc. EMB-41, EMB-74. Endorsed
-                    required for things like WS support (EMB-61)
-                    
-                    Disable assertions because something is not playing nicely in Hibernate:
-                    (19:58:01,172 ERROR [org.jboss.kernel.plugins.dependency.AbstractKernelController] 
-                      Error installing to Start: name=persistence.unit:unitName=#tempdb state=Create: java.lang.AssertionError
-                         at org.hibernate.cfg.InheritanceState.getElementsToProcess(
-                         InheritanceState.java:222) [hibernate-annotations-3.5.0-CR-1.jar:3.5.0-CR-1])
-                  -->
-                  <argLine>-disableassertions -Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Djava.endorsed.dirs=${JBOSS_HOME}/lib/endorsed -Djboss.home=${JBOSS_HOME} -Djboss.boot.server.log.dir=${JBOSS_HOME}</argLine>
+                  <forkMode>once</forkMode>
+                  <argLine>-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Djava.endorsed.dirs=${JBOSS_HOME}/lib/endorsed -Djboss.home=${JBOSS_HOME} -Djboss.boot.server.log.dir=${JBOSS_HOME} -Dorg.jboss.reflect.spi.TypeInfoFactory=org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory</argLine>
                 </configuration>
               </execution>
             </executions>
