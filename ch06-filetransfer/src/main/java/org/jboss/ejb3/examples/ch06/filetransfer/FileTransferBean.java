@@ -21,6 +21,7 @@
  */
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -107,9 +108,9 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Called by the container when the instance is about to be passivated or brought 
+    * Called by the container when the instance is about to be passivated or brought
     * out of service entirely.
-    * 
+    *
     * @see org.jboss.ejb3.examples.ch06.filetransfer.FileTransferCommonBusiness#disconnect()
     */
    @PrePassivate
@@ -149,7 +150,7 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
                log.warn("Exception encountered in disconnecting the FTP client", ioe);
             }
 
-            // Null out the client so it's not serialized 
+            // Null out the client so it's not serialized
             this.client = null;
          }
       }
@@ -159,7 +160,7 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
     * Called by the container when the instance has been created or re-activated
     * (brought out of passivated state).  Will construct the underlying FTP Client
     * and open all appropriate connections.
-    * 
+    *
     * @see org.jboss.ejb3.examples.ch06.filetransfer.FileTransferCommonBusiness#connect()
     */
    @PostConstruct
@@ -297,8 +298,19 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
             log.info(file);
          }
 
-         // Exec pwd
-         return client.printWorkingDirectory();
+          // Exec pwd
+          String dir = client.printWorkingDirectory();
+          String separator = File.separator;
+
+          if ("\\".equals(separator)) {
+              // reformat to use for windows
+              if (dir.startsWith("/")) {
+                  dir = dir.substring(1);
+              }
+              dir = dir.replaceAll("/", "\\" + separator);
+          }
+
+          return dir;
 
       }
       catch (final IOException ioe)
