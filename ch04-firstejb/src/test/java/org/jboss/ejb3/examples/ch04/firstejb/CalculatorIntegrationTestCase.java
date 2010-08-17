@@ -70,7 +70,7 @@ public class CalculatorIntegrationTestCase
    @Deployment
    public static JavaArchive createDeployment() throws MalformedURLException
    {
-      final JavaArchive archive = ShrinkWrap.create("firstejb.jar", JavaArchive.class).addPackage(
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "firstejb.jar").addPackage(
             CalculatorBeanBase.class.getPackage());
       log.info(archive.toString(true));
       return archive;

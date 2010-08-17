@@ -76,7 +76,7 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
    @Deployment
    public static JavaArchive createDeployment() throws MalformedURLException
    {
-      final JavaArchive archive = ShrinkWrap.create("slsb.jar", JavaArchive.class).addClasses(EncryptionBean.class,
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "slsb.jar").addClasses(EncryptionBean.class,
             EncryptionCommonBusiness.class, EncryptionLocalBusiness.class, EncryptionRemoteBusiness.class,
             EncryptionException.class).addManifestResource(
             new URL(EncryptionIntegrationTestCase.class.getProtectionDomain().getCodeSource().getLocation(),

@@ -190,7 +190,7 @@ public class MessageDestinationLinkIntegrationTest
    public void createAndDeployArchive() throws DeploymentException
    {
       // Package up the EJBs and a Deployment Descriptor
-      final JavaArchive archive = ShrinkWrap.create(NAME_MDB_ARCHIVE, JavaArchive.class).addClasses(
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, NAME_MDB_ARCHIVE).addClasses(
             MessageDestinationLinkConstants.class, MessageDestinationLinkMdb.class, MessageSendingBusiness.class,
             MessageSendingBean.class).addResource(NAME_EJB_JAR);
 

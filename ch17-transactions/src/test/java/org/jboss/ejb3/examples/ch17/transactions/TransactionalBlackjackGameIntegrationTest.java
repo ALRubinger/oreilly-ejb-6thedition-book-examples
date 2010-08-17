@@ -94,7 +94,7 @@ public class TransactionalBlackjackGameIntegrationTest
    @Deployment
    public static JavaArchive getDeployment()
    {
-      final JavaArchive archive = ShrinkWrap.create("test.jar", JavaArchive.class).addPackages(true,
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar").addPackages(true,
             BankLocalBusiness.class.getPackage(), User.class.getPackage()).addManifestResource("persistence.xml")
             .addPackages(false, DbInitializerBean.class.getPackage(), TxWrappingLocalBusiness.class.getPackage(),
                   BankBean.class.getPackage(), DbInitializerLocalBusiness.class.getPackage(),

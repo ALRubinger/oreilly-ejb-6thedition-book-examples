@@ -96,7 +96,7 @@ public class StatusUpdateIntegrationTest extends StatusUpdateTestBase
    @Deployment
    public static JavaArchive getDeployment()
    {
-      final JavaArchive archive = ShrinkWrap.create(NAME_MDB_ARCHIVE, JavaArchive.class).addClasses(StatusUpdate.class,
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, NAME_MDB_ARCHIVE).addClasses(StatusUpdate.class,
             StatusUpdateConstants.class, LoggingStatusUpdateMdb.class, StatusUpdateBeanBase.class,
             TwitterUpdateBlockingTestMdb.class, SecurityActions.class, TwitterUpdateMdb.class,
             EnvironmentSpecificTwitterClientUtil.class).addResource(NAME_RESOURCE_TOPIC_DEPLOYMENT);
