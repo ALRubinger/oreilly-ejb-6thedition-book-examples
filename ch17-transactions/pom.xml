@@ -29,7 +29,7 @@
     <!-- JBOSS_HOME (We'll unpack into here -->
     <JBOSS_HOME>${project.build.directory}/jboss-${version.org.jboss.jbossas}</JBOSS_HOME>
     <!-- The target version of AS to be used -->
-    <version.org.jboss.jbossas>6.0.0.20100429-M3</version.org.jboss.jbossas>
+    <version.org.jboss.jbossas>6.0.0.20100721-M4</version.org.jboss.jbossas>
 
   </properties>
 
@@ -58,7 +58,7 @@
     <!-- Arquillian Test Harness -->
     <dependency>
       <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-jbossas-embedded-60</artifactId>
+      <artifactId>arquillian-jbossas-embedded-6</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jboss.arquillian</groupId>
