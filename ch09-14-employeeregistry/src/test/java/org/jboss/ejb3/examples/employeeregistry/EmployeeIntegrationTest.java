@@ -108,7 +108,7 @@ public class EmployeeIntegrationTest
    @Deployment
    public static JavaArchive getDeployment()
    {
-      final JavaArchive archive = ShrinkWrap.create("entities.jar", JavaArchive.class).addPackages(false,
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "entities.jar").addPackages(false,
             SimpleEmployee.class.getPackage(), EmployeeWithMappedSuperClassId.class.getPackage(),
             Employee.class.getPackage(), TxWrappingLocalBusiness.class.getPackage(),
             EntityListenerEmployee.class.getPackage(), EntityManagerExposingBean.class.getPackage(),

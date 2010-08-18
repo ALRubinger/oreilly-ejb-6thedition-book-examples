@@ -19,14 +19,14 @@
 
     <version.junit_junit>4.7</version.junit_junit>
     <version.org.jboss.embedded>1.0.0-alpha-1</version.org.jboss.embedded>
-    <version.org.jboss.jbossas>6.0.0.20100429-M3</version.org.jboss.jbossas>
-    <version.org.jboss.shrinkwrap>1.0.0-alpha-9</version.org.jboss.shrinkwrap>
+    <version.org.jboss.jbossas>6.0.0.20100721-M4</version.org.jboss.jbossas>
+    <version.org.jboss.shrinkwrap>1.0.0-alpha-11</version.org.jboss.shrinkwrap>
     <version.org.jboss.ejb3_jboss.ejb3.api>3.1.0-Alpha1</version.org.jboss.ejb3_jboss.ejb3.api>
     <version.org.jboss.ejb3_jboss.ejb3.ext.api>1.0.0</version.org.jboss.ejb3_jboss.ejb3.ext.api>
     <version.org.jboss.javaee_jboss-jms-api>1.1.0.GA</version.org.jboss.javaee_jboss-jms-api>
     <version.org.jboss.logging_jboss.logging.log4j>2.0.6.GA</version.org.jboss.logging_jboss.logging.log4j>
     <version.org.jboss.logging_jboss.logging.spi>2.0.5.GA</version.org.jboss.logging_jboss.logging.spi>
-    <version.org.jboss.arquillian>1.0.0.Alpha2</version.org.jboss.arquillian>
+    <version.org.jboss.arquillian>1.0.0.Alpha3</version.org.jboss.arquillian>
     <version.org.glassfish>3.0.1-b18</version.org.glassfish>
     <version.org.apache.openejb>3.1.2</version.org.apache.openejb>
     <version.org.jboss.spec.javax.ejb>1.0.0.Beta2</version.org.jboss.spec.javax.ejb>
@@ -175,19 +175,19 @@
       
       <dependency>
         <groupId>org.jboss.arquillian.container</groupId>
-        <artifactId>arquillian-openejb</artifactId>
+        <artifactId>arquillian-openejb-embedded-3.1</artifactId>
         <version>${version.org.jboss.arquillian}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.jboss.arquillian.container</groupId>
-        <artifactId>arquillian-glassfish-embedded-30</artifactId>
+        <artifactId>arquillian-glassfish-embedded-3</artifactId>
         <version>${version.org.jboss.arquillian}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.jboss.arquillian.container</groupId>
-        <artifactId>arquillian-jbossas-embedded-60</artifactId>
+        <artifactId>arquillian-jbossas-embedded-6</artifactId>
         <version>${version.org.jboss.arquillian}</version>
         <scope>test</scope>
       </dependency>

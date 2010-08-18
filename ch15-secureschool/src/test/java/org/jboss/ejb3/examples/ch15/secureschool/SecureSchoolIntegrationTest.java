@@ -78,7 +78,7 @@ public class SecureSchoolIntegrationTest
    @Deployment
    public static JavaArchive getDeployment()
    {
-      final JavaArchive archive = ShrinkWrap.create("secureSchool.jar", JavaArchive.class).addPackages(false,
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "secureSchool.jar").addPackages(false,
             SecureSchoolLocalBusiness.class.getPackage(), SecureSchoolBean.class.getPackage());
       log.info(archive.toString(true));
       return archive;

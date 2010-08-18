@@ -76,7 +76,7 @@ public class InterceptionIntegrationTest
    @Deployment
    public static JavaArchive createDeployment()
    {
-      final JavaArchive deployment = ShrinkWrap.create("echo.jar", JavaArchive.class).addClasses(
+      final JavaArchive deployment = ShrinkWrap.create(JavaArchive.class, "echo.jar").addClasses(
             TunerLocalBusiness.class, TunerBean.class, CachingAuditor.class, Channel2Restrictor.class);
       log.info(deployment.toString(true));
       return deployment;

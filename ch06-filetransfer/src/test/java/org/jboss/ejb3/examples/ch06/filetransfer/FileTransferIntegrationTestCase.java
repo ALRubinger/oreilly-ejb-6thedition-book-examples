@@ -85,7 +85,7 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
    @Deployment
    public static JavaArchive createDeployment()
    {
-      final JavaArchive archive = ShrinkWrap.create("ftpclient.jar", JavaArchive.class).addPackage(
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "ftpclient.jar").addPackage(
             FileTransferBean.class.getPackage());
       log.info(archive.toString(true));
       return archive;
