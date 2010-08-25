@@ -21,6 +21,8 @@
  */
 package org.jboss.ejb3.examples.ch05.encryption;
 
+import java.util.concurrent.Future;
+
 /**
  * Contains the contract for operations common to 
  * all business interfaces of the EncryptionEJB
@@ -66,6 +68,17 @@ public interface EncryptionCommonBusiness
     * @throws EncryptionException If some problem occurred making the hash
     */
    String hash(String input) throws IllegalArgumentException, EncryptionException;
+   
+   /**
+    * Returns a one-way hash of the specified argument, calculated asynchronously.  
+    * Useful for safely storing passwords.
+    * 
+    * @param input
+    * @return
+    * @throws IllegalArgumentException
+    * @throws EncryptionException
+    */
+   Future<String> hashAsync(String input) throws IllegalArgumentException, EncryptionException;
 
    /**
     * Returns whether or not the specified input matches the specified 

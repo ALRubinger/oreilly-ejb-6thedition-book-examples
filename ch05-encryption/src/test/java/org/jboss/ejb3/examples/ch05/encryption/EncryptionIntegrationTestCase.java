@@ -24,6 +24,8 @@ package org.jboss.ejb3.examples.ch05.encryption;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import javax.ejb.EJB;
 
@@ -105,6 +107,34 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
 
       // Test via superclass
       this.assertHashing(encryptionLocalBusiness);
+   }
+   
+   /**
+    * Ensures that hashing works when used asynchronously
+    * @throws Exception
+    */
+   @Test
+   public void testAsyncHashing() throws Exception
+   {
+      // Log
+      log.info("testAsyncHashing");
+
+      // Declare the input
+      final String input = "Async Hashing Input";
+
+      // Hash
+      final Future<String> hashFuture = encryptionLocalBusiness.hashAsync(input);
+      final String hash = hashFuture.get(10,TimeUnit.SECONDS);
+      log.info("Hash of \"" + input + "\": " + hash);
+
+      // Test that the has function had some effect
+      TestCase.assertNotSame("The hash function had no effect upon the supplied input", input, hash);
+
+      // Get the comparison result
+      final boolean equal = encryptionLocalBusiness.compare(hash, input);
+
+      // Test that the input matches the hash we'd gotten
+      TestCase.assertTrue("The comparison of the input to its hashed result failed", equal);
    }
 
    /**

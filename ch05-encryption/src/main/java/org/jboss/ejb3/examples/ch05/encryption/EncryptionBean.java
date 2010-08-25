@@ -26,6 +26,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.KeySpec;
+import java.util.concurrent.Future;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -34,6 +35,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
+import javax.ejb.AsyncResult;
+import javax.ejb.Asynchronous;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.SessionContext;
@@ -359,6 +362,21 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
 
       // Return
       return hash;
+   }
+
+   /**
+    * {@inheritDoc}
+    * @see org.jboss.ejb3.examples.ch05.encryption.EncryptionCommonBusiness#hashAsync(java.lang.String)
+    */
+   @Asynchronous
+   @Override
+   public Future<String> hashAsync(final String input) throws IllegalArgumentException, EncryptionException
+   {
+      // Get the real hash
+      final String hash = this.hash(input);
+
+      // Wrap and return
+      return new AsyncResult<String>(hash);
    }
 
    /**
