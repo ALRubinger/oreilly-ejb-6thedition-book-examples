@@ -27,22 +27,21 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.interceptor.Interceptors;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import junit.framework.TestCase;
 
 import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.api.Run;
+import org.jboss.arquillian.api.RunModeType;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.ejb3.examples.ch18.tuner.CachingAuditor;
-import org.jboss.ejb3.examples.ch18.tuner.Channel2AccessPolicy;
-import org.jboss.ejb3.examples.ch18.tuner.Channel2ClosedException;
-import org.jboss.ejb3.examples.ch18.tuner.Channel2Restrictor;
-import org.jboss.ejb3.examples.ch18.tuner.TunerBean;
-import org.jboss.ejb3.examples.ch18.tuner.TunerLocalBusiness;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -54,6 +53,7 @@ import org.junit.runner.RunWith;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
+@Run(RunModeType.AS_CLIENT)
 public class InterceptionIntegrationTest
 {
 
@@ -86,11 +86,20 @@ public class InterceptionIntegrationTest
     * The bean to invoke upon
     */
    @EJB
-   private TunerLocalBusiness bean;
+   private static TunerLocalBusiness bean;
    
    //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
+   
+   /**
+    * Lookup the bean instance
+    * TODO Arquillian should inject this
+    */
+   @BeforeClass
+   public static void lookup() throws Exception{
+      bean = (TunerLocalBusiness)new InitialContext().lookup("java:global/echo/TunerBean!org.jboss.ejb3.examples.ch18.tuner.TunerLocalBusiness");
+   }
    
    /**
     * Cleanup
@@ -143,6 +152,10 @@ public class InterceptionIntegrationTest
          bean.getChannel(2);
       }
       // Expected
+      catch (final EJBException ejbe)
+      {
+         throw ejbe.getCause();
+      }
       catch (final UndeclaredThrowableException ute)
       {
          throw ute.getCause();

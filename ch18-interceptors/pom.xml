@@ -62,7 +62,7 @@
     <!-- Arquillian Test Harness -->
     <dependency>
       <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-openejb-embedded-3.1</artifactId>
+      <artifactId>arquillian-glassfish-embedded-3</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jboss.arquillian</groupId>
@@ -70,8 +70,9 @@
     </dependency>
     
     <dependency>
-      <groupId>org.apache.openejb</groupId>
-      <artifactId>openejb-core</artifactId>
+      <groupId>org.glassfish.extras</groupId>
+      <artifactId>glassfish-embedded-all</artifactId>
+      <version>${version.org.glassfish}</version>
     </dependency>
     
     <dependency>
