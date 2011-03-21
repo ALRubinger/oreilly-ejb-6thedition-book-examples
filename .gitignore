@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 target
 bin
 .classpath
 .project
 .settings
-=======
-.classpath
-.project
-.settings/
-target/
->>>>>>> EJBBOOK-33
+ch08-messagedestinationlink/transaction.log

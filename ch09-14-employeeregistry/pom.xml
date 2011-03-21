@@ -82,14 +82,6 @@
       <scope>compile</scope> <!-- Should be "test", but I can't find the GAV for JPA APIs -->
     </dependency>
 
-    <dependency>
-      <groupId>org.jboss.jbossas.osgi</groupId>
-      <artifactId>jboss-as-osgi-distribution</artifactId>
-      <version>${version.org.jboss.jbossas}</version>
-      <type>pom</type>
-    </dependency>
-
-
   </dependencies>
   
   <!--
@@ -117,7 +109,7 @@
       </dependency>
    </dependencies>
     
-    </dependencyManagement>
+  </dependencyManagement>
 
   <profiles>
 
