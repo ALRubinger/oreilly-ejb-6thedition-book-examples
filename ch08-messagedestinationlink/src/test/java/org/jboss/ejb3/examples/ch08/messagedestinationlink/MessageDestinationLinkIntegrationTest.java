@@ -21,35 +21,25 @@
  */
 package org.jboss.ejb3.examples.ch08.messagedestinationlink;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import junit.framework.TestCase;
 
-import org.jboss.bootstrap.api.lifecycle.LifecycleState;
+import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.api.Run;
+import org.jboss.arquillian.api.RunModeType;
+import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.ejb3.examples.ch08.messagedestinationlink.api.MessageDestinationLinkConstants;
 import org.jboss.ejb3.examples.ch08.messagedestinationlink.mdb.MessageDestinationLinkMdb;
 import org.jboss.ejb3.examples.ch08.messagedestinationlink.slsb.MessageSendingBean;
 import org.jboss.ejb3.examples.ch08.messagedestinationlink.slsb.MessageSendingBusiness;
-import org.jboss.embedded.api.DeploymentException;
-import org.jboss.embedded.api.server.JBossASEmbeddedServer;
-import org.jboss.embedded.api.server.JBossASEmbeddedServerFactory;
-import org.jboss.embedded.api.server.JBossHomeClassLoader;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * Ensures that a SLSB wired to an MDB by way of a logical mapping
@@ -58,6 +48,8 @@ import org.junit.Test;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
+@RunWith(Arquillian.class)
+@Run(RunModeType.AS_CLIENT)
 public class MessageDestinationLinkIntegrationTest
 {
 
@@ -71,145 +63,45 @@ public class MessageDestinationLinkIntegrationTest
    private static final Logger log = Logger.getLogger(MessageDestinationLinkIntegrationTest.class.getName());
 
    /**
-    * The server instance
-    */
-   private static JBossASEmbeddedServer server;
-
-   /**
-    * The CL of the test as originally loaded
-    */
-   private static ClassLoader originalClassLoader;
-
-   /**
     * Name of the archive we'll deploy into the server for testing
     */
    private static final String NAME_MDB_ARCHIVE = "messageDestinationLink.jar";
-
+   
    /**
-    * Name of the system property for JBOSS_HOME
+    * Name of the file containing the Queue
     */
-   private static final String NAME_SYSPROP_JBOSS_HOME = "jboss.home";
-
-   /**
-    * Location of the EJB deployment descriptor
-    */
-   private static final String NAME_EJB_JAR = "META-INF/ejb-jar.xml";
-
+   private static final String QUEUE_DEPLOYMENT_NAME = "hornet-jms.xml";
+   
    /**
     * The JNDI Context
     */
    private static Context NAMING_CONTEXT;
 
    //-------------------------------------------------------------------------------------||
-   // Instance Members -------------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
-    * Archive containing our EJBs
-    */
-   private JavaArchive testArchive;
-
-   //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Creates and starts a new JBossAS Server Embedded within this JVM, setting a JNDI context as well
+    * Creates the test archive
     */
-   @BeforeClass
-   public static void createAndStartJBossASAndSetNamingContext() throws Exception
-   {
-      // Get JBOSS_HOME
-      final URL jbossHome = getJBossHome();
-
-      // Get additional binaries which need CL visibility (ie. jboss-embedded-core,
-      // which is placed under "target/deps" by the build).  These
-      // binaries are not presently available under $JBOSS_HOME
-      final Set<URL> additionalUrls = new HashSet<URL>();
-      final URL source = MessageDestinationLinkIntegrationTest.class.getProtectionDomain().getCodeSource()
-            .getLocation();
-      final URL target = new URL(source, "..");
-      final URL additionalDeps = new URL(target, "deps");
-      final File deps = new File(additionalDeps.toURI());
-      TestCase.assertTrue("Dependencies location does not exist: " + deps, deps.exists());
-      TestCase.assertTrue("Dependencies location is not a directory: " + deps, deps.isDirectory());
-      for (final File child : deps.listFiles())
-      {
-         additionalUrls.add(child.toURI().toURL());
-         log.info("Booting with: " + child);
-      }
-
-      // Make the new ClassLoader
-      originalClassLoader = SecurityActions.getThreadContextClassLoader();
-      final ClassLoader jbossHomeClassLoader = JBossHomeClassLoader.newInstance(jbossHome, additionalUrls
-            .toArray(new URL[]
-            {}), originalClassLoader);
-
-      // Make Server
-      server = JBossASEmbeddedServerFactory.createServer(jbossHomeClassLoader);
-      log.info("Created: " + server);
-
-      // Start
-      log.info("Starting Server: " + server);
-
-      // Set TCCL
-      Thread.currentThread().setContextClassLoader(jbossHomeClassLoader);
-
-      // Start the Server
-      server.start();
-
-      // Set Naming Context
-      NAMING_CONTEXT = new InitialContext();
-   }
-
-   /**
-    * Stops the Application Server
-    */
-   @AfterClass
-   public static void stopJBossAS() throws Exception
-   {
-      if (server != null && server.getState().equals(LifecycleState.STARTED))
-      {
-         try
-         {
-            server.shutdown();
-         }
-         finally
-         {
-            // Reset the TCCL 
-            Thread.currentThread().setContextClassLoader(originalClassLoader);
-         }
-      }
-   }
-
-   /**
-    * Creates and deploys the test archive
-    * @throws DeploymentException
-    */
-   @Before
-   public void createAndDeployArchive() throws DeploymentException
+   @Deployment
+   public static JavaArchive createDeployment()
    {
       // Package up the EJBs and a Deployment Descriptor
-      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, NAME_MDB_ARCHIVE).addClasses(
-            MessageDestinationLinkConstants.class, MessageDestinationLinkMdb.class, MessageSendingBusiness.class,
-            MessageSendingBean.class).addResource(NAME_EJB_JAR);
+//      final JavaArchive archive = ShrinkWrap
+//            .create(JavaArchive.class, NAME_MDB_ARCHIVE)
+//            .addClasses(MessageDestinationLinkConstants.class, MessageDestinationLinkMdb.class,
+//                  MessageSendingBusiness.class, MessageSendingBean.class)
+//            .addResource(QUEUE_DEPLOYMENT_NAME, "queues/" + QUEUE_DEPLOYMENT_NAME);
+      
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class).addResource(QUEUE_DEPLOYMENT_NAME,
+            "queues/" + QUEUE_DEPLOYMENT_NAME);
 
-      // Deploy the archive
+      // Log
       log.info("Deploying archive: " + archive.toString(true));
-      server.deploy(archive);
-      testArchive = archive;
-   }
 
-   /**
-    * Undeploys the test archive
-    */
-   @After
-   public void undeployArchive() throws DeploymentException
-   {
-      if (testArchive != null)
-      {
-         server.undeploy(testArchive);
-      }
+      // Return
+      return archive;
    }
 
    //-------------------------------------------------------------------------------------||
@@ -258,38 +150,6 @@ public class MessageDestinationLinkIntegrationTest
       // Ensure the contents are as expected
       final String roundtrip = MessageDestinationLinkMdb.LAST_MESSAGE;
       TestCase.assertEquals("Last message sent was not as expected", message, roundtrip);
-   }
-
-   //-------------------------------------------------------------------------------------||
-   // Internal Helper Methods ------------------------------------------------------------||
-   //-------------------------------------------------------------------------------------||
-
-   /**
-    * Obtains $JBOSS_HOME from the system property
-    * 
-    * @return
-    */
-   private static URL getJBossHome()
-   {
-      final String sysProp = NAME_SYSPROP_JBOSS_HOME;
-      final String jbossHomeString = SecurityActions.getSystemProperty(sysProp);
-      if (jbossHomeString == null)
-      {
-         throw new IllegalStateException("System property \"" + sysProp + "\" must be present in the environment");
-      }
-      final File jbossHomeFile = new File(jbossHomeString);
-      if (!jbossHomeFile.exists())
-      {
-         throw new IllegalStateException("JBOSS_HOME does not exist: " + jbossHomeFile.getAbsolutePath());
-      }
-      try
-      {
-         return jbossHomeFile.toURI().toURL();
-      }
-      catch (final MalformedURLException murle)
-      {
-         throw new RuntimeException("Could not get JBOSS_HOME", murle);
-      }
    }
 
 }

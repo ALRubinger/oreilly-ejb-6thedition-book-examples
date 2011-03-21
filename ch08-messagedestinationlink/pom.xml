@@ -50,53 +50,38 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
+    
+    <!-- Arquillian Test Harness -->
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-jbossas-embedded-6</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian</groupId>
+      <artifactId>arquillian-junit</artifactId>
+    </dependency>
 
-   
   </dependencies>
 
-  <profiles>
+    <profiles>
 
     <profile>
 
       <!-- Declare the "Integration Test" Profile -->
       <id>it</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
 
       <build>
 
         <plugins>
-
-          <!-- Surefire -->
-          <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>integration-test</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <additionalClasspathElements>
-                    <additionalClasspathElement>${JBOSS_HOME}/client/jbossws-native-client.jar</additionalClasspathElement>
-                  </additionalClasspathElements>
-                  <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                  <trimStackTrace>false</trimStackTrace>
-                  <printSummary>true</printSummary>
-                  <includes>
-                    <include>**/*IntegrationTest.java</include>
-                  </includes>
-                  <forkMode>always</forkMode>
-                  <argLine>-disableassertions -Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Djava.endorsed.dirs=${JBOSS_HOME}/lib/endorsed -Djboss.home=${JBOSS_HOME} -Djboss.boot.server.log.dir=${JBOSS_HOME}</argLine>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
+        
+          <!-- Get AS and put into "target" -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
-              <!-- Get AS and put into "target" -->
               <execution>
                 <id>unpack</id>
                 <phase>pre-integration-test</phase> <!-- So run before testing -->
@@ -118,8 +103,38 @@
               </execution>
             </executions>
           </plugin>
+         
 
-      </plugins>
+          <!-- Surefire -->
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>integration-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <additionalClasspathElements>
+                    <additionalClasspathElement>${JBOSS_HOME}/client/jbossws-native-client.jar</additionalClasspathElement>
+                    <additionalClasspathElement>${JBOSS_HOME}/server/default/deploy/jbossweb.sar</additionalClasspathElement>
+                  </additionalClasspathElements>
+                  <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                  <trimStackTrace>false</trimStackTrace>
+                  <printSummary>true</printSummary>
+                  <includes>
+                    <include>**/*IntegrationTest.java</include>
+                  </includes>
+                  <forkMode>once</forkMode>
+                  <argLine>-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Djava.endorsed.dirs=${JBOSS_HOME}/lib/endorsed -Djboss.home=${JBOSS_HOME} -Djboss.boot.server.log.dir=${JBOSS_HOME} -Dorg.jboss.reflect.spi.TypeInfoFactory=org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory</argLine>
+                  <skipTests>true</skipTests>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
 
       </build>
 

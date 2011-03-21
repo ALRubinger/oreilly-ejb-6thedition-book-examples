@@ -21,6 +21,7 @@
  */
 package org.jboss.ejb3.examples.ch08.messagedestinationlink.slsb;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -68,14 +69,14 @@ public class MessageSendingBean implements MessageSendingBusiness
    /**
     * Queue we'll send messages to; logical name as wired from the message-destination-link
     */
-   @Resource(name = MessageDestinationLinkConstants.NAME_MESSAGE_DESTINATION_LINK_REF)
+   @Resource(name = MessageDestinationLinkConstants.NAME_MESSAGE_DESTINATION_LINK_REF, mappedName = "queue/MessageDestinationLinkQueue")
    // Name to match message-destination-ref-name
    private Queue queue;
 
    /**
     * Connection factory for making new Queue connections
     */
-   @Resource(mappedName = MessageDestinationLinkConstants.JNDI_NAME_CONNECTION_FACTORY)
+   @Resource(name = MessageDestinationLinkConstants.JNDI_NAME_CONNECTION_FACTORY, mappedName = MessageDestinationLinkConstants.JNDI_NAME_CONNECTION_FACTORY)
    private QueueConnectionFactory connectionFactory;
 
    //-------------------------------------------------------------------------------------||
@@ -148,6 +149,23 @@ public class MessageSendingBean implements MessageSendingBusiness
       catch (final JMSException jmse)
       {
          throw new RuntimeException("Could not send message", jmse);
+      }
+      
+      try
+      {
+         session.close();
+      }
+      catch (JMSException ex)
+      {
+         Logger.getLogger(MessageSendingBean.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      try
+      {
+         connection.close();
+      }
+      catch (JMSException ex)
+      {
+         Logger.getLogger(MessageSendingBean.class.getName()).log(Level.SEVERE, null, ex);
       }
 
    }

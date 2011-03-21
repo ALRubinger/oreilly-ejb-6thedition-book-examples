@@ -24,6 +24,7 @@ package org.jboss.ejb3.examples.ch08.messagedestinationlink.mdb;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
 
+import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -37,7 +38,9 @@ import javax.jms.TextMessage;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-@MessageDriven(name = MessageDestinationLinkMdb.NAME_EJB)
+@MessageDriven(name = MessageDestinationLinkMdb.NAME_EJB, activationConfig =
+{@ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/MessageDestinationLinkQueue"),
+      @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
 public class MessageDestinationLinkMdb implements MessageListener
 {
 
@@ -84,11 +87,12 @@ public class MessageDestinationLinkMdb implements MessageListener
    public void onMessage(final Message message)
    {
       // Cast
-      if (message instanceof TextMessage)
+      if (!(message instanceof TextMessage))
       {
          throw new IllegalArgumentException("Expecting message of type " + TextMessage.class.getName() + "; got: "
                + message);
       }
+
       final TextMessage txtMessage = (TextMessage) message;
       final String contents;
       try
@@ -99,14 +103,13 @@ public class MessageDestinationLinkMdb implements MessageListener
       {
          throw new RuntimeException("Could not get contents of message: " + txtMessage, e);
       }
-
-      // Set the last contents received
       log.info("Received message with contents: " + contents);
       LAST_MESSAGE = contents;
 
       // Count down the latch so that the test knows we're here
       log.info("Counting down the latch...");
       LATCH.countDown();
+
    }
 
 }

@@ -23,7 +23,7 @@
         we'll send messages
       -->
       <message-destination-ref>
-        <message-destination-ref-name>jms/MessageDestinationLinkQueue</message-destination-ref-name>
+        <message-destination-ref-name>queue/MessageDestinationLinkQueue</message-destination-ref-name>
         <message-destination-type>javax.jms.Queue</message-destination-type>
         <message-destination-usage>Produces</message-destination-usage>
         <message-destination-link>OurLinkName</message-destination-link>

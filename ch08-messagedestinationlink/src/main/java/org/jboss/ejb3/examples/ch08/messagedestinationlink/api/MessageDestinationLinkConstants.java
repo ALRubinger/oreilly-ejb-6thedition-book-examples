@@ -42,7 +42,7 @@ public interface MessageDestinationLinkConstants
    /**
     * Name of the Message Destination Link Ref
     */
-   String NAME_MESSAGE_DESTINATION_LINK_REF = "jms/MessageDestinationLinkQueue"; // To match XML message-destination-ref-name
+   String NAME_MESSAGE_DESTINATION_LINK_REF = "queue/MessageDestinationLinkQueue"; // To match XML message-destination-ref-name
 
    /**
     * The type of destination used by StatusUpdate MDB implementations
