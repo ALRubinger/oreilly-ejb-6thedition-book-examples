@@ -80,7 +80,7 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
    {
       final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "slsb.jar").addClasses(EncryptionBean.class,
             EncryptionCommonBusiness.class, EncryptionLocalBusiness.class, EncryptionRemoteBusiness.class,
-            EncryptionException.class).addManifestResource(
+            EncryptionException.class).addAsManifestResource(
             new URL(EncryptionIntegrationTestCase.class.getProtectionDomain().getCodeSource().getLocation(),
                   "../classes/META-INF/ejb-jar.xml"), "ejb-jar.xml");
       //TODO SHRINKWRAP-141 Make addition of the ejb-jar less verbose

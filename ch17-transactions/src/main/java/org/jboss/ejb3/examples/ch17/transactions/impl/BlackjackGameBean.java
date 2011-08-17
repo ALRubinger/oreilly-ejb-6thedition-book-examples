@@ -31,7 +31,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.jboss.ejb3.annotation.LocalBinding;
 import org.jboss.ejb3.examples.ch17.transactions.api.BankLocalBusiness;
 import org.jboss.ejb3.examples.ch17.transactions.api.BlackjackGameLocalBusiness;
 import org.jboss.ejb3.examples.ch17.transactions.api.InsufficientBalanceException;
@@ -53,7 +52,6 @@ import org.jboss.ejb3.examples.ch17.transactions.entity.User;
  */
 @Stateless
 @Local(BlackjackGameLocalBusiness.class)
-@LocalBinding(jndiBinding = BlackjackGameLocalBusiness.JNDI_NAME)
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 // Each game must be in a new Tx, suspending the existing enclosing Tx if necessary;
 // At the class-level, this annotation now applied to all methods

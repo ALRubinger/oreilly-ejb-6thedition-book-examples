@@ -53,17 +53,16 @@
     <!-- Arquillian Test Harness -->
     <dependency>
       <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-glassfish-embedded-3</artifactId>
+      <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jboss.arquillian</groupId>
-      <artifactId>arquillian-junit</artifactId>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
     </dependency>
     
     <dependency>
       <groupId>org.glassfish.extras</groupId>
       <artifactId>glassfish-embedded-all</artifactId>
-      <version>${version.org.glassfish}</version>
     </dependency>
     
     <dependency>

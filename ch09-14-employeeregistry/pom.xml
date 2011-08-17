@@ -104,28 +104,6 @@
         <scope>import</scope>
         <version>${version.org.jboss.as.7}</version>
       </dependency> 
-   
-    
-      <!-- When uniformly upgraded, this section can go away -->
-      <dependency>
-        <groupId>org.jboss.shrinkwrap</groupId>
-        <artifactId>shrinkwrap-api</artifactId>
-        <version>${version.org.jboss.shrinkwrap.upgrade}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.jboss.shrinkwrap</groupId>
-        <artifactId>shrinkwrap-spi</artifactId>
-        <version>${version.org.jboss.shrinkwrap.upgrade}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.jboss.shrinkwrap</groupId>
-        <artifactId>shrinkwrap-impl-base</artifactId>
-        <version>${version.org.jboss.shrinkwrap.upgrade}</version>
-        <scope>test</scope>
-      </dependency>
-      
     </dependencies>
     
   </dependencyManagement>

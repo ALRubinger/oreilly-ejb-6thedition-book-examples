@@ -35,7 +35,6 @@ import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.jms.TextMessage;
 
-import org.jboss.ejb3.annotation.LocalBinding;
 import org.jboss.ejb3.examples.ch08.messagedestinationlink.api.MessageDestinationLinkConstants;
 import org.jboss.ejb3.examples.ch08.messagedestinationlink.mdb.MessageDestinationLinkMdb;
 
@@ -48,7 +47,6 @@ import org.jboss.ejb3.examples.ch08.messagedestinationlink.mdb.MessageDestinatio
  * @version $Revision: $
  */
 @Stateless(name = MessageSendingBusiness.NAME_EJB)
-@LocalBinding(jndiBinding = MessageSendingBusiness.NAME_JNDI)
 @Local(MessageSendingBusiness.class)
 public class MessageSendingBean implements MessageSendingBusiness
 {

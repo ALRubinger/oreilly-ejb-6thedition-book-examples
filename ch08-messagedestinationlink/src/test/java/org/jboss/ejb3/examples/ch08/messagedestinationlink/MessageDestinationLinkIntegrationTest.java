@@ -28,13 +28,9 @@ import javax.naming.Context;
 
 import junit.framework.TestCase;
 
-import org.jboss.arquillian.api.Deployment;
-import org.jboss.arquillian.api.Run;
-import org.jboss.arquillian.api.RunModeType;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.ejb3.examples.ch08.messagedestinationlink.api.MessageDestinationLinkConstants;
 import org.jboss.ejb3.examples.ch08.messagedestinationlink.mdb.MessageDestinationLinkMdb;
-import org.jboss.ejb3.examples.ch08.messagedestinationlink.slsb.MessageSendingBean;
 import org.jboss.ejb3.examples.ch08.messagedestinationlink.slsb.MessageSendingBusiness;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -49,7 +45,6 @@ import org.junit.runner.RunWith;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-@Run(RunModeType.AS_CLIENT)
 public class MessageDestinationLinkIntegrationTest
 {
 
@@ -94,7 +89,7 @@ public class MessageDestinationLinkIntegrationTest
 //                  MessageSendingBusiness.class, MessageSendingBean.class)
 //            .addResource(QUEUE_DEPLOYMENT_NAME, "queues/" + QUEUE_DEPLOYMENT_NAME);
       
-      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class).addResource(QUEUE_DEPLOYMENT_NAME,
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class).addAsResource(QUEUE_DEPLOYMENT_NAME,
             "queues/" + QUEUE_DEPLOYMENT_NAME);
 
       // Log
