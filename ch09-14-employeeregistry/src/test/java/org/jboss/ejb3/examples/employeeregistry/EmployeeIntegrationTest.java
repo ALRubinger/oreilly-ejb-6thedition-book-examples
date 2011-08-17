@@ -27,8 +27,7 @@ import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.persistence.EmbeddedId;
 import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
@@ -37,9 +36,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.jboss.arquillian.api.Deployment;
-import org.jboss.arquillian.api.Run;
-import org.jboss.arquillian.api.RunModeType;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.ejb3.examples.employeeregistry.ch09.entitymanager.SimpleEmployee;
 import org.jboss.ejb3.examples.employeeregistry.ch10.mapping.EmbeddedEmployeePK;
@@ -63,14 +60,12 @@ import org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingBean;
 import org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingLocalBusiness;
 import org.jboss.ejb3.examples.testsupport.entity.IdentityBase;
 import org.jboss.ejb3.examples.testsupport.txwrap.TaskExecutionException;
-import org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingBean;
 import org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingLocalBusiness;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -83,7 +78,6 @@ import org.junit.runner.RunWith;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-@Run(RunModeType.AS_CLIENT)
 public class EmployeeIntegrationTest
 {
    //-------------------------------------------------------------------------------------||
@@ -96,13 +90,6 @@ public class EmployeeIntegrationTest
    private static final Logger log = Logger.getLogger(EmployeeIntegrationTest.class.getName());
 
    /**
-    * Naming Context
-    * @deprecated Remove when Arquillian will inject the EJB proxies
-    */
-   @Deprecated
-   private static Context jndiContext;
-
-   /**
     * The Deployment into the EJB Container
     */
    @Deployment
@@ -111,11 +98,12 @@ public class EmployeeIntegrationTest
       final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "entities.jar").addPackages(false,
             SimpleEmployee.class.getPackage(), EmployeeWithMappedSuperClassId.class.getPackage(),
             Employee.class.getPackage(), TxWrappingLocalBusiness.class.getPackage(),
+            IdentityBase.class.getPackage(),
             EntityListenerEmployee.class.getPackage(), EntityManagerExposingBean.class.getPackage(),
             org.jboss.ejb3.examples.employeeregistry.ch12.inheritance.singleclass.Employee.class.getPackage(),
             org.jboss.ejb3.examples.employeeregistry.ch12.inheritance.tableperclass.Employee.class.getPackage(),
             org.jboss.ejb3.examples.employeeregistry.ch12.inheritance.joined.Employee.class.getPackage())
-            .addManifestResource("persistence.xml");
+            .addAsManifestResource("persistence.xml");
       log.info(archive.toString(true));
       return archive;
    }
@@ -145,42 +133,26 @@ public class EmployeeIntegrationTest
    /**
     * EJB which wraps supplied {@link Callable} instances inside of a new Tx
     */
-   // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
+   @EJB(mappedName="java:global/entities/TxWrappingBean!org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingLocalBusiness")
    private TxWrappingLocalBusiness txWrapper;
 
    /**
     * EJB which provides direct access to an {@link EntityManager}'s method for use in testing.
     * Must be called inside an existing Tx so that returned entities are not detached.
     */
-   // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
+   @EJB(mappedName="java:global/entities/EntityManagerExposingBean!org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingLocalBusiness")
    private EntityManagerExposingLocalBusiness emHook;
 
    //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
-
-   /**
-    * Performs suite-wide initialization
-    */
-   @BeforeClass
-   public static void init() throws Exception
-   {
-      // After the server is up, we don't need to pass any explicit properties
-      jndiContext = new InitialContext();
-   }
-
+   
    /**
     * Manually looks up EJBs in JNDI and assigns them
     */
    @Before
    public void injectEjbsAndClearDB() throws Throwable
    {
-      // Fake injection by doing manual lookups for the time being
-      //TODO Deprecated portion
-      txWrapper = (TxWrappingLocalBusiness) jndiContext.lookup(TxWrappingBean.class.getSimpleName() + "/local");
-      emHook = (EntityManagerExposingLocalBusiness) jndiContext.lookup(EntityManagerExposingBean.class.getSimpleName()
-            + "/local");
-
       // Clear all employees before running, just in case
       this.clearAllEmployees();
    }
@@ -1331,15 +1303,13 @@ public class EmployeeIntegrationTest
             // Persist
             em.persist(employee);
 
-            // Refresh
-            em.refresh(employee);
-
             // Update
             employee.setName("New Name");
             em.flush();
 
             // Lookup
-            em.find(EntityListenerEmployee.class, employee.getId());
+            final EntityListenerEmployee employee2 = em.find(EntityListenerEmployee.class, employee.getId());
+            em.refresh(employee2);
 
             // Remove
             em.remove(employee);
@@ -1348,7 +1318,7 @@ public class EmployeeIntegrationTest
             return null;
          }
       });
-
+      
       // Assert events fired
       final String postconditionMessage = "Missing event fired";
       Assert.assertTrue(postconditionMessage, EventTracker.postLoad);

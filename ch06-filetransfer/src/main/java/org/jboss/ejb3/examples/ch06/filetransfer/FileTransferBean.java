@@ -24,6 +24,7 @@ package org.jboss.ejb3.examples.ch06.filetransfer;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -36,7 +37,6 @@ import javax.ejb.Stateful;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
-import org.jboss.logging.Logger;
 
 /**
  * Bean Implementation class of the FileTransferEJB, modeled
@@ -61,7 +61,7 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(FileTransferBean.class);
+   private static final Logger log = Logger.getLogger(FileTransferBean.class.getName());
 
    /**
     * Name of the EJB, used in Global JNDI addresses
@@ -135,19 +135,19 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
             }
             catch (final IOException ioe)
             {
-               log.warn("Exception encountered in logging out of the FTP client", ioe);
+               log.warning("Exception encountered in logging out of the FTP client: " + ioe.getMessage());
             }
 
             // Disconnect
             try
             {
-               log.debug("Disconnecting: " + client);
+               log.fine("Disconnecting: " + client);
                client.disconnect();
                log.info("Disconnected: " + client);
             }
             catch (final IOException ioe)
             {
-               log.warn("Exception encountered in disconnecting the FTP client", ioe);
+               log.warning("Exception encountered in disconnecting the FTP client: " + ioe.getMessage());
             }
 
             // Null out the client so it's not serialized
@@ -184,7 +184,7 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
       // Create the client
       final FTPClient client = new FTPClient();
       final String canonicalServerName = connectHost + ":" + connectPort;
-      log.debug("Connecting to FTP Server at " + canonicalServerName);
+      log.fine("Connecting to FTP Server at " + canonicalServerName);
       try
       {
          client.connect(connectHost, connectPort);
@@ -295,7 +295,7 @@ public class FileTransferBean implements FileTransferRemoteBusiness, Serializabl
          final FTPFile[] files = client.listFiles();
          for (final FTPFile file : files)
          {
-            log.info(file);
+            log.info(file.toString());
          }
 
           // Exec pwd

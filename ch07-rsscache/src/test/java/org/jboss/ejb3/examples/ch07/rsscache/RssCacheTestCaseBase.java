@@ -11,6 +11,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +22,6 @@ import junit.framework.Assert;
 
 import org.jboss.ejb3.examples.ch07.rsscache.spi.RssCacheCommonBusiness;
 import org.jboss.ejb3.examples.ch07.rsscache.spi.RssEntry;
-import org.jboss.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public abstract class RssCacheTestCaseBase
    // Class Members ----------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
 
-   private static final Logger log = Logger.getLogger(RssCacheTestCaseBase.class);
+   private static final Logger log = Logger.getLogger(RssCacheTestCaseBase.class.getName());
 
    /**
     * The number of expected RSS entries from the default RSS Feed
@@ -141,7 +142,7 @@ public abstract class RssCacheTestCaseBase
          catch (final Exception e)
          {
             // Swallow
-            log.error("Could not stop HTTP Server cleanly", e);
+            log.severe("Could not stop HTTP Server cleanly: " + e.getMessage());
          }
          log.info("HTTP Server Stopped: " + httpServer);
          httpServer = null;
@@ -158,7 +159,7 @@ public abstract class RssCacheTestCaseBase
       boolean deleted = rssFile.delete();
       if (!deleted)
       {
-         log.warn("RSS Feed File was not cleaned up properly: " + rssFile);
+         log.warning("RSS Feed File was not cleaned up properly: " + rssFile);
       }
    }
 
@@ -371,7 +372,7 @@ public abstract class RssCacheTestCaseBase
          if (!file.exists())
          {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            log.warn("Requested file is not found: " + file);
+            log.log(Level.WARNING, "Requested file is not found: " + file);
             return;
          }
 

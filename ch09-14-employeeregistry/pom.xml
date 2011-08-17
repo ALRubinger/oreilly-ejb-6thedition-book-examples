@@ -17,11 +17,6 @@
   <name>JBoss EJB 3.x Examples - Chapters 9-14: Employee Registry EJBs</name>
   <description>Example to accompany O'Reilly "Enterprise Java Beans 6th Edition" Chapter 9-14</description>
 
-  <!-- Build -->
-  <build>
-  </build>
-
-
   <!-- Properties -->
   <properties>
 
@@ -34,19 +29,16 @@
   <!-- Dependencies -->
   <dependencies>
   
-  <!--  
-    <dependency>
-      <groupId>org.jboss.spec.javax.ejb</groupId>
-      <artifactId>jboss-ejb-api_3.1_spec</artifactId>
-      <scope>provided</scope>
-    </dependency>
-  -->
-  
-    <!-- Examples Support -->
+    <!-- Compile Dependencies -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>jboss-ejb3-examples-testsupport</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-spec-api</artifactId>
+      <type>pom</type>
     </dependency>
     
     
@@ -54,17 +46,44 @@
     
     Test Dependencies
      -->
-     
-    
 
     <!-- Arquillian Test Harness -->
     <dependency>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-jbossas-embedded-6</artifactId>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-arquillian-container-managed</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jboss.arquillian</groupId>
-      <artifactId>arquillian-junit</artifactId>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-dist</artifactId>
+      <type>zip</type>
+      <scope>test</scope>
+    </dependency>
+    
+    <!-- 
+    HACK:
+    Currently the ARQ Managed Container is not exporting
+    all deps needed to run, at a minimum, jboss-threads
+    AS7-1557
+    -->
+    <dependency>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-build</artifactId>
+      <type>pom</type>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.faces</groupId>
+          <artifactId>jsf-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xalan</groupId>
+          <artifactId>serializer</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
     <!-- JUnit -->
@@ -72,50 +91,49 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
-    
-    <!-- JBossAS -->
-    <dependency>
-      <groupId>org.jboss.jbossas</groupId>
-      <artifactId>jboss-as-depchain</artifactId>
-      <version>${version.org.jboss.jbossas}</version>
-      <type>pom</type>
-      <scope>compile</scope> <!-- Should be "test", but I can't find the GAV for JPA APIs -->
-    </dependency>
 
   </dependencies>
   
-  <!--
-    We also need to place the AS depchain into 
-    the "dependencyManagement" section in import scope
-    so that Maven respects the "exclusion" elements
-    configured
-    -->
   <dependencyManagement>
     <dependencies>
-  
-      <!-- org.jboss.jbossas -->
+      <!-- To honor exclusions -->
       <dependency>
-        <groupId>org.jboss.jbossas</groupId>
-        <artifactId>jboss-as-depchain</artifactId>
-        <version>${version.org.jboss.jbossas}</version>
+        <groupId>org.jboss.as</groupId>
+        <artifactId>jboss-as-parent</artifactId>
         <type>pom</type>
         <scope>import</scope>
-        <exclusions>
-          <exclusion>
-            <groupId>org.jboss.jbossas.osgi</groupId>
-            <artifactId>jboss-as-osgi-distribution</artifactId>
-          </exclusion>
-        </exclusions>
+        <version>${version.org.jboss.as.7}</version>
+      </dependency> 
+   
+    
+      <!-- When uniformly upgraded, this section can go away -->
+      <dependency>
+        <groupId>org.jboss.shrinkwrap</groupId>
+        <artifactId>shrinkwrap-api</artifactId>
+        <version>${version.org.jboss.shrinkwrap.upgrade}</version>
+        <scope>test</scope>
       </dependency>
-   </dependencies>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap</groupId>
+        <artifactId>shrinkwrap-spi</artifactId>
+        <version>${version.org.jboss.shrinkwrap.upgrade}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap</groupId>
+        <artifactId>shrinkwrap-impl-base</artifactId>
+        <version>${version.org.jboss.shrinkwrap.upgrade}</version>
+        <scope>test</scope>
+      </dependency>
+      
+    </dependencies>
     
   </dependencyManagement>
-
+  
   <profiles>
-
+  
     <profile>
-
-      <!-- Declare the "Integration Test" Profile -->
+    
       <id>it</id>
       <activation>
         <activeByDefault>true</activeByDefault>
@@ -139,9 +157,9 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.jboss.jbossas</groupId>
-                      <artifactId>jboss-as-distribution</artifactId>
-                      <version>${version.org.jboss.jbossas}</version>
+                      <groupId>org.jboss.as</groupId>
+                      <artifactId>jboss-as-dist</artifactId>
+                      <version>${version.org.jboss.as.7}</version>
                       <type>zip</type>
                       <overWrite>false</overWrite>
                       <outputDirectory>${project.build.directory}</outputDirectory>
@@ -164,10 +182,6 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <additionalClasspathElements>
-                    <additionalClasspathElement>${JBOSS_HOME}/client/jbossws-native-client.jar</additionalClasspathElement>
-                    <additionalClasspathElement>${JBOSS_HOME}/server/default/deploy/jbossweb.sar</additionalClasspathElement>
-                  </additionalClasspathElements>
                   <redirectTestOutputToFile>true</redirectTestOutputToFile>
                   <trimStackTrace>false</trimStackTrace>
                   <printSummary>true</printSummary>
@@ -175,7 +189,6 @@
                     <include>**/*IntegrationTest.java</include>
                   </includes>
                   <forkMode>once</forkMode>
-                  <argLine>-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Djava.endorsed.dirs=${JBOSS_HOME}/lib/endorsed -Djboss.home=${JBOSS_HOME} -Djboss.boot.server.log.dir=${JBOSS_HOME} -Dorg.jboss.reflect.spi.TypeInfoFactory=org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory</argLine>
                 </configuration>
               </execution>
             </executions>
@@ -184,9 +197,8 @@
         </plugins>
 
       </build>
-
+      
     </profile>
-
   </profiles>
 
 </project>

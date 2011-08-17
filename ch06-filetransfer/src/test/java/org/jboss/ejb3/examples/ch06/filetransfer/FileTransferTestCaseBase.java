@@ -22,13 +22,14 @@
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import junit.framework.TestCase;
 
-import org.jboss.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 
 /**
  * Base tests for the file transfer test classes, may
@@ -46,7 +47,7 @@ public abstract class FileTransferTestCaseBase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(FileTransferTestCaseBase.class);
+   private static final Logger log = Logger.getLogger(FileTransferTestCaseBase.class.getName());
 
    /**
     * The name of the directory under the writable temp filesystem which

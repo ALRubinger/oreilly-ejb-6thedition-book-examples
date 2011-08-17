@@ -26,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 
@@ -33,7 +34,6 @@ import junit.framework.TestCase;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(EncryptionIntegrationTestCase.class);
+   private static final Logger log = Logger.getLogger(EncryptionIntegrationTestCase.class.getName());
 
    /**
     * The EJB 3.x local business view of the EncryptionEJB

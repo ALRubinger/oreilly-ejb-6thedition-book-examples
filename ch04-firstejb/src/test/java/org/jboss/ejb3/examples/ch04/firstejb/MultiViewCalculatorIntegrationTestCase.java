@@ -23,13 +23,13 @@
 package org.jboss.ejb3.examples.ch04.firstejb;
 
 import java.net.MalformedURLException;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.BeforeClass;
@@ -51,7 +51,7 @@ public class MultiViewCalculatorIntegrationTestCase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(MultiViewCalculatorIntegrationTestCase.class);
+   private static final Logger log = Logger.getLogger(MultiViewCalculatorIntegrationTestCase.class.getName());
 
    /**
     * The JNDI Naming Context

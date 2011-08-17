@@ -21,9 +21,9 @@
  */
 package org.jboss.ejb3.examples.ch05.encryption;
 
-import junit.framework.TestCase;
+import java.util.logging.Logger;
 
-import org.jboss.logging.Logger;
+import junit.framework.TestCase;
 
 /**
  * Common base for centralizing test logic used
@@ -40,7 +40,7 @@ public class EncryptionTestCaseSupport
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(EncryptionTestCaseSupport.class);
+   private static final Logger log = Logger.getLogger(EncryptionTestCaseSupport.class.getName());
 
    /**
     * A simple String used in testing

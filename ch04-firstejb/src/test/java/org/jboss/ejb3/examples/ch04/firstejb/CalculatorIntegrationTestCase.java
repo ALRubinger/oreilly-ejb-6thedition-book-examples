@@ -23,12 +23,12 @@
 package org.jboss.ejb3.examples.ch04.firstejb;
 
 import java.net.MalformedURLException;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.BeforeClass;
@@ -51,7 +51,7 @@ public class CalculatorIntegrationTestCase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(CalculatorIntegrationTestCase.class);
+   private static final Logger log = Logger.getLogger(CalculatorIntegrationTestCase.class.getName());
 
    /**
     * The EJB 3.x local business view of the CalculatorEJB

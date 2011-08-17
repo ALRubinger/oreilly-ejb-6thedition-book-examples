@@ -117,4 +117,9 @@ class MockInvocationContext implements InvocationContext
    {
       throw new UnsupportedOperationException(MSG_UNSUPPORTED);
    }
+
+   @Override
+   public Object getTimer() {
+      throw new UnsupportedOperationException(MSG_UNSUPPORTED);
+   }
 }

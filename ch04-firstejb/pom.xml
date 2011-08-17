@@ -21,8 +21,9 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.jboss.ejb3</groupId>
-      <artifactId>jboss-ejb3-api</artifactId>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-spec-api</artifactId>
+      <type>pom</type>
     </dependency>
 
     <dependency>
@@ -30,16 +31,6 @@
       <artifactId>junit</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.jboss.logging</groupId>
-      <artifactId>jboss-logging-log4j</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.logging</groupId>
-      <artifactId>jboss-logging-spi</artifactId>
-    </dependency>
-    
     <dependency>
       <groupId>org.jboss.arquillian.container</groupId>
       <artifactId>arquillian-openejb-embedded-3.1</artifactId>

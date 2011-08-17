@@ -22,6 +22,7 @@
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.NoSuchEJBException;
@@ -30,7 +31,6 @@ import junit.framework.TestCase;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
@@ -61,7 +61,7 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(FileTransferIntegrationTestCase.class);
+   private static final Logger log = Logger.getLogger(FileTransferIntegrationTestCase.class.getName());
 
    /**
     * Name of the configuration file for the FTP server users

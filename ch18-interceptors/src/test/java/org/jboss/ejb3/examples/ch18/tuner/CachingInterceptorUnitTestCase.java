@@ -23,6 +23,7 @@ package org.jboss.ejb3.examples.ch18.tuner;
 
 import java.security.Identity;
 import java.security.Principal;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -38,9 +39,6 @@ import javax.xml.rpc.handler.MessageContext;
 
 import junit.framework.TestCase;
 
-import org.jboss.ejb3.examples.ch18.tuner.AuditedInvocation;
-import org.jboss.ejb3.examples.ch18.tuner.CachingAuditor;
-import org.jboss.ejb3.examples.ch18.tuner.TunerLocalBusiness;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -218,8 +216,12 @@ public class CachingInterceptorUnitTestCase
          }
 
          @Override
-         public boolean isCancelled() throws IllegalStateException
-         {
+         public Map<String, Object> getContextData() {
+            throw UNSUPPORTED;
+         }
+
+         @Override
+         public boolean wasCancelCalled() throws IllegalStateException {
             throw UNSUPPORTED;
          }
       };

@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
@@ -17,7 +18,6 @@ import javax.ejb.Startup;
 
 import org.jboss.ejb3.examples.ch07.rsscache.spi.RssCacheCommonBusiness;
 import org.jboss.ejb3.examples.ch07.rsscache.spi.RssEntry;
-import org.jboss.logging.Logger;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
@@ -47,7 +47,7 @@ public class RssCacheBean implements RssCacheCommonBusiness
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(RssCacheBean.class);
+   private static final Logger log = Logger.getLogger(RssCacheBean.class.getName());
 
    //-------------------------------------------------------------------------------------||
    // Instance Members -------------------------------------------------------------------||
@@ -141,7 +141,7 @@ public class RssCacheBean implements RssCacheCommonBusiness
 
          // Place in the list
          rssEntries.add(rssEntry);
-         log.debug("Found new RSS Entry: " + rssEntry);
+         log.fine("Found new RSS Entry: " + rssEntry);
       }
 
       // Protect the entries from mutation from exporting the client view

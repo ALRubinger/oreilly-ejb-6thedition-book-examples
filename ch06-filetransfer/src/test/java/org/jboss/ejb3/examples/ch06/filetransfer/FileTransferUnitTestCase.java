@@ -28,13 +28,13 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.logging.Logger;
 
 import javax.ejb.PostActivate;
 import javax.ejb.PrePassivate;
 
 import junit.framework.TestCase;
 
-import org.jboss.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -61,7 +61,7 @@ public class FileTransferUnitTestCase extends FileTransferTestCaseBase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(FileTransferUnitTestCase.class);
+   private static final Logger log = Logger.getLogger(FileTransferUnitTestCase.class.getName());
 
    /**
     * The FTP Service to which we'll connect

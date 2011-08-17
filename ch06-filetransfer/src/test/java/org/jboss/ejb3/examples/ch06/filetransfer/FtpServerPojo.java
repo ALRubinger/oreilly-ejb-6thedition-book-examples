@@ -24,6 +24,7 @@ package org.jboss.ejb3.examples.ch06.filetransfer;
 import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.logging.Logger;
 
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
@@ -32,7 +33,6 @@ import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
-import org.jboss.logging.Logger;
 
 /**
  * POJO Responsible for starting/stopping 
@@ -58,7 +58,7 @@ public final class FtpServerPojo
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(FtpServerPojo.class);
+   private static final Logger log = Logger.getLogger(FtpServerPojo.class.getName());
 
    /**
     * Name of the Server's default listener
@@ -114,7 +114,7 @@ public final class FtpServerPojo
       final ListenerFactory factory = new ListenerFactory();
 
       // Set properties
-      log.debug("Using FTP bind port: " + bindPort);
+      log.fine("Using FTP bind port: " + bindPort);
       factory.setPort(bindPort);
 
       // Add default listener to the server factory
@@ -182,7 +182,7 @@ public final class FtpServerPojo
       }
 
       // Start
-      log.debug("Starting the FTP Server: " + server);
+      log.fine("Starting the FTP Server: " + server);
       server.start();
       log.info("FTP Server Started: " + server);
    }
@@ -216,7 +216,7 @@ public final class FtpServerPojo
       }
 
       // Stop
-      log.debug("Stopping the FTP Server: " + server);
+      log.fine("Stopping the FTP Server: " + server);
       server.stop();
       log.info("FTP Server stopped: " + server);
    }

@@ -23,10 +23,10 @@ package org.jboss.ejb3.examples.ch07.rsscache;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import org.jboss.ejb3.examples.ch07.rsscache.impl.rome.TestRssCacheBean;
 import org.jboss.ejb3.examples.ch07.rsscache.spi.RssCacheCommonBusiness;
-import org.jboss.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -46,7 +46,7 @@ public class RssCacheUnitTestCase extends RssCacheTestCaseBase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(RssCacheUnitTestCase.class);
+   private static final Logger log = Logger.getLogger(RssCacheUnitTestCase.class.getName());
 
    /**
     * The bean (POJO) instance to test, mocking a @Singleton EJB
