@@ -22,7 +22,7 @@
 
 package org.jboss.ejb3.examples.ch04.firstejb;
 
-import org.jboss.logging.Logger;
+import java.util.logging.Logger;
 
 /**
  * Base for bean implementation classes of the CalculatorEJB, 
@@ -39,7 +39,7 @@ public class CalculatorBeanBase implements CalculatorCommonBusiness
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(CalculatorBeanBase.class);
+   private static final Logger log = Logger.getLogger(CalculatorBeanBase.class.getName());
 
    // ---------------------------------------------------------------------------||
    // Required Implementations --------------------------------------------------||

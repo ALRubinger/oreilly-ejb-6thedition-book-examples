@@ -25,25 +25,16 @@
   <!-- Properties -->
   <properties>
 
-    <!-- Versioning -->
-    <!-- JBOSS_HOME (We'll unpack into here -->
-    <JBOSS_HOME>${project.build.directory}/jboss-${version.org.jboss.jbossas}</JBOSS_HOME>
-    <!-- The target version of AS to be used -->
-    <version.org.jboss.jbossas>6.0.0.20100721-M4</version.org.jboss.jbossas>
-
   </properties>
 
   <!-- Dependencies -->
   <dependencies>
   
-  <!--  
     <dependency>
-      <groupId>org.jboss.spec.javax.ejb</groupId>
-      <artifactId>jboss-ejb-api_3.1_spec</artifactId>
-      <scope>provided</scope>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-spec-api</artifactId>
+      <type>pom</type>
     </dependency>
-  -->
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>jboss-ejb3-examples-testsupport</artifactId>
@@ -57,12 +48,18 @@
 
     <!-- Arquillian Test Harness -->
     <dependency>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-jbossas-embedded-6</artifactId>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-arquillian-container-managed</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jboss.arquillian</groupId>
-      <artifactId>arquillian-junit</artifactId>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-dist</artifactId>
+      <type>zip</type>
+      <scope>test</scope>
     </dependency>
     
     <!-- JUnit -->
@@ -71,25 +68,27 @@
       <artifactId>junit</artifactId>
     </dependency>
     
-    <!-- JBossAS -->
+        <!-- 
+    HACK:
+    Currently the ARQ Managed Container is not exporting
+    all deps needed to run, at a minimum, jboss-threads
+    AS7-1557
+    -->
     <dependency>
-      <groupId>org.jboss.jbossas</groupId>
-      <artifactId>jboss-as-depchain</artifactId>
-      <version>${version.org.jboss.jbossas}</version>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-build</artifactId>
       <type>pom</type>
-      <scope>compile</scope> <!-- Should be "test", but I can't find the GAV for JPA APIs -->
+      <scope>test</scope>
       <exclusions>
         <exclusion>
-          <groupId>org.jboss.jbossas.osgi</groupId>
-          <artifactId>jboss-as-osgi-distribution</artifactId>
+          <groupId>javax.faces</groupId>
+          <artifactId>jsf-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xalan</groupId>
+          <artifactId>serializer</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.jbossas.osgi</groupId>
-      <artifactId>jboss-as-osgi-distribution</artifactId>
-      <version>${version.org.jboss.jbossas}</version>
-      <type>pom</type>
     </dependency>
 
   </dependencies>
@@ -102,18 +101,17 @@
     -->
   <dependencyManagement>
     <dependencies>
-  
-      <!-- org.jboss.jbossas -->
+      <!-- To honor exclusions -->
       <dependency>
-        <groupId>org.jboss.jbossas</groupId>
-        <artifactId>jboss-as-depchain</artifactId>
-        <version>${version.org.jboss.jbossas}</version>
+        <groupId>org.jboss.as</groupId>
+        <artifactId>jboss-as-parent</artifactId>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-   </dependencies>
+        <version>${version.org.jboss.as.7}</version>
+      </dependency> 
+    </dependencies>
     
-    </dependencyManagement>
+  </dependencyManagement>
 
   <profiles>
 
@@ -143,9 +141,9 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.jboss.jbossas</groupId>
-                      <artifactId>jboss-as-distribution</artifactId>
-                      <version>${version.org.jboss.jbossas}</version>
+                      <groupId>org.jboss.as</groupId>
+                      <artifactId>jboss-as-dist</artifactId>
+                      <version>${version.org.jboss.as.7}</version>
                       <type>zip</type>
                       <overWrite>false</overWrite>
                       <outputDirectory>${project.build.directory}</outputDirectory>
@@ -168,10 +166,6 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <additionalClasspathElements>
-                    <additionalClasspathElement>${JBOSS_HOME}/client/jbossws-native-client.jar</additionalClasspathElement>
-                    <additionalClasspathElement>${JBOSS_HOME}/server/default/deploy/jbossweb.sar</additionalClasspathElement>
-                  </additionalClasspathElements>
                   <redirectTestOutputToFile>true</redirectTestOutputToFile>
                   <trimStackTrace>false</trimStackTrace>
                   <printSummary>true</printSummary>
@@ -179,7 +173,6 @@
                     <include>**/*IntegrationTest.java</include>
                   </includes>
                   <forkMode>once</forkMode>
-                  <argLine>-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Djava.endorsed.dirs=${JBOSS_HOME}/lib/endorsed -Djboss.home=${JBOSS_HOME} -Djboss.boot.server.log.dir=${JBOSS_HOME} -Dorg.jboss.reflect.spi.TypeInfoFactory=org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory</argLine>
                 </configuration>
               </execution>
             </executions>

@@ -32,7 +32,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 
-import org.jboss.ejb3.annotation.LocalBinding;
 import org.jboss.ejb3.examples.ch17.transactions.api.BankLocalBusiness;
 import org.jboss.ejb3.examples.ch17.transactions.api.InsufficientBalanceException;
 import org.jboss.ejb3.examples.ch17.transactions.entity.Account;
@@ -49,7 +48,6 @@ import org.jboss.ejb3.examples.ch17.transactions.entity.Account;
  */
 @Stateless
 @Local(BankLocalBusiness.class)
-@LocalBinding(jndiBinding = BankLocalBusiness.JNDI_NAME)
 public class BankBean implements BankLocalBusiness
 {
 

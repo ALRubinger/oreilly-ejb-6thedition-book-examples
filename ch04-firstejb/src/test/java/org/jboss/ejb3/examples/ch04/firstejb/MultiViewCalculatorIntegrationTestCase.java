@@ -23,16 +23,15 @@
 package org.jboss.ejb3.examples.ch04.firstejb;
 
 import java.net.MalformedURLException;
+import java.util.logging.Logger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 
-import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -51,39 +50,24 @@ public class MultiViewCalculatorIntegrationTestCase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(MultiViewCalculatorIntegrationTestCase.class);
-
-   /**
-    * The JNDI Naming Context
-    */
-   private static Context namingContext;
+   private static final Logger log = Logger.getLogger(MultiViewCalculatorIntegrationTestCase.class.getName());
 
    /**
     * The EJB 3.x local business view of the CalculatorEJB
     */
-   private static CalculatorLocalBusiness calcLocalBusiness;
+   @EJB(mappedName="java:module/ManyViewCalculatorBean!org.jboss.ejb3.examples.ch04.firstejb.CalculatorLocalBusiness")
+   private CalculatorLocalBusiness calcLocalBusiness;
 
    /**
-    * The EJB 2.x local component view of the CalculatorEJB 
+    * The EJB 3.x remote business view of the CalculatorEJB 
     */
-   private static CalculatorLocal calcLocal;
+   @EJB(mappedName="java:module/ManyViewCalculatorBean!org.jboss.ejb3.examples.ch04.firstejb.CalculatorRemoteBusiness")
+   private CalculatorRemoteBusiness calcRemoteBusiness;
 
    /**
     * Delegate for ensuring that the obtained Calculators are working as expected
     */
-   private static CalculatorAssertionDelegate assertionDelegate;
-
-   /**
-    * JNDI Name of the Local Business Reference
-    */
-   //TODO Use Global JNDI Syntax
-   private static final String JNDI_NAME_CALC_LOCAL_BUSINESS = ManyViewCalculatorBean.class.getSimpleName() + "Local";
-
-   /**
-    * JNDI Name of the Local Home Reference
-    */
-   //TODO Use Global JNDI Syntax 
-   private static final String JNDI_NAME_CALC_REMOTE_HOME = ManyViewCalculatorBean.class.getSimpleName() + "LocalHome";
+   private CalculatorAssertionDelegate assertionDelegate;
 
    /**
     * Define the deployment
@@ -104,22 +88,11 @@ public class MultiViewCalculatorIntegrationTestCase
    /**
     * Run once before any tests
     */
-   @BeforeClass
-   public static void beforeClass() throws Throwable
+   @Before
+   public void beforeClass() throws Throwable
    {
-      // Create the naming context, using jndi.properties on the CP
-      namingContext = new InitialContext();
-
-      // Obtain EJB 3.x Business Reference
-      calcLocalBusiness = (CalculatorLocalBusiness) namingContext.lookup(JNDI_NAME_CALC_LOCAL_BUSINESS);
-
       // Create Assertion Delegate
       assertionDelegate = new CalculatorAssertionDelegate();
-
-      // Obtain EJB 2.x Component Reference via Home
-      final Object calcLocalHomeReference = namingContext.lookup(JNDI_NAME_CALC_REMOTE_HOME);
-      final CalculatorLocalHome calcRemoteHome = (CalculatorLocalHome) calcLocalHomeReference;
-      calcLocal = calcRemoteHome.create();
    }
 
    // ---------------------------------------------------------------------------||
@@ -131,7 +104,7 @@ public class MultiViewCalculatorIntegrationTestCase
     * using the EJB 3.x business view
     */
    @Test
-   public void testAdditionUsingBusinessReference() throws Throwable
+   public void testAdditionUsingLocalBusinessReference() throws Throwable
    {
       // Test 
       log.info("Testing remote business reference...");
@@ -143,13 +116,13 @@ public class MultiViewCalculatorIntegrationTestCase
     * using the EJB 2.x component view
     */
    @Test
-   public void testAdditionUsingComponentReference() throws Throwable
+   public void testAdditionUsingRemoteBusinessReference() throws Throwable
    {
       // Test
       log.info("Testing remote component reference...");
-      assertionDelegate.assertAdditionSucceeds(calcLocal);
+      assertionDelegate.assertAdditionSucceeds(calcRemoteBusiness);
    }
 
-   //TODO Add test for no-interface view when OpenEJB supports it EJBBOOK-28
+   //TODO Add tests for EJB 2.x Views when AS7 supports it
 
 }

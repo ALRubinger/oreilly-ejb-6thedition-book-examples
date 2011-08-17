@@ -69,7 +69,7 @@ public abstract class DbInitializerBeanBase implements DbInitializerLocalBusines
     * we use to programmatically demarcate transactional
     * boundaries.
     */
-   @Resource(mappedName = "java:/TransactionManager")
+   @Resource(mappedName = "java:jboss/TransactionManager")
    private TransactionManager txManager;
 
    //-------------------------------------------------------------------------------------||

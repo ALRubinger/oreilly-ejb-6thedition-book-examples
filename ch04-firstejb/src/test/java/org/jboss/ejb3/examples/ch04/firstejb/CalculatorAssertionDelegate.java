@@ -21,9 +21,9 @@
  */
 package org.jboss.ejb3.examples.ch04.firstejb;
 
-import junit.framework.TestCase;
+import java.util.logging.Logger;
 
-import org.jboss.logging.Logger;
+import junit.framework.TestCase;
 
 /**
  * Contains functions to assert that implementations
@@ -41,7 +41,7 @@ class CalculatorAssertionDelegate
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(CalculatorAssertionDelegate.class);
+   private static final Logger log = Logger.getLogger(CalculatorAssertionDelegate.class.getName());
 
    // ---------------------------------------------------------------------------||
    // Functional Methods --------------------------------------------------------||

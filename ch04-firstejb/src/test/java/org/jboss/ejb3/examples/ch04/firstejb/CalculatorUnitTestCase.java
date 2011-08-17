@@ -22,9 +22,10 @@
 
 package org.jboss.ejb3.examples.ch04.firstejb;
 
+import java.util.logging.Logger;
+
 import junit.framework.TestCase;
 
-import org.jboss.logging.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,7 +44,7 @@ public class CalculatorUnitTestCase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(CalculatorUnitTestCase.class);
+   private static final Logger log = Logger.getLogger(CalculatorUnitTestCase.class.getName());
 
    /**
     * The POJO instance to test

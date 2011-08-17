@@ -25,15 +25,12 @@ import java.math.BigDecimal;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.persistence.EntityManager;
 
 import junit.framework.Assert;
 
-import org.jboss.arquillian.api.Deployment;
-import org.jboss.arquillian.api.Run;
-import org.jboss.arquillian.api.RunModeType;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.ejb3.examples.ch17.transactions.api.BankLocalBusiness;
 import org.jboss.ejb3.examples.ch17.transactions.api.BlackjackGameLocalBusiness;
@@ -49,13 +46,10 @@ import org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingLocalBus
 import org.jboss.ejb3.examples.testsupport.entity.IdentityBase;
 import org.jboss.ejb3.examples.testsupport.txwrap.ForcedTestException;
 import org.jboss.ejb3.examples.testsupport.txwrap.TaskExecutionException;
-import org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingBean;
 import org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingLocalBusiness;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -68,7 +62,6 @@ import org.junit.runner.RunWith;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-@Run(RunModeType.AS_CLIENT)
 public class TransactionalBlackjackGameIntegrationTest
 {
 
@@ -82,20 +75,13 @@ public class TransactionalBlackjackGameIntegrationTest
    private static final Logger log = Logger.getLogger(TransactionalBlackjackGameIntegrationTest.class.getName());
 
    /**
-    * Naming Context
-    * @deprecated Remove when Arquillian will inject the EJB proxies
-    */
-   @Deprecated
-   private static Context jndiContext;
-
-   /**
     * The Deployment into the EJB Container
     */
    @Deployment
    public static JavaArchive getDeployment()
    {
       final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar").addPackages(true,
-            BankLocalBusiness.class.getPackage(), User.class.getPackage()).addManifestResource("persistence.xml")
+            BankLocalBusiness.class.getPackage(), User.class.getPackage()).addAsManifestResource("persistence.xml")
             .addPackages(false, DbInitializerBean.class.getPackage(), TxWrappingLocalBusiness.class.getPackage(),
                   BankBean.class.getPackage(), DbInitializerLocalBusiness.class.getPackage(),
                   EntityManagerExposingBean.class.getPackage(), IdentityBase.class.getPackage());
@@ -110,65 +96,37 @@ public class TransactionalBlackjackGameIntegrationTest
    /**
     * Test-only DB initializer to sanitize and prepopulate the DB with each test run
     */
-   // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
+   @EJB(mappedName="java:global/test/DbInitializerBean!org.jboss.ejb3.examples.testsupport.dbinit.DbInitializerLocalBusiness")
    private DbInitializerLocalBusiness dbInitializer;
 
    /**
     * EJB which wraps supplied {@link Callable} instances inside of a new Tx
     */
-   // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
+   @EJB(mappedName="java:global/test/TxWrappingBean!org.jboss.ejb3.examples.testsupport.txwrap.TxWrappingLocalBusiness")
    private TxWrappingLocalBusiness txWrapper;
 
    /**
     * EJB which provides direct access to an {@link EntityManager}'s method for use in testing.
     * Must be called inside an existing Tx so that returned entities are not detached.
     */
-   // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
+   @EJB(mappedName="java:global/test/EntityManagerExposingBean!org.jboss.ejb3.examples.testsupport.dbquery.EntityManagerExposingLocalBusiness")
    private EntityManagerExposingLocalBusiness emHook;
 
    /**
     * Bank EJB Proxy
     */
-   // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
+   @EJB(mappedName="java:global/test/BankBean!org.jboss.ejb3.examples.ch17.transactions.api.BankLocalBusiness")
    private BankLocalBusiness bank;
 
    /**
     * Blackjack Game EJB Proxy
     */
-   // TODO: Support Injection of @EJB here when Arquillian for Embedded JBossAS will support it
+   @EJB(mappedName="java:global/test/BlackjackGameBean!org.jboss.ejb3.examples.ch17.transactions.api.BlackjackGameLocalBusiness")
    private BlackjackGameLocalBusiness blackjackGame;
 
    //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
-
-   /**
-    * Performs suite-wide initialization
-    */
-   @BeforeClass
-   public static void init() throws Exception
-   {
-      // After the server is up, we don't need to pass any explicit properties
-      jndiContext = new InitialContext();
-   }
-
-   /**
-    * Manually looks up EJBs in JNDI and assigns them
-    * @deprecated Remove when Arquillian will handle the injection for us
-    */
-   @Deprecated
-   @Before
-   public void injectEjbs() throws Exception
-   {
-      // Fake injection by doing manual lookups for the time being
-      dbInitializer = (DbInitializerLocalBusiness) jndiContext.lookup(DbInitializerBean.class.getSimpleName()
-            + "/local");
-      txWrapper = (TxWrappingLocalBusiness) jndiContext.lookup(TxWrappingBean.class.getSimpleName() + "/local");
-      emHook = (EntityManagerExposingLocalBusiness) jndiContext.lookup(EntityManagerExposingBean.class.getSimpleName()
-            + "/local");
-      bank = (BankLocalBusiness) jndiContext.lookup(BankLocalBusiness.JNDI_NAME);
-      blackjackGame = (BlackjackGameLocalBusiness) jndiContext.lookup(BlackjackGameLocalBusiness.JNDI_NAME);
-   }
 
    /**
     * Clears and repopulates the database with test data 

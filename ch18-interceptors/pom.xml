@@ -33,25 +33,9 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.jboss.ejb3</groupId>
-      <artifactId>jboss-ejb3-api</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.javaee</groupId>
-      <artifactId>jboss-jms-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.logging</groupId>
-      <artifactId>jboss-logging-log4j</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.logging</groupId>
-      <artifactId>jboss-logging-spi</artifactId>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-spec-api</artifactId>
+      <type>pom</type>
     </dependency>
 
     <!-- 
@@ -61,23 +45,17 @@
 
     <!-- Arquillian Test Harness -->
     <dependency>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-glassfish-embedded-3</artifactId>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-arquillian-container-managed</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jboss.arquillian</groupId>
-      <artifactId>arquillian-junit</artifactId>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
     </dependency>
-    
     <dependency>
-      <groupId>org.glassfish.extras</groupId>
-      <artifactId>glassfish-embedded-all</artifactId>
-      <version>${version.org.glassfish}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-dist</artifactId>
+      <type>zip</type>
       <scope>test</scope>
     </dependency>
     
@@ -86,8 +64,51 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
+    
+        <!-- 
+    HACK:
+    Currently the ARQ Managed Container is not exporting
+    all deps needed to run, at a minimum, jboss-threads
+    AS7-1557
+    -->
+    <dependency>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-build</artifactId>
+      <type>pom</type>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.faces</groupId>
+          <artifactId>jsf-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xalan</groupId>
+          <artifactId>serializer</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
   </dependencies>
+  
+  <!--
+    We also need to place the AS depchain into 
+    the "dependencyManagement" section in import scope
+    so that Maven respects the "exclusion" elements
+    configured
+    -->
+  <dependencyManagement>
+    <dependencies>
+      <!-- To honor exclusions -->
+      <dependency>
+        <groupId>org.jboss.as</groupId>
+        <artifactId>jboss-as-parent</artifactId>
+        <type>pom</type>
+        <scope>import</scope>
+        <version>${version.org.jboss.as.7}</version>
+      </dependency> 
+    </dependencies>
+    
+  </dependencyManagement>
 
   <profiles>
 
@@ -102,6 +123,34 @@
       <build>
 
         <plugins>
+        
+          <!-- Get AS and put into "target" -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack</id>
+                <phase>pre-integration-test</phase> <!-- So run before testing -->
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.jboss.as</groupId>
+                      <artifactId>jboss-as-dist</artifactId>
+                      <version>${version.org.jboss.as.7}</version>
+                      <type>zip</type>
+                      <overWrite>false</overWrite>
+                      <outputDirectory>${project.build.directory}</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+         
 
           <!-- Surefire -->
           <plugin>
@@ -120,7 +169,7 @@
                   <includes>
                     <include>**/*IntegrationTest.java</include>
                   </includes>
-                  <forkMode>always</forkMode>
+                  <forkMode>once</forkMode>
                 </configuration>
               </execution>
             </executions>

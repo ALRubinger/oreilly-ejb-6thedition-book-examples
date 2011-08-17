@@ -21,7 +21,8 @@
  */
 package org.jboss.ejb3.examples.ch05.encryption;
 
-import org.jboss.logging.Logger;
+import java.util.logging.Logger;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -40,7 +41,7 @@ public class EncryptionUnitTestCase extends EncryptionTestCaseSupport
    /**
     * Logger 
     */
-   private static final Logger log = Logger.getLogger(EncryptionUnitTestCase.class);
+   private static final Logger log = Logger.getLogger(EncryptionUnitTestCase.class.getName());
 
    /**
     * POJO Encryption Service

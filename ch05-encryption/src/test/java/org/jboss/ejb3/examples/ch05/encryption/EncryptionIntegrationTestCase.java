@@ -26,14 +26,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 
 import junit.framework.TestCase;
 
-import org.jboss.arquillian.api.Deployment;
+import org.apache.commons.codec.BinaryEncoder;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
@@ -54,13 +55,13 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(EncryptionIntegrationTestCase.class);
+   private static final Logger log = Logger.getLogger(EncryptionIntegrationTestCase.class.getName());
 
    /**
     * The EJB 3.x local business view of the EncryptionEJB
     */
-   @EJB
-   private static EncryptionLocalBusiness encryptionLocalBusiness;
+   @EJB(mappedName="java:module/EncryptionEJB!org.jboss.ejb3.examples.ch05.encryption.EncryptionLocalBusiness")
+   private EncryptionLocalBusiness encryptionLocalBusiness;
 
    /**
     * Correlates to the env-entry within ejb-jar.xml, to be used as an override from the default 
@@ -80,9 +81,9 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
    {
       final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "slsb.jar").addClasses(EncryptionBean.class,
             EncryptionCommonBusiness.class, EncryptionLocalBusiness.class, EncryptionRemoteBusiness.class,
-            EncryptionException.class).addManifestResource(
+            EncryptionException.class, EncryptionTestCaseSupport.class).addAsManifestResource(
             new URL(EncryptionIntegrationTestCase.class.getProtectionDomain().getCodeSource().getLocation(),
-                  "../classes/META-INF/ejb-jar.xml"), "ejb-jar.xml");
+                  "../classes/META-INF/ejb-jar.xml"), "ejb-jar.xml").addPackages(true,BinaryEncoder.class.getPackage());
       //TODO SHRINKWRAP-141 Make addition of the ejb-jar less verbose
       log.info(archive.toString(true));
       return archive;
@@ -104,7 +105,7 @@ public class EncryptionIntegrationTestCase extends EncryptionTestCaseSupport
    {
       // Log
       log.info("testHashing");
-
+      
       // Test via superclass
       this.assertHashing(encryptionLocalBusiness);
    }

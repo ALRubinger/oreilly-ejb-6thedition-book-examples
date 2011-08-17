@@ -29,19 +29,16 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.interceptor.Interceptors;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import junit.framework.TestCase;
 
-import org.jboss.arquillian.api.Deployment;
-import org.jboss.arquillian.api.Run;
-import org.jboss.arquillian.api.RunModeType;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
-import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -50,10 +47,9 @@ import org.junit.runner.RunWith;
  * declared are intercepted when invoked
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-@Run(RunModeType.AS_CLIENT)
+@Ignore //TODO Re-enable when EJB security in AS7 is available
 public class InterceptionIntegrationTest
 {
 
@@ -76,8 +72,7 @@ public class InterceptionIntegrationTest
    @Deployment
    public static JavaArchive createDeployment()
    {
-      final JavaArchive deployment = ShrinkWrap.create(JavaArchive.class, "echo.jar").addClasses(
-            TunerLocalBusiness.class, TunerBean.class, CachingAuditor.class, Channel2Restrictor.class);
+      final JavaArchive deployment = ShrinkWrap.create(JavaArchive.class, "tuner.jar").addPackage(TunerBean.class.getPackage());
       log.info(deployment.toString(true));
       return deployment;
    }
@@ -85,21 +80,12 @@ public class InterceptionIntegrationTest
    /**
     * The bean to invoke upon
     */
-   @EJB
+   @EJB(mappedName="java:module/TunerBean!org.jboss.ejb3.examples.ch18.tuner.TunerLocalBusiness")
    private static TunerLocalBusiness bean;
    
    //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
-   
-   /**
-    * Lookup the bean instance
-    * TODO Arquillian should inject this
-    */
-   @BeforeClass
-   public static void lookup() throws Exception{
-      bean = (TunerLocalBusiness)new InitialContext().lookup("java:global/echo/TunerBean!org.jboss.ejb3.examples.ch18.tuner.TunerLocalBusiness");
-   }
    
    /**
     * Cleanup

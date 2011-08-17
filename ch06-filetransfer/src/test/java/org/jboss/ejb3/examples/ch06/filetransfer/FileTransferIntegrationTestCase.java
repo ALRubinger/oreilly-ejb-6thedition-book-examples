@@ -22,15 +22,16 @@
 package org.jboss.ejb3.examples.ch06.filetransfer;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.NoSuchEJBException;
 
 import junit.framework.TestCase;
 
-import org.jboss.arquillian.api.Deployment;
+import org.apache.commons.net.SocketClient;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
@@ -61,7 +62,7 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(FileTransferIntegrationTestCase.class);
+   private static final Logger log = Logger.getLogger(FileTransferIntegrationTestCase.class.getName());
 
    /**
     * Name of the configuration file for the FTP server users
@@ -85,8 +86,8 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
    @Deployment
    public static JavaArchive createDeployment()
    {
-      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "ftpclient.jar").addPackage(
-            FileTransferBean.class.getPackage());
+      final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "ftpclient.jar").addPackages(true,
+            FileTransferBean.class.getPackage(),SocketClient.class.getPackage());
       log.info(archive.toString(true));
       return archive;
    }
@@ -96,16 +97,16 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
    //-------------------------------------------------------------------------------------||
 
    /**
-    * Our view of the EJB, remote business interface type of the Proxy
+    * Our view of the EJB, local business interface type of the Proxy
     */
-   @EJB
-   private FileTransferRemoteBusiness client1;
+   @EJB(mappedName="java:module/FileTransferEJB!org.jboss.ejb3.examples.ch06.filetransfer.FileTransferLocalBusiness")
+   private FileTransferLocalBusiness client1;
 
    /**
     * Another FTP Client Session
     */
-   @EJB
-   private FileTransferRemoteBusiness client2;
+   @EJB(mappedName="java:module/FileTransferEJB!org.jboss.ejb3.examples.ch06.filetransfer.FileTransferLocalBusiness")
+   private FileTransferLocalBusiness client2;
 
    //-------------------------------------------------------------------------------------||
    // Lifecycle --------------------------------------------------------------------------||
@@ -186,10 +187,10 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
       log.info("testSessionIsolation");
 
       // Get the existing client as made from the test lifecycle
-      final FileTransferRemoteBusiness session1 = this.getClient();
+      final FileTransferLocalBusiness session1 = this.getClient();
 
       // Use another client
-      final FileTransferRemoteBusiness session2 = this.client2;
+      final FileTransferLocalBusiness session2 = this.client2;
 
       // cd into a home directory for each
       final String ftpHome = getFtpHome().getAbsolutePath();
@@ -217,7 +218,7 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
    }
 
    /**
-    * Tests that a call to {@link FileTransferRemoteBusiness#endSession()}
+    * Tests that a call to {@link FileTransferLocalBusiness#endSession()}
     * results in the SFSB's backing instance removal, and that subsequent 
     * operations result in a {@link NoSuchEJBException}
     * 
@@ -230,7 +231,7 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
       log.info("testSfsbRemoval");
 
       // Get the existing client as made from the test lifecycle
-      final FileTransferRemoteBusiness sfsb = this.getClient();
+      final FileTransferLocalBusiness sfsb = this.getClient();
 
       // cd into the home directory
       final String ftpHome = getFtpHome().getAbsolutePath();
@@ -268,7 +269,7 @@ public class FileTransferIntegrationTestCase extends FileTransferTestCaseBase
     * @see org.jboss.ejb3.examples.ch06.filetransfer.FileTransferTestCaseBase#getClient()
     */
    @Override
-   protected FileTransferRemoteBusiness getClient()
+   protected FileTransferLocalBusiness getClient()
    {
       return this.client1;
    }

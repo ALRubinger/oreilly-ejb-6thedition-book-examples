@@ -36,11 +36,16 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.jboss.jbossas</groupId>
-      <artifactId>jboss-as-depchain</artifactId>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-spec-api</artifactId>
+      <type>pom</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-build</artifactId>
       <type>pom</type>
       <scope>provided</scope>
-      <version>${version.org.jboss.jbossas}</version>
     </dependency>
 
     <!-- 
@@ -53,12 +58,12 @@
     
     <!-- Arquillian Test Harness -->
     <dependency>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-jbossas-embedded-6</artifactId>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-arquillian-container-managed</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jboss.arquillian</groupId>
-      <artifactId>arquillian-junit</artifactId>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
     </dependency>
 
   </dependencies>
@@ -91,9 +96,9 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.jboss.jbossas</groupId>
-                      <artifactId>jboss-as-distribution</artifactId>
-                      <version>${version.org.jboss.jbossas}</version>
+                      <groupId>org.jboss.as</groupId>
+                      <artifactId>jboss-as-dist</artifactId>
+                      <version>${version.org.jboss.as.7}</version>
                       <type>zip</type>
                       <overWrite>false</overWrite>
                       <outputDirectory>${project.build.directory}</outputDirectory>
@@ -116,10 +121,6 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <additionalClasspathElements>
-                    <additionalClasspathElement>${JBOSS_HOME}/client/jbossws-native-client.jar</additionalClasspathElement>
-                    <additionalClasspathElement>${JBOSS_HOME}/server/default/deploy/jbossweb.sar</additionalClasspathElement>
-                  </additionalClasspathElements>
                   <redirectTestOutputToFile>true</redirectTestOutputToFile>
                   <trimStackTrace>false</trimStackTrace>
                   <printSummary>true</printSummary>
@@ -127,7 +128,6 @@
                     <include>**/*IntegrationTest.java</include>
                   </includes>
                   <forkMode>once</forkMode>
-                  <argLine>-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Djava.endorsed.dirs=${JBOSS_HOME}/lib/endorsed -Djboss.home=${JBOSS_HOME} -Djboss.boot.server.log.dir=${JBOSS_HOME} -Dorg.jboss.reflect.spi.TypeInfoFactory=org.jboss.reflect.plugins.introspection.IntrospectionTypeInfoFactory</argLine>
                   <skipTests>true</skipTests>
                 </configuration>
               </execution>

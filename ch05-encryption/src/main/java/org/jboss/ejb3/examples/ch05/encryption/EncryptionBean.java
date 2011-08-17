@@ -27,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.KeySpec;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -43,7 +44,6 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
 import org.apache.commons.codec.binary.Base64;
-import org.jboss.logging.Logger;
 
 /**
  * Bean implementation class of the EncryptionEJB.  Shows
@@ -65,7 +65,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(EncryptionBean.class);
+   private static final Logger log = Logger.getLogger(EncryptionBean.class.getName());
 
    /**
     * Name we'll assign to this EJB, will be referenced in the corresponding 
@@ -412,7 +412,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
          {
 
             // Log a warning
-            log.warn("No encryption passphrase has been supplied explicitly via "
+            log.warning("No encryption passphrase has been supplied explicitly via "
                   + "an env-entry, falling back on the default...");
 
             // Set
@@ -444,7 +444,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
       if (this.messageDigestAlgorithm == null)
       {
          // Log a warning
-         log.warn("No message digest algorithm has been supplied explicitly via "
+         log.warning("No message digest algorithm has been supplied explicitly via "
                + "an env-entry, falling back on the default...");
 
          // Set
@@ -479,7 +479,7 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
       final SessionContext context = this.context;
       if (context == null)
       {
-         log.warn("No SessionContext, bypassing request to obtain environment entry: " + envEntryName);
+         log.warning("No SessionContext, bypassing request to obtain environment entry: " + envEntryName);
          return null;
       }
 
@@ -488,13 +488,13 @@ public class EncryptionBean implements EncryptionLocalBusiness, EncryptionRemote
       try
       {
          lookupValue = context.lookup(envEntryName);
-         log.debug("Obtained environment entry \"" + envEntryName + "\": " + lookupValue);
+         log.fine("Obtained environment entry \"" + envEntryName + "\": " + lookupValue);
       }
       catch (final IllegalArgumentException iae)
       {
          // Not found defined within this EJB's Component Environment, 
          // so return null and let the caller handle it
-         log.warn("Could not find environment entry with name: " + envEntryName);
+         log.warning("Could not find environment entry with name: " + envEntryName);
          return null;
       }
 

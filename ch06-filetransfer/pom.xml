@@ -47,7 +47,6 @@
     <!-- Versioning -->
     <version.org.apache.ftpserver_ftpserver.core>1.0.4</version.org.apache.ftpserver_ftpserver.core>
     <version.commons.net_commons.net>2.0</version.commons.net_commons.net>
-    <version.org.slf4j_slf4j.jcl>1.5.2</version.org.slf4j_slf4j.jcl>
 
   </properties>
 
@@ -55,23 +54,14 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.jboss.ejb3</groupId>
-      <artifactId>jboss-ejb3-api</artifactId>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-spec-api</artifactId>
+      <type>pom</type>
     </dependency>
 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.logging</groupId>
-      <artifactId>jboss-logging-log4j</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.logging</groupId>
-      <artifactId>jboss-logging-spi</artifactId>
     </dependency>
 
     <!-- For the embedded FTP Server -->
@@ -108,39 +98,68 @@
       <artifactId>commons-net</artifactId>
       <version>${version.commons.net_commons.net}</version>
     </dependency>
+    
+    <dependency>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-arquillian-container-managed</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-dist</artifactId>
+      <type>zip</type>
+      <scope>test</scope>
+    </dependency>
 
-    <!-- For the FTP Server logging framework -->
+        <!-- 
+    HACK:
+    Currently the ARQ Managed Container is not exporting
+    all deps needed to run, at a minimum, jboss-threads
+    AS7-1557
+    -->
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jcl</artifactId>
-      <version>${version.org.slf4j_slf4j.jcl}</version>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-build</artifactId>
+      <type>pom</type>
       <scope>test</scope>
-    </dependency>
-    
-    <!-- Arquillian Test Harness -->
-    <dependency>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-openejb-embedded-3.1</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.arquillian</groupId>
-      <artifactId>arquillian-junit</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.openejb</groupId>
-      <artifactId>openejb-core</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
-      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.faces</groupId>
+          <artifactId>jsf-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xalan</groupId>
+          <artifactId>serializer</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
   </dependencies>
+  
+  <!--
+    We also need to place the AS depchain into 
+    the "dependencyManagement" section in import scope
+    so that Maven respects the "exclusion" elements
+    configured
+    -->
+  <dependencyManagement>
+    <dependencies>
+      <!-- To honor exclusions -->
+      <dependency>
+        <groupId>org.jboss.as</groupId>
+        <artifactId>jboss-as-parent</artifactId>
+        <type>pom</type>
+        <scope>import</scope>
+        <version>${version.org.jboss.as.7}</version>
+      </dependency> 
+    </dependencies>
+    
+  </dependencyManagement>
 
-  <profiles>
+    <profiles>
 
     <profile>
 
@@ -153,28 +172,53 @@
       <build>
 
         <plugins>
+        
+          <!-- Get AS and put into "target" -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack</id>
+                <phase>pre-integration-test</phase> <!-- So run before testing -->
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.jboss.as</groupId>
+                      <artifactId>jboss-as-dist</artifactId>
+                      <version>${version.org.jboss.as.7}</version>
+                      <type>zip</type>
+                      <overWrite>false</overWrite>
+                      <outputDirectory>${project.build.directory}</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+         
 
-          <!--
-
-            Configure Surefire to run in integration-test phase
-          -->
+          <!-- Surefire -->
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <executions>
               <execution>
-                <id>surefire-it</id>
+                <id>integration-test</id>
                 <phase>integration-test</phase>
                 <goals>
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <skip>false</skip>
                   <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                  <trimStackTrace>false</trimStackTrace>
                   <printSummary>true</printSummary>
-                  <forkMode>always</forkMode>
                   <includes>
                     <include>**/*IntegrationTestCase.java</include>
                   </includes>
+                  <forkMode>once</forkMode>
                 </configuration>
               </execution>
             </executions>
